@@ -53,6 +53,7 @@ const BackgroundTable = styled.div`
 const TwitterTableName = styled.a`
   color: ${menuColor};
   text-decoration: none;
+  cursor: pointer;
   &:hover {
     color: white;
   }

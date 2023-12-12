@@ -80,11 +80,38 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
 };
 
 const formatDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const newDate = date.getDate();
-  const dateFormat = `${year}-${month}-${newDate}`;
-  return dateFormat;
+  try {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const newDate = date.getDate();
+    const dateFormat = `${year}-${month}-${newDate}`;
+    return dateFormat;
+  } catch (err) {
+    console.log("Error formating date: ", err);
+    throw err;
+  }
 };
 
-export { useFetch, extractTwitterSentimentByDay, insertArrayData, formatDate };
+const removeDuplicate = (data: ArrayTweetResult[]) => {
+  try {
+    let coinSet = new Set();
+    const filterData = data.filter((coin) => {
+      if (!coinSet.has(coin.coin)) {
+        coinSet.add(coin.coin);
+        return true;
+      }
+      return false;
+    });
+    return filterData;
+  } catch (err) {
+    console.log("Error removing duplicate: ", err);
+  }
+};
+
+export {
+  useFetch,
+  extractTwitterSentimentByDay,
+  insertArrayData,
+  formatDate,
+  removeDuplicate,
+};

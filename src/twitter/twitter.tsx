@@ -3,25 +3,27 @@ import {
   extractTwitterSentimentByDay,
   formatDate,
   insertArrayData,
+  removeDuplicate,
   useFetch,
 } from "../utils/utils";
-import {
-  BackgroundTable,
-  LeftContainer,
-  RightContainer,
-  TopicHeader,
-  TwitterPage,
-  TwitterTableName,
-} from "./twitterStyle";
-import DataTable from "../table/dataTable";
+import { TwitterTableName } from "./twitterStyle";
+import { CoinDataTable } from "../table/dataTable";
 import { ArrayTweetResult, StartDate } from "../utils/interface";
 import { Row } from "react-table";
-import DateSelector from "../table/datePicker";
+import DataTableModal from "../table/modal";
 
-const Twitter = ({ startDate, setStartDate }: StartDate) => {
+const Twitter = ({
+  startDate,
+  setStartDate,
+  openModal,
+  isOpen,
+  coin,
+  closeModal,
+}: StartDate) => {
   const dateFormat = formatDate(startDate);
   console.log("dateasda: ", dateFormat);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
+  let noDuplicateData: ArrayTweetResult[] = [];
   let arrayData: ArrayTweetResult[] = [];
   const { data, error, loading } = useFetch(twitterUrl || "", dateFormat);
   if (data) {
@@ -29,6 +31,8 @@ const Twitter = ({ startDate, setStartDate }: StartDate) => {
     console.log("twitter result: ", twitterResult);
     arrayData = insertArrayData(twitterResult);
     console.log("array: ", arrayData);
+    noDuplicateData = removeDuplicate(arrayData) || [];
+    console.log("no duplicate: ", noDuplicateData);
   }
 
   const columns = useMemo(
@@ -53,37 +57,54 @@ const Twitter = ({ startDate, setStartDate }: StartDate) => {
       {
         Header: "Twitter",
         accessor: "twitterUser",
-        Cell: ({ row }: { row: Row<ArrayTweetResult> }) => (
-          <TwitterTableName
-            href={row.original.twitterUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {row.original.twitterUser}
-          </TwitterTableName>
-        ),
+        Cell: ({ row }: { row: Row<ArrayTweetResult> }) => {
+          if (row.original.uniqueUser > 1 && openModal) {
+            return (
+              <TwitterTableName
+                onClick={(event) => {
+                  event.stopPropagation();
+                  openModal(row.original.coin);
+                }}
+              >
+                View More
+              </TwitterTableName>
+            );
+          } else {
+            return (
+              <TwitterTableName
+                href={row.original.twitterUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {row.original.twitterUser}
+              </TwitterTableName>
+            );
+          }
+        },
       },
     ],
-    []
+    [openModal]
   );
 
   return (
     <>
-      <TopicHeader>
-        <h3>Twitter Sentiment</h3>
-      </TopicHeader>
-      <TwitterPage>
-        <LeftContainer>
-          <BackgroundTable>
-            <h3>Top Coins By Day</h3>
-            <DateSelector startDate={startDate} setStartDate={setStartDate} />
-            <DataTable data={arrayData} columns={columns} />
-          </BackgroundTable>
-        </LeftContainer>
-        <RightContainer>
-          <BackgroundTable>Testing</BackgroundTable>
-        </RightContainer>
-      </TwitterPage>
+      <CoinDataTable
+        data={noDuplicateData}
+        columns={columns}
+        isOpen={isOpen || false}
+        coin={coin || null}
+        closeModal={closeModal}
+        modal={false}
+        startDate={startDate}
+        setStartDate={setStartDate}
+      />
+      <DataTableModal
+        data={arrayData}
+        columns={columns}
+        isOpen={isOpen}
+        closeModal={closeModal}
+        coin={coin}
+      />
     </>
   );
 };

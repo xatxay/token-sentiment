@@ -34,21 +34,39 @@ export interface Result {
   [key: string]: CoinResult;
 }
 
-export type DataTableProps = {
+export interface DataTableProps extends Modal {
   data: any[];
   columns: any[];
-};
+}
 
 export interface ArrayTweetResult {
   coin: string;
   mentions: string | number;
-  uniqueUser: string | number;
+  uniqueUser: number;
   sentiments: string | number;
   twitterUser: string | number;
   twitterUrl: string;
 }
 
-export interface StartDate {
+export interface StartDate extends Modal {
   startDate: Date;
   setStartDate: (date: Date) => void;
+}
+
+export interface Modal {
+  isOpen?: boolean;
+  openModal?: (coin: string) => void;
+  closeModal?: () => void;
+  coin?: string | null;
+}
+
+export interface CoinDataTableProps {
+  data: ArrayTweetResult[];
+  columns: any[];
+  isOpen?: boolean;
+  coin?: string | null;
+  closeModal?: () => void;
+  modal: boolean;
+  startDate?: Date;
+  setStartDate?: (date: Date) => void;
 }
