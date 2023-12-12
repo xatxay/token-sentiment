@@ -10,9 +10,11 @@ import {
   MenuList,
 } from "./homepageStyle";
 import logo from "./logo.png";
+import Twitter from "../twitter/twitter";
+import { StartDate } from "../utils/interface";
 
-const Homepage = () => {
-  const menuItems = ["Youtube", "Twitter", "Tiktok", "Reddit", "Polls"];
+const Homepage = ({ startDate, setStartDate }: StartDate) => {
+  const menuItems = ["Twitter", "Youtube", "Tiktok", "Reddit", "Polls"];
   return (
     <>
       <Global styles={GlobalStyle} />
@@ -32,6 +34,7 @@ const Homepage = () => {
         </HeaderMenu>
         <LogoutButton>Logout</LogoutButton>
       </HeaderContainer>
+      <Twitter startDate={startDate} setStartDate={setStartDate} />
     </>
   );
 };

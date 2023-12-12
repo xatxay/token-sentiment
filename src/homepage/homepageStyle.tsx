@@ -6,7 +6,6 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  background-color: black;
   height: 80px;
   position: relative;
   box-sizing: border-box;
