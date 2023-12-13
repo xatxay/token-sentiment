@@ -8,7 +8,8 @@
   right: 350px;
   bottom: 150px;
   border: none;
-  background-color: red;
+  padding: 30px;
+  background-color: #282c34;
 }
 
 .overlay {

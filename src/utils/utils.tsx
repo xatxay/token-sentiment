@@ -108,10 +108,25 @@ const removeDuplicate = (data: ArrayTweetResult[]) => {
   }
 };
 
+const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
+  try {
+    const filterData = data.filter((coin) => {
+      if (coin.coin === ticker) {
+        return true;
+      }
+      return false;
+    });
+    return filterData;
+  } catch (err) {
+    console.error("Error extract duplicate coins");
+  }
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
   insertArrayData,
   formatDate,
   removeDuplicate,
+  duplicateCoins,
 };

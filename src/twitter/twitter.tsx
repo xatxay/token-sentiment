@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import {
+  duplicateCoins,
   extractTwitterSentimentByDay,
   formatDate,
   insertArrayData,
@@ -9,8 +10,9 @@ import {
 import { TwitterTableName } from "./twitterStyle";
 import { CoinDataTable } from "../table/dataTable";
 import { ArrayTweetResult, StartDate } from "../utils/interface";
-import { Row } from "react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import DataTableModal from "../table/modal";
+import { toast } from "react-toastify";
 
 const Twitter = ({
   startDate,
@@ -21,49 +23,55 @@ const Twitter = ({
   closeModal,
 }: StartDate) => {
   const dateFormat = formatDate(startDate);
-  console.log("dateasda: ", dateFormat);
+  console.log("dateasda: ", dateFormat, coin);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
   let noDuplicateData: ArrayTweetResult[] = [];
-  let arrayData: ArrayTweetResult[] = [];
-  const { data, error, loading } = useFetch(twitterUrl || "", dateFormat);
+  let duplicateData: ArrayTweetResult[] = [];
+  const { data, error } = useFetch(twitterUrl || "", dateFormat);
   if (data) {
     const twitterResult = extractTwitterSentimentByDay(data);
     console.log("twitter result: ", twitterResult);
-    arrayData = insertArrayData(twitterResult);
+    const arrayData = insertArrayData(twitterResult);
     console.log("array: ", arrayData);
     noDuplicateData = removeDuplicate(arrayData) || [];
     console.log("no duplicate: ", noDuplicateData);
+    duplicateData = duplicateCoins(arrayData, coin || "") || [];
   }
+  if (error) {
+    console.error("Failed fetching twitter data: ", error);
+    toast.error(error);
+  }
+
+  const columnHelper = createColumnHelper<ArrayTweetResult>();
 
   const columns = useMemo(
     () => [
-      {
-        Header: "Coin",
-        accessor: "coin",
-      },
-      {
-        Header: "Mentions",
-        accessor: "mentions",
-      },
-      {
-        Header: "Unique Users",
-        accessor: "uniqueUser",
-      },
-      {
-        Header: "Sentiment",
-        accessor: "sentiments",
-      },
-
-      {
-        Header: "Twitter",
-        accessor: "twitterUser",
-        Cell: ({ row }: { row: Row<ArrayTweetResult> }) => {
-          if (row.original.uniqueUser > 1 && openModal) {
+      columnHelper.accessor("coin", {
+        header: () => "Coin",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("mentions", {
+        header: "Mentions",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("uniqueUser", {
+        header: "Unique Users",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("sentiments", {
+        header: "Sentiment",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("twitterUser", {
+        header: "Twitter",
+        cell: (info) => {
+          const row = info.row.original;
+          if (row.uniqueUser > 1 && openModal && !isOpen) {
             return (
               <TwitterTableName
                 onClick={(event) => {
                   event.stopPropagation();
-                  openModal(row.original.coin);
+                  openModal(row.coin);
                 }}
               >
                 View More
@@ -72,18 +80,18 @@ const Twitter = ({
           } else {
             return (
               <TwitterTableName
-                href={row.original.twitterUrl}
+                href={row.twitterUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {row.original.twitterUser}
+                {row.twitterUser}
               </TwitterTableName>
             );
           }
         },
-      },
+      }),
     ],
-    [openModal]
+    [columnHelper, isOpen, openModal]
   );
 
   return (
@@ -99,7 +107,7 @@ const Twitter = ({
         setStartDate={setStartDate}
       />
       <DataTableModal
-        data={arrayData}
+        data={duplicateData}
         columns={columns}
         isOpen={isOpen}
         closeModal={closeModal}

@@ -1,7 +1,7 @@
 import ReactModal from "react-modal";
 import { DataTableProps } from "../utils/interface";
 import "./modalStyle.css";
-import { CoinDataTable } from "./dataTable";
+import {  DataTable } from "./dataTable";
 
 const DataTableModal = ({
   data,
@@ -18,7 +18,7 @@ const DataTableModal = ({
       overlayClassName="overlay"
     >
       {/* <span>{coin}</span> */}
-      <CoinDataTable data={data} columns={columns} modal={true} />
+      <DataTable data={data} columns={columns} />
     </ReactModal>
   );
 };

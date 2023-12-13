@@ -1,3 +1,5 @@
+import { Updater } from "@tanstack/react-table";
+
 export interface TopCoinsDict {
   [key: string]: TopCoinsDictInfo;
 }
@@ -69,4 +71,14 @@ export interface CoinDataTableProps {
   modal: boolean;
   startDate?: Date;
   setStartDate?: (date: Date) => void;
+}
+
+export interface Pagination {
+  canPreviousPage: boolean;
+  canNextPage: boolean;
+  previousPage: () => void;
+  nextPage: () => void;
+  pageIndex: number;
+  pageCount: number;
+  setPageIndex: (updater: Updater<number>) => void;
 }
