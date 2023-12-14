@@ -1,14 +1,6 @@
 // import { useTable, usePagination } from "react-table";
-import { CoinDataTableProps, DataTableProps } from "../utils/interface";
+import { DataTableProps } from "../utils/interface";
 import { Table, TableContainer, TableHead } from "./tableStyle";
-import {
-  BackgroundTable,
-  LeftContainer,
-  RightContainer,
-  TopicHeader,
-  TwitterPage,
-} from "../twitter/twitterStyle";
-import DateSelector from "./datePicker";
 import PaginationControll from "./pagination";
 import { PaginationContainer } from "./paginationStyle";
 import {
@@ -27,7 +19,6 @@ const DataTable = ({ data, columns }: DataTableProps) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
     state: {
       pagination: {
         pageIndex: pageIndexNumber,
@@ -35,6 +26,7 @@ const DataTable = ({ data, columns }: DataTableProps) => {
       },
     },
   });
+  console.log("datatable: ", data);
 
   const nextPage = () => {
     const newPageIndex = pageIndexNumber + 1;
@@ -94,34 +86,4 @@ const DataTable = ({ data, columns }: DataTableProps) => {
   );
 };
 
-const CoinDataTable = ({
-  data,
-  columns,
-  startDate,
-  setStartDate,
-  modal,
-}: CoinDataTableProps) => {
-  return (
-    <>
-      <TopicHeader>
-        <h3>Twitter Sentiment</h3>
-      </TopicHeader>
-      <TwitterPage>
-        <LeftContainer>
-          <BackgroundTable>
-            <h3>Top Coins By Day</h3>
-            {!modal && startDate && setStartDate && (
-              <DateSelector startDate={startDate} setStartDate={setStartDate} />
-            )}
-            <DataTable data={data} columns={columns} />
-          </BackgroundTable>
-        </LeftContainer>
-        <RightContainer>
-          <BackgroundTable>Testing</BackgroundTable>
-        </RightContainer>
-      </TwitterPage>
-    </>
-  );
-};
-
-export { CoinDataTable, DataTable };
+export { DataTable };

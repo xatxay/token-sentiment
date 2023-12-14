@@ -1,21 +1,34 @@
 import { useEffect, useState } from "react";
-import { ArrayTweetResult, Result, TweetByDay, TweetsData } from "./interface";
+import {
+  ArrayTweetResult,
+  Fetchparams,
+  Result,
+  TweetByDay,
+  TweetsData,
+} from "./interface";
 
-const useFetch = (apiUrl: string, date: string) => {
-  const [data, setData] = useState<TweetByDay | null>(null);
+const useFetch = (apiUrl: string, params: Fetchparams) => {
+  const [data, setData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  console.log(apiUrl, date);
+  console.log("date: ", params);
 
   useEffect(() => {
     const fetData = async () => {
       if (!apiUrl) return;
       setLoading(true);
       const url = new URL(apiUrl);
-      url.searchParams.append("date", date);
+      Object.keys(params).forEach((key) => {
+        if (params[key]) {
+          url.searchParams.append(key, params[key]);
+        }
+      });
       try {
         const response = await fetch(url.toString());
+        console.log("url: ", url);
+        console.log("response: ", response);
         if (!response.ok) {
+          console.error("error fetching");
           throw new Error(`${response.status}: ${response.statusText}`);
         }
         const jsonResponse = await response.json();
@@ -24,6 +37,7 @@ const useFetch = (apiUrl: string, date: string) => {
         return { data, error };
       } catch (err) {
         setError((err as Error).message);
+        console.error("error fetching: ", err);
         setData(null);
       } finally {
         setLoading(false);
@@ -31,7 +45,7 @@ const useFetch = (apiUrl: string, date: string) => {
     };
     fetData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiUrl, date]);
+  }, [apiUrl, params?.date]);
   return { data, error, loading };
 };
 

@@ -10,11 +10,13 @@ import {
   MenuList,
 } from "./homepageStyle";
 import logo from "./logo.png";
-import Twitter from "../twitter/twitter";
-import { StartDate } from "../utils/interface";
+import CoinsByDay from "../twitter/coinsByDay";
+// import { StartDate } from "../utils/interface";
 import { useCallback, useState } from "react";
+import SentimentByUser from "../twitter/sentimentByUser";
+import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
 
-const Homepage = ({ startDate, setStartDate }: StartDate) => {
+const Homepage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedCoin, setSelectedCoin] = useState<string | null>(null);
 
@@ -52,14 +54,20 @@ const Homepage = ({ startDate, setStartDate }: StartDate) => {
         </HeaderMenu>
         <LogoutButton>Logout</LogoutButton>
       </HeaderContainer>
-      <Twitter
-        startDate={startDate}
-        setStartDate={setStartDate}
-        openModal={openModal}
-        isOpen={isOpen}
-        coin={selectedCoin}
-        closeModal={closeModal}
-      />
+      <TopicHeader>
+        <h3>Twitter Sentiment</h3>
+      </TopicHeader>
+      <TwitterPage>
+        <CoinsByDay
+          // startDate={startDate}
+          // setStartDate={setStartDate}
+          openModal={openModal}
+          isOpen={isOpen}
+          coin={selectedCoin}
+          closeModal={closeModal}
+        />
+        <SentimentByUser />
+      </TwitterPage>
     </>
   );
 };

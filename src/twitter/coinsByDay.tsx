@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   duplicateCoins,
   extractTwitterSentimentByDay,
@@ -8,26 +8,48 @@ import {
   useFetch,
 } from "../utils/utils";
 import { TwitterTableName } from "./twitterStyle";
-import { CoinDataTable } from "../table/dataTable";
-import { ArrayTweetResult, StartDate } from "../utils/interface";
+import {
+  ArrayTweetResult,
+  CoinDataTableProps,
+  Modal,
+} from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTableModal from "../table/modal";
 import { toast } from "react-toastify";
+import { BackgroundTable, LeftContainer } from "../twitter/twitterStyle";
+import DateSelector from "../table/datePicker";
+import { DataTable } from "../table/dataTable";
 
-const Twitter = ({
+const CoinDataTable = ({
+  data,
+  columns,
   startDate,
   setStartDate,
-  openModal,
-  isOpen,
-  coin,
-  closeModal,
-}: StartDate) => {
+  modal,
+}: CoinDataTableProps) => {
+  return (
+    <>
+      <LeftContainer>
+        <BackgroundTable>
+          <h3>Top Coins By Day</h3>
+          {!modal && startDate && setStartDate && (
+            <DateSelector startDate={startDate} setStartDate={setStartDate} />
+          )}
+          <DataTable data={data} columns={columns} />
+        </BackgroundTable>
+      </LeftContainer>
+    </>
+  );
+};
+
+const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const dateFormat = formatDate(startDate);
-  console.log("dateasda: ", dateFormat, coin);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
   let noDuplicateData: ArrayTweetResult[] = [];
   let duplicateData: ArrayTweetResult[] = [];
-  const { data, error } = useFetch(twitterUrl || "", dateFormat);
+  const { data, error } = useFetch(twitterUrl || "", { date: dateFormat });
+
   if (data) {
     const twitterResult = extractTwitterSentimentByDay(data);
     console.log("twitter result: ", twitterResult);
@@ -37,6 +59,7 @@ const Twitter = ({
     console.log("no duplicate: ", noDuplicateData);
     duplicateData = duplicateCoins(arrayData, coin || "") || [];
   }
+
   if (error) {
     console.error("Failed fetching twitter data: ", error);
     toast.error(error);
@@ -79,11 +102,7 @@ const Twitter = ({
             );
           } else {
             return (
-              <TwitterTableName
-                href={row.twitterUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <TwitterTableName href={row.twitterUrl} target="_blank">
                 {row.twitterUser}
               </TwitterTableName>
             );
@@ -117,4 +136,4 @@ const Twitter = ({
   );
 };
 
-export default Twitter;
+export default CoinsByDay;

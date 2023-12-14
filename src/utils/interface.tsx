@@ -11,7 +11,7 @@ interface TopCoinsDictInfo {
   unique_users: number;
 }
 
-export interface TweetsDataString {
+export interface Fetchparams {
   [key: string]: string;
 }
 
@@ -24,7 +24,7 @@ export interface TweetsData {
 
 export interface TweetByDay {
   top_coins_dict: TopCoinsDict;
-  tweets_data: TweetsDataString;
+  tweets_data: Fetchparams;
 }
 
 interface CoinResult {
@@ -50,7 +50,7 @@ export interface ArrayTweetResult {
   twitterUrl: string;
 }
 
-export interface StartDate extends Modal {
+export interface StartDate {
   startDate: Date;
   setStartDate: (date: Date) => void;
 }
@@ -81,4 +81,15 @@ export interface Pagination {
   pageIndex: number;
   pageCount: number;
   setPageIndex: (updater: Updater<number>) => void;
+}
+
+export interface SentimentByUserProps {
+  tweet_url: string;
+  username: string;
+  coin_sentiment: CoinSentiment | number;
+  date: string;
+}
+
+interface CoinSentiment {
+  [key: string]: number;
 }
