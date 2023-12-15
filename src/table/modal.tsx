@@ -1,15 +1,15 @@
 import ReactModal from "react-modal";
 import { DataTableProps } from "../utils/interface";
 import "./modalStyle.css";
-import {  DataTable } from "./dataTable";
+import { DataTable } from "./dataTable";
 
 const DataTableModal = ({
   data,
   columns,
   isOpen,
   closeModal,
-  coin,
 }: DataTableProps) => {
+  console.log("isopen: ", isOpen);
   return (
     <ReactModal
       isOpen={isOpen || false}

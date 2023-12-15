@@ -22,11 +22,11 @@ const Homepage = () => {
   const [selectedCoin, setSelectedCoin] = useState<string | null>(null);
 
   const openModal = useCallback(
-    (coin: string) => {
+    (coin?: string) => {
       console.log("opening modal", isOpen, selectedCoin, coin);
       if (isOpen) return;
       setIsOpen(true);
-      setSelectedCoin(coin);
+      if (coin) setSelectedCoin(coin);
     },
     [isOpen, selectedCoin]
   );
@@ -70,7 +70,11 @@ const Homepage = () => {
         <SentimentByUser />
       </TwitterPage>
       <TwitterPage>
-        <SentimentByCoin />
+        <SentimentByCoin
+          openModal={openModal}
+          closeModal={closeModal}
+          isOpen={isOpen}
+        />
       </TwitterPage>
     </>
   );

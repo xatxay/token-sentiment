@@ -120,6 +120,17 @@ interface CoinSentiment {
   [key: string]: number;
 }
 
-export interface BrushChartProps {
+export interface BrushChartProps extends SentimentByCoinProps {
   data: SentimentValidJson[];
+  coin: string;
+}
+
+export interface AggregateData {
+  [key: string]: SentimentValidJson[];
+}
+
+export interface SentimentByCoinProps {
+  openModal: () => void;
+  closeModal?: () => void;
+  isOpen?: boolean;
 }

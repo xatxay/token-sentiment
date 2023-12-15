@@ -1,27 +1,28 @@
 import { Component } from "react";
 import ReactApexChart from "react-apexcharts";
 import {
+  AggregateData,
   BrushChartProps,
   BrushChartState,
   SentimentValidJson,
 } from "../utils/interface";
 import { BrushChartContainer } from "./brushChartStyle";
+import { dateRangeSelector, lineColor, white } from "../color/color";
 
 class BrushChart extends Component<BrushChartProps, BrushChartState> {
-  constructor(props: any, data: SentimentValidJson[]) {
+  constructor(props: any) {
     super(props);
+
+    const aggregatedData = this.aggregateData(props.data, props.coin);
 
     this.state = {
       series: [
         {
-          data:
-            props.data && props.data.length > 0
-              ? props.data.map((item: SentimentValidJson) => ({
-                  x: new Date(item.date),
-                  y: Object.values(item.coin_sentiment)[0],
-                  username: item.username,
-                }))
-              : [],
+          data: aggregatedData.map((item) => ({
+            x: item.date,
+            y: item.avgSentiment,
+            tooltipContent: item.tooltipContent,
+          })),
         },
       ],
       options: {
@@ -36,8 +37,13 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           zoom: {
             enabled: false,
           },
+          events: {
+            click: () => {
+              props.openModal();
+            },
+          },
         },
-        colors: ["#AF2655"],
+        colors: [lineColor],
         stroke: {
           width: 3,
         },
@@ -52,11 +58,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
             const data =
               w.globals.initialSeries[seriesIndex].data[dataPointIndex];
             if (!data) return;
-            return `<div class="apexcharts-tooltip-title" style="font-size: 12px;">${data.username}<br></div>
-            <div class="apexcharts-tooltip-series-group" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="apexcharts-tooltip-marker" style="background-color: ${w.globals.colors[seriesIndex]};"></span>
-              <div class="apexcharts-tooltip-text" style="font-size: 12px; padding: 2px;">Score: ${series[seriesIndex][dataPointIndex]}</div>
-            </div>`;
+            return `<div class="apexcharts-tooltip-title" style="font-size: 12px;"> ${data.tooltipContent} </div>`;
           },
         },
         dataLabels: {
@@ -67,12 +69,16 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         },
         markers: {
           size: 0,
+          // onClick: () => {
+          //   console.log("clicking");
+          //   props.openModal();
+          // }, (not working)
         },
         xaxis: {
           type: "datetime",
           labels: {
             style: {
-              colors: "#FFFFFF",
+              colors: white,
               fontSize: "11px",
               fontWeight: 900,
               cssClass: "apexchart-xaxis-label",
@@ -86,7 +92,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           labels: {
             formatter: (val: number) => val.toFixed(0),
             style: {
-              colors: "#FFFFFF",
+              colors: white,
               fontSize: "11px",
               fontWeight: 900,
               cssClass: "apexcharts-yaxis-label",
@@ -95,7 +101,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           title: {
             text: "Sentiment Score",
             style: {
-              color: "#FFFFFF",
+              color: white,
               fontSize: "14px",
               fontWeight: "bold",
               cssClass: "apexcharts-yaxis-title",
@@ -106,13 +112,10 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
 
       seriesLine: [
         {
-          data:
-            props.data && props.data.length > 0
-              ? data.map((item) => ({
-                  x: new Date(item.date),
-                  y: 0,
-                }))
-              : [],
+          data: aggregatedData.map((item) => ({
+            x: new Date(item.date),
+            y: item.avgSentiment,
+          })),
         },
       ],
       optionsLine: {
@@ -126,14 +129,20 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           },
           selection: {
             enabled: true,
+            type: "x",
+            fill: {
+              color: dateRangeSelector,
+              opacity: 0.1,
+            },
             xaxis: {
-              min: props.data.date ? new Date(data[0].date) : undefined,
+              min: props.data.date ? new Date(props.data[0].date) : undefined,
               max: props.data.date
-                ? new Date(data[data.length - 1].date)
+                ? new Date(props.data[props.data.length - 1].date)
                 : undefined,
             },
           },
         },
+        colors: [white],
         fill: {
           type: "gradient",
           gradient: {
@@ -144,7 +153,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         xaxis: {
           labels: {
             style: {
-              colors: "#FFFFFF",
+              colors: white,
               fontSize: "11px",
               fontWeight: 900,
               cssClass: "apexcharts-xaxis-label",
@@ -155,10 +164,9 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
             enabled: false,
           },
           axisBorder: {
-            colors: "#FFFFFF",
+            colors: white,
           },
         },
-        colors: ["#FFFFFF"],
         yaxis: {
           min: -1,
           max: 1,
@@ -166,7 +174,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           labels: {
             formatters: (val: number) => val.toFixed(0),
             style: {
-              colors: "#FFFFFF",
+              colors: white,
               fontSize: "11px",
               fontWeight: 900,
               cssClass: "apexcharts-yaxis-label",
@@ -177,27 +185,68 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
     };
   }
   componentDidUpdate(prevProps: BrushChartProps) {
-    if (this.props.data !== prevProps.data) {
+    if (
+      this.props.data !== prevProps.data ||
+      this.props.coin !== prevProps.coin
+    ) {
+      const aggregatedData = this.aggregateData(
+        this.props.data,
+        this.props.coin
+      );
       this.setState({
         series: [
           {
-            data: this.props.data.map((item: SentimentValidJson) => ({
-              x: new Date(item.date),
-              y: Object.values(item.coin_sentiment)[0],
-              username: item.username,
+            data: aggregatedData.map((item) => ({
+              x: item.date,
+              y: item.avgSentiment,
+              tooltipContent: item.tooltipContent,
             })),
           },
         ],
         seriesLine: [
           {
-            data: this.props.data.map((item: SentimentValidJson) => ({
+            data: aggregatedData.map((item) => ({
               x: new Date(item.date),
-              y: 0,
+              y: item.avgSentiment,
             })),
           },
         ],
       });
     }
+  }
+
+  aggregateData(data: SentimentValidJson[], coin: string) {
+    const groupedByDate: AggregateData = {};
+
+    data.forEach((item) => {
+      const dateString = new Date(item.date).toDateString();
+      if (!groupedByDate[dateString]) {
+        groupedByDate[dateString] = [];
+      }
+      groupedByDate[dateString].push(item);
+    });
+
+    return Object.keys(groupedByDate).map((dateString) => {
+      const items = groupedByDate[dateString];
+      const avgSentiment = (
+        items.reduce((acc, cur) => {
+          const sentimentValue = cur.coin_sentiment[coin];
+          return acc + sentimentValue;
+        }, 0) / items.length
+      ).toFixed(2);
+      const tooltipContent =
+        `<strong>Sentiment: ${avgSentiment}</strong><br>` +
+        items
+          .map((item) => `${item.username}: ${item.coin_sentiment[coin]}`)
+          .join("<br>");
+      console.log("asdasdasdasd: ", items);
+
+      return {
+        date: new Date(dateString),
+        avgSentiment,
+        tooltipContent,
+      };
+    });
   }
 
   render() {

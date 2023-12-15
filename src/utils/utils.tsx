@@ -181,7 +181,9 @@ const querySentimentCoin = (
       : ticker;
   try {
     const coinSentiment = data.filter((coin) => {
-      if (newTicker in coin.coin_sentiment) {
+      if (
+        newTicker in coin.coin_sentiment
+      ) {
         return true;
       }
       return false;
