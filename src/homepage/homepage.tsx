@@ -15,6 +15,7 @@ import CoinsByDay from "../twitter/coinsByDay";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
 import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
+import SentimentByCoin from "../twitter/sentimentByCoin";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -67,6 +68,9 @@ const Homepage = () => {
           closeModal={closeModal}
         />
         <SentimentByUser />
+      </TwitterPage>
+      <TwitterPage>
+        <SentimentByCoin />
       </TwitterPage>
     </>
   );

@@ -26,7 +26,6 @@ const DataTable = ({ data, columns }: DataTableProps) => {
       },
     },
   });
-  console.log("datatable: ", data);
 
   const nextPage = () => {
     const newPageIndex = pageIndexNumber + 1;

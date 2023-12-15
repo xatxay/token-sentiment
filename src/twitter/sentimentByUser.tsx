@@ -1,25 +1,50 @@
 import { toast } from "react-toastify";
-import { useFetch } from "../utils/utils";
+import { sentimentFormatted, useFetch } from "../utils/utils";
 import {
   BackgroundTable,
   RightContainer,
-  TwitterPage,
   TwitterTableName,
 } from "./twitterStyle";
-import { DataTableProps, SentimentByUserProps } from "../utils/interface";
-import { useMemo } from "react";
+import {
+  SentimentByInfluencer,
+  SentimentByUserProps,
+  TwitterInfluencers,
+} from "../utils/interface";
+import { ChangeEvent, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
+import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 
 const SentimentByUser = () => {
+  const defaultUser = "Awawat_Trades";
+  const [username, setUsername] = useState<string>(defaultUser);
   const apiUrl = String(process.env.REACT_APP_SENTIMENT_BY_USER);
-  const username = "Awawat_Trades";
+  const apiUrlInfluencers = String(process.env.REACT_APP_SENTIMENT_USERS);
   const { data, error, loading } = useFetch(apiUrl, { username: username });
-  let parseData = null;
+  const { data: twitterInfluencers, error: userError } =
+    useFetch(apiUrlInfluencers);
+  let parseData: SentimentByUserProps[] = [];
+  let parseUser: TwitterInfluencers[] = [];
+  let influencer: string[] = [];
   if (data) {
-    parseData = JSON.parse(data);
+    parseData = JSON.parse(data)
+      .filter(
+        (sentiment: SentimentByUserProps) => sentiment.coin_sentiment !== "{}"
+      )
+      .sort((a: SentimentByUserProps, b: SentimentByUserProps) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
   }
-  console.log("parsing data: ", parseData);
+  if (twitterInfluencers) {
+    parseUser = JSON.parse(twitterInfluencers);
+    influencer = parseUser.map((user) => {
+      return user.username;
+    });
+  }
+
+  const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
+    setUsername(event.target.value);
+  };
 
   const columnHelper = createColumnHelper<SentimentByUserProps>();
   const columns = useMemo(
@@ -32,10 +57,8 @@ const SentimentByUser = () => {
         header: "Sentiment",
         cell: (info) => {
           const tickerSentiment = info.getValue();
-          const formatData = Object.entries(tickerSentiment)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ");
-          return <TwitterTableName>{formatData}</TwitterTableName>;
+          const formattedSentiment = sentimentFormatted(tickerSentiment);
+          return <TwitterTableName>{formattedSentiment}</TwitterTableName>;
         },
       }),
       columnHelper.accessor("tweet_url", {
@@ -52,34 +75,73 @@ const SentimentByUser = () => {
         },
       }),
     ],
-    [columnHelper]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [columnHelper, username]
   );
+
+  if (!loading && parseData.length === 0) {
+    console.log("no data: ", parseData);
+  }
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    toast.error(error);
+  if (error || userError) {
+    toast.error(error || userError);
   }
-  return <SentimentByUserPlacement data={parseData} columns={columns} />;
+  return (
+    <SentimentByUserPlacement
+      data={parseData}
+      columns={columns}
+      twitterInfluencers={influencer}
+      username={username}
+      handleSelectUser={handleSelectUser}
+    />
+  );
 };
 
-const SentimentByUserPlacement = ({ data, columns }: DataTableProps) => {
+const SentimentByUserPlacement = ({
+  data,
+  columns,
+  twitterInfluencers,
+  username,
+  handleSelectUser,
+}: SentimentByInfluencer) => {
   return (
     <>
-      <TwitterPage>
-        <RightContainer>
-          <BackgroundTable>
-            <h3>Sentiment By User</h3>
-            {data && data.length > 0 ? (
+      <RightContainer>
+        <BackgroundTable>
+          <h3>Sentiment By User</h3>
+          {data && data.length > 0 ? (
+            <>
+              <DropDownMenu value={username} onChange={handleSelectUser}>
+                {twitterInfluencers.map((influencer) => {
+                  return (
+                    <DropDownOptions key={influencer} value={influencer}>
+                      {influencer}
+                    </DropDownOptions>
+                  );
+                })}
+              </DropDownMenu>
               <DataTable data={data} columns={columns} />
-            ) : (
-              <div>no data</div>
-            )}
-          </BackgroundTable>
-        </RightContainer>
-      </TwitterPage>
+            </>
+          ) : (
+            <>
+              <DropDownMenu value={username} onChange={handleSelectUser}>
+                {twitterInfluencers.map((influencer) => {
+                  return (
+                    <DropDownOptions key={influencer} value={influencer}>
+                      {influencer}
+                    </DropDownOptions>
+                  );
+                })}
+              </DropDownMenu>
+              <h1>Please select a different user</h1>
+            </>
+          )}
+        </BackgroundTable>
+      </RightContainer>
     </>
   );
 };

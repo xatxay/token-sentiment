@@ -1,6 +1,7 @@
 import Homepage from "./homepage/homepage";
 import ReactModal from "react-modal";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactModal.setAppElement("#root");
 

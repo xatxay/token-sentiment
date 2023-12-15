@@ -1,4 +1,5 @@
 import { Updater } from "@tanstack/react-table";
+import { ChangeEvent } from "react";
 
 export interface TopCoinsDict {
   [key: string]: TopCoinsDictInfo;
@@ -86,10 +87,39 @@ export interface Pagination {
 export interface SentimentByUserProps {
   tweet_url: string;
   username: string;
-  coin_sentiment: CoinSentiment | number;
-  date: string;
+  coin_sentiment: string;
+  date: number;
+}
+
+export interface TwitterInfluencers {
+  user_id: number;
+  username: string;
+}
+
+export interface SentimentByInfluencer extends DataTableProps {
+  twitterInfluencers: string[];
+  username: string;
+  handleSelectUser: (event: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export interface BrushChartState {
+  options: any;
+  series: any[];
+  optionsLine: any;
+  seriesLine: any[];
+}
+
+export interface SentimentValidJson {
+  tweet_url: string;
+  username: string;
+  coin_sentiment: CoinSentiment;
+  date: number;
 }
 
 interface CoinSentiment {
   [key: string]: number;
+}
+
+export interface BrushChartProps {
+  data: SentimentValidJson[];
 }

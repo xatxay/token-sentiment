@@ -3,30 +3,31 @@ import {
   ArrayTweetResult,
   Fetchparams,
   Result,
+  SentimentByUserProps,
+  SentimentValidJson,
   TweetByDay,
   TweetsData,
 } from "./interface";
 
-const useFetch = (apiUrl: string, params: Fetchparams) => {
+const useFetch = (apiUrl: string, params?: Fetchparams) => {
   const [data, setData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("date: ", params);
 
   useEffect(() => {
     const fetData = async () => {
       if (!apiUrl) return;
       setLoading(true);
       const url = new URL(apiUrl);
-      Object.keys(params).forEach((key) => {
-        if (params[key]) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
+      if (params) {
+        Object.keys(params).forEach((key) => {
+          if (params[key]) {
+            url.searchParams.append(key, params[key]);
+          }
+        });
+      }
       try {
         const response = await fetch(url.toString());
-        console.log("url: ", url);
-        console.log("response: ", response);
         if (!response.ok) {
           console.error("error fetching");
           throw new Error(`${response.status}: ${response.statusText}`);
@@ -45,7 +46,7 @@ const useFetch = (apiUrl: string, params: Fetchparams) => {
     };
     fetData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiUrl, params?.date]);
+  }, [apiUrl, params?.date, params?.username]);
   return { data, error, loading };
 };
 
@@ -85,7 +86,7 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
         });
       });
     });
-    console.log("array: ", tableData);
+    // console.log("array: ", tableData);
     return tableData;
   } catch (err) {
     console.log("Error inserting data to array: ", err);
@@ -136,6 +137,62 @@ const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
   }
 };
 
+const sentimentFormatted = (tickerSentiment: string): string | null => {
+  try {
+    if (tickerSentiment === "{}") {
+      return null;
+    }
+    const regex = /'(\w+)':\s*(-?\d+)/g;
+    const matches = tickerSentiment.matchAll(regex);
+    const formattedSentiment = Array.from(matches)
+      .map((match) => `${match[1]}: ${match[2]}`)
+      .join(", ");
+    return formattedSentiment;
+  } catch (err) {
+    console.error("Error formatted sentiment: ", err);
+    throw err;
+  }
+};
+
+const modifyValidJson = (
+  sentimentData: SentimentByUserProps[]
+): SentimentValidJson[] => {
+  try {
+    const validJsonData = sentimentData.map((data) => {
+      return {
+        ...data,
+        coin_sentiment: JSON.parse(data.coin_sentiment.replace(/'/g, '"')),
+      };
+    });
+    return validJsonData;
+  } catch (err) {
+    console.error("Error turning string to valid json: ", err);
+    throw err;
+  }
+};
+
+const querySentimentCoin = (
+  ticker: string,
+  data: SentimentValidJson[]
+): SentimentValidJson[] => {
+  const newTicker =
+    ticker === "CRYPTO"
+      ? ticker.charAt(0).toUpperCase() + ticker.slice(1).toLowerCase()
+      : ticker;
+  try {
+    const coinSentiment = data.filter((coin) => {
+      if (newTicker in coin.coin_sentiment) {
+        return true;
+      }
+      return false;
+    });
+    return coinSentiment;
+  } catch (err) {
+    console.error("Error querying sentiment coin: ", err);
+    throw err;
+  }
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
@@ -143,4 +200,7 @@ export {
   formatDate,
   removeDuplicate,
   duplicateCoins,
+  sentimentFormatted,
+  modifyValidJson,
+  querySentimentCoin,
 };
