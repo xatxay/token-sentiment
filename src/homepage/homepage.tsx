@@ -14,9 +14,14 @@ import CoinsByDay from "../twitter/coinsByDay";
 // import { StartDate } from "../utils/interface";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
+import {
+  LeftContainer,
+  TopicHeader,
+  TwitterPage,
+} from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
+import PieChart from "../chart/pieChart";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -68,6 +73,8 @@ const Homepage = () => {
           coin={selectedCoin}
           closeModal={closeModal}
         />
+      </TwitterPage>
+      <TwitterPage>
         <SentimentByUser />
       </TwitterPage>
       <TwitterPage>

@@ -20,6 +20,31 @@ const PaginationButton = styled.button`
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s ease;
+    z-index: 0;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 const PaginationText = styled.span`

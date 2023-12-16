@@ -44,9 +44,9 @@ export interface DataTableProps extends Modal {
 
 export interface ArrayTweetResult {
   coin: string;
-  mentions: string | number;
+  mentions: number;
   uniqueUser: number;
-  sentiments: string | number;
+  sentiments: number;
   twitterUser: string | number;
   twitterUrl: string;
 }
@@ -107,6 +107,11 @@ export interface BrushChartState {
   series: any[];
   optionsLine: any;
   seriesLine: any[];
+}
+
+export interface PieChartState {
+  chartOptions: any;
+  series: any[];
 }
 
 export interface SentimentValidJson {
@@ -170,4 +175,9 @@ export interface FollowersChanges {
   username: string;
   date: string;
   data: number | string;
+}
+
+export interface PieChartData {
+  series: number[];
+  labels: string[];
 }

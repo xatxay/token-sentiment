@@ -2,16 +2,18 @@ import { useMemo, useState } from "react";
 import {
   duplicateCoins,
   extractTwitterSentimentByDay,
+  formatCoinSentimentByDayPieChart,
   formatDate,
   insertArrayData,
   removeDuplicate,
   useFetch,
 } from "../utils/utils";
-import { TwitterTableName } from "./twitterStyle";
+import { RightContainer, TwitterTableName } from "./twitterStyle";
 import {
   ArrayTweetResult,
   CoinDataTableProps,
   Modal,
+  PieChartData,
 } from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTableModal from "../table/modal";
@@ -19,6 +21,7 @@ import { toast } from "react-toastify";
 import { BackgroundTable, LeftContainer } from "../twitter/twitterStyle";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
+import PieChart from "../chart/pieChart";
 
 const CoinDataTable = ({
   data,
@@ -48,6 +51,7 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
   let noDuplicateData: ArrayTweetResult[] = [];
   let duplicateData: ArrayTweetResult[] = [];
+  let pieChartData: PieChartData = { series: [0], labels: [""] };
   const { data, error } = useFetch(twitterUrl || "", { date: dateFormat });
 
   if (data) {
@@ -56,8 +60,9 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     const arrayData = insertArrayData(twitterResult);
     // console.log("array: ", arrayData);
     noDuplicateData = removeDuplicate(arrayData) || [];
-    // console.log("no duplicate: ", noDuplicateData);
+    console.log("no duplicate: ", noDuplicateData);
     duplicateData = duplicateCoins(arrayData, coin || "") || [];
+    pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
   }
 
   if (error) {
@@ -115,16 +120,21 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
 
   return (
     <>
-      <CoinDataTable
-        data={noDuplicateData}
-        columns={columns}
-        isOpen={isOpen || false}
-        coin={coin || null}
-        closeModal={closeModal}
-        modal={false}
-        startDate={startDate}
-        setStartDate={setStartDate}
-      />
+      <LeftContainer>
+        <CoinDataTable
+          data={noDuplicateData}
+          columns={columns}
+          isOpen={isOpen || false}
+          coin={coin || null}
+          closeModal={closeModal}
+          modal={false}
+          startDate={startDate}
+          setStartDate={setStartDate}
+        />
+      </LeftContainer>
+      <RightContainer>
+        <PieChart series={pieChartData.series} labels={pieChartData.labels} />
+      </RightContainer>
       <DataTableModal
         data={duplicateData}
         columns={columns}

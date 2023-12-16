@@ -110,38 +110,36 @@ const SentimentByUserPlacement = ({
 }: SentimentByInfluencer) => {
   return (
     <>
-      <RightContainer>
-        <BackgroundTable>
-          <h3>Sentiment By User</h3>
-          {data && data.length > 0 ? (
-            <>
-              <DropDownMenu value={username} onChange={handleSelectUser}>
-                {twitterInfluencers.map((influencer) => {
-                  return (
-                    <DropDownOptions key={influencer} value={influencer}>
-                      {influencer}
-                    </DropDownOptions>
-                  );
-                })}
-              </DropDownMenu>
-              <DataTable data={data} columns={columns} />
-            </>
-          ) : (
-            <>
-              <DropDownMenu value={username} onChange={handleSelectUser}>
-                {twitterInfluencers.map((influencer) => {
-                  return (
-                    <DropDownOptions key={influencer} value={influencer}>
-                      {influencer}
-                    </DropDownOptions>
-                  );
-                })}
-              </DropDownMenu>
-              <h1>Please select a different user</h1>
-            </>
-          )}
-        </BackgroundTable>
-      </RightContainer>
+      <BackgroundTable>
+        <h3>Sentiment By User</h3>
+        {data && data.length > 0 ? (
+          <>
+            <DropDownMenu value={username} onChange={handleSelectUser}>
+              {twitterInfluencers.map((influencer) => {
+                return (
+                  <DropDownOptions key={influencer} value={influencer}>
+                    {influencer}
+                  </DropDownOptions>
+                );
+              })}
+            </DropDownMenu>
+            <DataTable data={data} columns={columns} />
+          </>
+        ) : (
+          <>
+            <DropDownMenu value={username} onChange={handleSelectUser}>
+              {twitterInfluencers.map((influencer) => {
+                return (
+                  <DropDownOptions key={influencer} value={influencer}>
+                    {influencer}
+                  </DropDownOptions>
+                );
+              })}
+            </DropDownMenu>
+            <h1>Please select a different user</h1>
+          </>
+        )}
+      </BackgroundTable>
     </>
   );
 };

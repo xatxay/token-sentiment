@@ -7,13 +7,13 @@ import {
   FollowersChanges,
   GroupData,
   MinMax,
+  PieChartData,
   Result,
   SentimentByUserProps,
   SentimentValidJson,
   TweetByDay,
   TweetsData,
   TwitterFollower,
-  UserChanges,
   UserSentimentGroup,
 } from "./interface";
 
@@ -259,7 +259,7 @@ const aggregateSentimentByCoinData = (
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
-    console.log("asdasdasdasd: ", items);
+    // console.log("coinsentimentdata: ", items);
     // console.log("date: ", dateString, new Date(dateString));
 
     return {
@@ -340,6 +340,16 @@ const chartContentFormatted = (data: FollowersChanges[]): BrushChartData[] => {
   }
 };
 
+const formatCoinSentimentByDayPieChart = (
+  data: ArrayTweetResult[]
+): PieChartData => {
+  const labels = data.map((coin) => coin.coin);
+  const series = data.map((mention) => mention.mentions);
+  const pieChartData = { series, labels };
+  console.log("hjkhkk: ", pieChartData);
+  return pieChartData;
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
@@ -356,4 +366,5 @@ export {
   twitterFollowersBrushData,
   calculateMinMax,
   chartContentFormatted,
+  formatCoinSentimentByDayPieChart,
 };

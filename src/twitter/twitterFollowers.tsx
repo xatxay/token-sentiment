@@ -14,6 +14,7 @@ import {
   useFetch,
 } from "../utils/utils";
 import { TopicContainer } from "./twitterStyle";
+import { toast } from "react-toastify";
 
 const TwitterFollowes = () => {
   const [username, setUsername] = useState<string>("Pentosh1");
@@ -28,7 +29,15 @@ const TwitterFollowes = () => {
 
   if (data) {
     parseData = JSON.parse(data);
-    console.log("followers data: ", parseData);
+    // console.log("followers data: ", parseData);
+  }
+
+  if (error) {
+    toast.error(error);
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   if (parseData && parseData.length > 0) {

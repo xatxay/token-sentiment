@@ -16,13 +16,13 @@ const PaginationControll = ({
         onClick={() => setPageIndex(0)}
         disabled={!canPreviousPage}
       >
-        {"<<"}
+        <span>{`<<`}</span>
       </PaginationButton>
       <PaginationButton
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
       >
-        {"<"}
+        <span>{`<`}</span>
       </PaginationButton>
       <span>
         Page{" "}
@@ -31,13 +31,13 @@ const PaginationControll = ({
         </strong>
       </span>
       <PaginationButton onClick={() => nextPage()} disabled={!canNextPage}>
-        {">"}
+        <span>{`>`}</span>
       </PaginationButton>
       <PaginationButton
         onClick={() => setPageIndex(pageCount - 1)}
         disabled={!canNextPage}
       >
-        {">>"}
+        <span>{`>>`}</span>
       </PaginationButton>
     </>
   );

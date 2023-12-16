@@ -8,8 +8,8 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
   constructor(props: any) {
     super(props);
 
-    console.log("brush: ", props.data);
-    console.log("miasda: ", props.min, props.max);
+    // console.log("brush: ", props.data);
+    // console.log("miasda: ", props.min, props.max);
     this.state = {
       series: [
         {
