@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BrushChart from "../chart/brushChart";
 import {
   BrushChartData,
@@ -25,10 +25,12 @@ const SentimentByCoin = ({
   closeModal,
   isOpen,
 }: SentimentByCoinProps) => {
-  const [coin, setCoin] = useState<string>("BTC");
+  const [coin, setCoin] = useState<string>("ETH");
   const [filterData, setFilterData] = useState<BrushChartData[]>([]);
+  const [modifiedData, setModifiedData] = useState<SentimentValidJson[]>([]);
   const apiUrl = process.env.REACT_APP_SENTIMENT_BY_COIN;
   const { data, error, loading } = useFetch(apiUrl || "");
+  const { min, max } = { min: -1, max: 1 };
 
   const columnHelper = createColumnHelper<SentimentValidJson>();
   const columns = useMemo(
@@ -65,23 +67,32 @@ const SentimentByCoin = ({
     [columnHelper]
   );
 
-  let modifiedData: SentimentValidJson[] = [];
-  if (data) {
-    const parseData: SentimentByUserProps[] = JSON.parse(data).filter(
-      (sentiment: SentimentByUserProps) => sentiment.coin_sentiment !== "{}"
-    );
-    // console.log("gdgdfgfdg: ", parseData);
-    modifiedData = modifyValidJson(parseData);
-  }
+  const processData = (coin: string, data: SentimentValidJson[]) => {
+    const sentimentData = querySentimentCoin(coin, data);
+    const groupedData = aggregateSentimentByCoinData(sentimentData, coin);
+    setFilterData(groupedData);
+  };
+  useEffect(() => {
+    if (data) {
+      const parseData: SentimentByUserProps[] = JSON.parse(data).filter(
+        (sentiment: SentimentByUserProps) => sentiment.coin_sentiment !== "{}"
+      );
+      const newModifiedData = modifyValidJson(parseData);
+      setModifiedData(newModifiedData);
+    }
+  }, [data]);
+  useEffect(() => {
+    if (coin && modifiedData.length > 0) {
+      processData(coin, modifiedData);
+    }
+  }, [coin, modifiedData]);
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!coin.trim()) {
       return;
     }
-    const data = querySentimentCoin(coin, modifiedData);
-    const groupedData = aggregateSentimentByCoinData(data, coin);
-    setFilterData(groupedData);
-    // console.log("query: ", data);
+    processData(coin, modifiedData);
   };
   // console.log("valid data: ", modifiedData);
   if (loading) {
@@ -99,10 +110,16 @@ const SentimentByCoin = ({
           <SentimentByCoinInput
             required
             placeholder="Enter a coin! For Example: ETH"
+            value={coin}
             onChange={(e) => setCoin(e.target.value.toUpperCase())}
           />
         </form>
-        <BrushChart data={filterData} openModal={openModal} />
+        <BrushChart
+          data={filterData}
+          openModal={openModal}
+          min={min}
+          max={max}
+        />
       </TopicContainer>
       <DataTableModal
         data={filterData}

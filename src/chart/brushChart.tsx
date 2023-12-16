@@ -9,12 +9,13 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
     super(props);
 
     console.log("brush: ", props.data);
+    console.log("miasda: ", props.min, props.max);
     this.state = {
       series: [
         {
           data: props.data.map((item: any) => ({
             x: item.date,
-            y: item.avgSentiment,
+            y: item.data,
             tooltipContent: item.tooltipContent,
           })),
         },
@@ -80,8 +81,8 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           },
         },
         yaxis: {
-          min: -1,
-          max: 1,
+          min: props.min,
+          max: props.max,
           tickAmount: 2,
           labels: {
             formatter: (val: number) => val.toFixed(0),
@@ -92,15 +93,15 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
               cssClass: "apexcharts-yaxis-label",
             },
           },
-          title: {
-            text: "Sentiment Score",
-            style: {
-              color: white,
-              fontSize: "14px",
-              fontWeight: "bold",
-              cssClass: "apexcharts-yaxis-title",
-            },
-          },
+          // title: {
+          //   text: "Sentiment Score",
+          //   style: {
+          //     color: white,
+          //     fontSize: "14px",
+          //     fontWeight: "bold",
+          //     cssClass: "apexcharts-yaxis-title",
+          //   },
+          // },
         },
       },
 
@@ -108,7 +109,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         {
           data: props.data.map((item: any) => ({
             x: new Date(item.date),
-            y: item.avgSentiment,
+            y: item.data,
           })),
         },
       ],
@@ -162,8 +163,8 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           },
         },
         yaxis: {
-          min: -1,
-          max: 1,
+          min: props.min,
+          max: props.max,
           tickAmount: 2,
           labels: {
             formatters: (val: number) => val.toFixed(0),
@@ -179,13 +180,17 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
     };
   }
   componentDidUpdate(prevProps: BrushChartProps) {
-    if (this.props.data !== prevProps.data) {
+    if (
+      this.props.data !== prevProps.data ||
+      this.props.min !== prevProps.min ||
+      this.props.max !== prevProps.max
+    ) {
       this.setState({
         series: [
           {
             data: this.props.data.map((item) => ({
               x: item.date,
-              y: item.avgSentiment,
+              y: item.data,
               tooltipContent: item.tooltipContent,
             })),
           },
@@ -194,10 +199,32 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           {
             data: this.props.data.map((item) => ({
               x: new Date(item.date),
-              y: item.avgSentiment,
+              y: item.data,
             })),
           },
         ],
+        options: {
+          ...this.state.options,
+          yaxis: {
+            ...this.state.options.yaxis,
+            min: this.props.min,
+            max: this.props.max,
+          },
+          xaxis: {
+            ...this.state.options.xaxis,
+          },
+        },
+        optionsLine: {
+          ...this.state.optionsLine,
+          yaxis: {
+            ...this.state.optionsLine.yaxis,
+            min: this.props.min,
+            max: this.props.max,
+          },
+          xaxis: {
+            ...this.state.optionsLine.xaxis,
+          },
+        },
       });
     }
   }

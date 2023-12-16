@@ -4,12 +4,16 @@ import {
   ArrayTweetResult,
   BrushChartData,
   Fetchparams,
+  FollowersChanges,
+  GroupData,
+  MinMax,
   Result,
   SentimentByUserProps,
   SentimentValidJson,
   TweetByDay,
   TweetsData,
   TwitterFollower,
+  UserChanges,
   UserSentimentGroup,
 } from "./interface";
 
@@ -218,6 +222,7 @@ const aggregateSentimentByCoinData = (
   //group data by date
   data.forEach((item) => {
     const dateString = new Date(item.date).toDateString();
+    // console.log("loop: ", item.date);
     if (!groupedByDate[dateString]) {
       groupedByDate[dateString] = [];
     }
@@ -255,13 +260,84 @@ const aggregateSentimentByCoinData = (
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
     console.log("asdasdasdasd: ", items);
+    // console.log("date: ", dateString, new Date(dateString));
 
     return {
       date: new Date(dateString),
-      avgSentiment,
+      data: avgSentiment,
       tooltipContent,
     };
   });
+};
+
+const groupedDataByDate = (data: TwitterFollower[]): GroupData => {
+  try {
+    const groupedByDate: GroupData = {};
+    // if (!data || data.length === 0) return null;
+    data.forEach((item) => {
+      if (!groupedByDate[item.date]) {
+        groupedByDate[item.date] = [];
+      }
+      groupedByDate[item.date].push(item);
+    });
+    console.log("groupdatabydate: ", groupedByDate);
+    return groupedByDate;
+  } catch (err) {
+    console.error("Failed grouping data by date: ", err);
+    throw err;
+  }
+};
+
+const twitterFollowersBrushData = (
+  data: TwitterFollower[],
+  username: string
+): FollowersChanges[] => {
+  try {
+    const userData = data.filter((d) => d.username === username);
+    const followersChanges: FollowersChanges[] = [];
+
+    for (let i = 1; i < userData.length; i++) {
+      const prev = userData[i - 1];
+      const current = userData[i];
+      const change =
+        parseInt(current.num_followers) - parseInt(prev.num_followers);
+      followersChanges.push({ username, date: current.date, data: change });
+    }
+    return followersChanges;
+  } catch (err) {
+    console.error("Error formatting twitter followers brush data: ", err);
+    throw err;
+  }
+};
+
+const calculateMinMax = (dataArray: { data: string | number }[]): MinMax => {
+  try {
+    const numberValue = dataArray.map((item) => Number(item.data));
+    const min = Math.min(...numberValue);
+    const max = Math.max(...numberValue);
+    console.log("min and max: ", min, max);
+    return { min, max };
+  } catch (err) {
+    console.error("Failed calculating mix and max: ", err);
+    throw err;
+  }
+};
+
+const chartContentFormatted = (data: FollowersChanges[]): BrushChartData[] => {
+  try {
+    const chartFormatted = data.map((data) => {
+      const tooltipContent = `<strong>${data.username}: ${data.data}</strong>`;
+      return {
+        date: new Date(data.date),
+        data: data.data,
+        tooltipContent: tooltipContent,
+      };
+    });
+    return chartFormatted;
+  } catch (err) {
+    console.log("Error formatting chart data: ", err);
+    throw err;
+  }
 };
 
 export {
@@ -276,4 +352,8 @@ export {
   querySentimentCoin,
   extractUniqueUsers,
   aggregateSentimentByCoinData,
+  groupedDataByDate,
+  twitterFollowersBrushData,
+  calculateMinMax,
+  chartContentFormatted,
 };

@@ -122,6 +122,8 @@ interface CoinSentiment {
 
 export interface BrushChartProps extends SentimentByCoinProps {
   data: any[];
+  min: number;
+  max: number;
 }
 
 export interface AggregateSentimentByCoinData {
@@ -147,6 +149,25 @@ export interface UserSentimentGroup {
 
 export interface BrushChartData {
   date: Date | string;
-  avgSentiment: string;
+  data: number | string;
   tooltipContent: string;
+}
+
+export interface GroupData {
+  [key: string]: TwitterFollower[];
+}
+
+export interface MinMax {
+  min: number;
+  max: number;
+}
+
+export interface UserChanges {
+  [date: string]: number;
+}
+
+export interface FollowersChanges {
+  username: string;
+  date: string;
+  data: number | string;
 }
