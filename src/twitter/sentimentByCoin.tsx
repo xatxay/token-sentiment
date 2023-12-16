@@ -1,11 +1,17 @@
 import React, { useMemo, useState } from "react";
 import BrushChart from "../chart/brushChart";
 import {
+  BrushChartData,
   SentimentByCoinProps,
   SentimentByUserProps,
   SentimentValidJson,
 } from "../utils/interface";
-import { modifyValidJson, querySentimentCoin, useFetch } from "../utils/utils";
+import {
+  aggregateSentimentByCoinData,
+  modifyValidJson,
+  querySentimentCoin,
+  useFetch,
+} from "../utils/utils";
 import {
   SentimentByCoinInput,
   TopicContainer,
@@ -20,7 +26,7 @@ const SentimentByCoin = ({
   isOpen,
 }: SentimentByCoinProps) => {
   const [coin, setCoin] = useState<string>("BTC");
-  const [filterData, setFilterData] = useState<SentimentValidJson[]>([]);
+  const [filterData, setFilterData] = useState<BrushChartData[]>([]);
   const apiUrl = process.env.REACT_APP_SENTIMENT_BY_COIN;
   const { data, error, loading } = useFetch(apiUrl || "");
 
@@ -73,8 +79,9 @@ const SentimentByCoin = ({
       return;
     }
     const data = querySentimentCoin(coin, modifiedData);
-    setFilterData(data);
-    console.log("query: ", data);
+    const groupedData = aggregateSentimentByCoinData(data, coin);
+    setFilterData(groupedData);
+    // console.log("query: ", data);
   };
   // console.log("valid data: ", modifiedData);
   if (loading) {
@@ -83,7 +90,7 @@ const SentimentByCoin = ({
   if (error) {
     return <div>{error}</div>;
   }
-  console.log("submit coin: ", coin);
+  // console.log("submit coin: ", coin);
   return (
     <>
       <TopicContainer>
@@ -95,7 +102,7 @@ const SentimentByCoin = ({
             onChange={(e) => setCoin(e.target.value.toUpperCase())}
           />
         </form>
-        <BrushChart data={filterData} coin={coin} openModal={openModal} />
+        <BrushChart data={filterData} openModal={openModal} />
       </TopicContainer>
       <DataTableModal
         data={filterData}

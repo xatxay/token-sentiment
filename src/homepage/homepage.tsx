@@ -16,6 +16,7 @@ import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
 import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
+import TwitterFollowes from "../twitter/twitterFollowers";
 
 const Homepage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -75,6 +76,9 @@ const Homepage = () => {
           closeModal={closeModal}
           isOpen={isOpen}
         />
+      </TwitterPage>
+      <TwitterPage>
+        <TwitterFollowes />
       </TwitterPage>
     </>
   );

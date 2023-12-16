@@ -121,16 +121,32 @@ interface CoinSentiment {
 }
 
 export interface BrushChartProps extends SentimentByCoinProps {
-  data: SentimentValidJson[];
-  coin: string;
+  data: any[];
 }
 
-export interface AggregateData {
+export interface AggregateSentimentByCoinData {
   [key: string]: SentimentValidJson[];
 }
 
 export interface SentimentByCoinProps {
-  openModal: () => void;
+  openModal?: () => void;
   closeModal?: () => void;
   isOpen?: boolean;
+}
+
+export interface TwitterFollower {
+  date: string;
+  user_id: string;
+  username: string;
+  num_followers: string;
+}
+
+export interface UserSentimentGroup {
+  [key: string]: string[];
+}
+
+export interface BrushChartData {
+  date: Date | string;
+  avgSentiment: string;
+  tooltipContent: string;
 }

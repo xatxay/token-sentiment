@@ -9,7 +9,7 @@ const DataTableModal = ({
   isOpen,
   closeModal,
 }: DataTableProps) => {
-  console.log("isopen: ", isOpen);
+  // console.log("isopen: ", isOpen);
   return (
     <ReactModal
       isOpen={isOpen || false}

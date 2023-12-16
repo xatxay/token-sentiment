@@ -147,3 +147,14 @@ const SentimentByUserPlacement = ({
 };
 
 export default SentimentByUser;
+
+/*
+[{date: "2023-11-01",user_id: "1427112869842198533",username: "AVCrypto_",num_followers: "13028"},
+{date: "2023-11-01",user_id: "1281133175658254336",username: "Awawat_Trades",num_followers: "75823"},
+{date: "2023-11-01",user_id: "1526904668403941376",username: "BlankBrainTrade",num_followers: "16876"},
+{date: "2023-11-01",user_id: "2319151119",username: "CryptoBran_",num_followers: "17251"},
+{date: "2023-11-02",user_id: "1427112869842198533",username: "AVCrypto_",num_followers: "13026"},
+{date: "2023-11-01",user_id: "1281133175658254336",username: "Awawat_Trades",num_followers: "75833"},
+{date: "2023-11-01",user_id: "1526904668403941376",username: "BlankBrainTrade",num_followers: "16836"},
+{date: "2023-11-01",user_id: "2319151119",username: "CryptoBran_",num_followers: "17291"}]
+*/

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import {
+  AggregateSentimentByCoinData,
   ArrayTweetResult,
+  BrushChartData,
   Fetchparams,
   Result,
   SentimentByUserProps,
   SentimentValidJson,
   TweetByDay,
   TweetsData,
+  TwitterFollower,
+  UserSentimentGroup,
 } from "./interface";
 
 const useFetch = (apiUrl: string, params?: Fetchparams) => {
@@ -181,9 +185,7 @@ const querySentimentCoin = (
       : ticker;
   try {
     const coinSentiment = data.filter((coin) => {
-      if (
-        newTicker in coin.coin_sentiment
-      ) {
+      if (newTicker in coin.coin_sentiment) {
         return true;
       }
       return false;
@@ -193,6 +195,73 @@ const querySentimentCoin = (
     console.error("Error querying sentiment coin: ", err);
     throw err;
   }
+};
+
+const extractUniqueUsers = (data: TwitterFollower[]): string[] => {
+  try {
+    const uniqueUsersSet = new Set<string>();
+    data.forEach((user) => uniqueUsersSet.add(user.username));
+    const uniqueUserArray = Array.from(uniqueUsersSet);
+    return uniqueUserArray;
+  } catch (err) {
+    console.error("Error extracting unique users: ", err);
+    throw err;
+  }
+};
+
+const aggregateSentimentByCoinData = (
+  data: SentimentValidJson[],
+  coin: string
+): BrushChartData[] => {
+  const groupedByDate: AggregateSentimentByCoinData = {};
+
+  //group data by date
+  data.forEach((item) => {
+    const dateString = new Date(item.date).toDateString();
+    if (!groupedByDate[dateString]) {
+      groupedByDate[dateString] = [];
+    }
+    groupedByDate[dateString].push(item);
+  });
+
+  return Object.keys(groupedByDate).map((dateString) => {
+    const items = groupedByDate[dateString];
+    let userSentiments: UserSentimentGroup = {};
+
+    //group data by username
+    items.forEach((item) => {
+      const username = item.username;
+      const sentiment = item.coin_sentiment[coin].toString();
+      if (!userSentiments[username]) {
+        userSentiments[username] = [];
+      }
+      userSentiments[username].push(sentiment);
+    });
+
+    const combinedUserSentiments = Object.keys(userSentiments).map(
+      (username) => {
+        return `${username}: ${userSentiments[username].join(", ")}`;
+      }
+    );
+
+    const avgSentiment = (
+      items.reduce((acc, cur) => {
+        const sentimentValue = cur.coin_sentiment[coin];
+        return acc + sentimentValue;
+      }, 0) / items.length
+    ).toFixed(2);
+
+    const tooltipContent =
+      `<strong>Sentiment: ${avgSentiment}</strong><br>` +
+      combinedUserSentiments.join("<br>");
+    console.log("asdasdasdasd: ", items);
+
+    return {
+      date: new Date(dateString),
+      avgSentiment,
+      tooltipContent,
+    };
+  });
 };
 
 export {
@@ -205,4 +274,6 @@ export {
   sentimentFormatted,
   modifyValidJson,
   querySentimentCoin,
+  extractUniqueUsers,
+  aggregateSentimentByCoinData,
 };

@@ -1,11 +1,6 @@
 import { Component } from "react";
 import ReactApexChart from "react-apexcharts";
-import {
-  AggregateData,
-  BrushChartProps,
-  BrushChartState,
-  SentimentValidJson,
-} from "../utils/interface";
+import { BrushChartProps, BrushChartState } from "../utils/interface";
 import { BrushChartContainer } from "./brushChartStyle";
 import { dateRangeSelector, lineColor, white } from "../color/color";
 
@@ -13,12 +8,11 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
   constructor(props: any) {
     super(props);
 
-    const aggregatedData = this.aggregateData(props.data, props.coin);
-
+    console.log("brush: ", props.data);
     this.state = {
       series: [
         {
-          data: aggregatedData.map((item) => ({
+          data: props.data.map((item: any) => ({
             x: item.date,
             y: item.avgSentiment,
             tooltipContent: item.tooltipContent,
@@ -112,7 +106,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
 
       seriesLine: [
         {
-          data: aggregatedData.map((item) => ({
+          data: props.data.map((item: any) => ({
             x: new Date(item.date),
             y: item.avgSentiment,
           })),
@@ -185,18 +179,11 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
     };
   }
   componentDidUpdate(prevProps: BrushChartProps) {
-    if (
-      this.props.data !== prevProps.data ||
-      this.props.coin !== prevProps.coin
-    ) {
-      const aggregatedData = this.aggregateData(
-        this.props.data,
-        this.props.coin
-      );
+    if (this.props.data !== prevProps.data) {
       this.setState({
         series: [
           {
-            data: aggregatedData.map((item) => ({
+            data: this.props.data.map((item) => ({
               x: item.date,
               y: item.avgSentiment,
               tooltipContent: item.tooltipContent,
@@ -205,7 +192,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         ],
         seriesLine: [
           {
-            data: aggregatedData.map((item) => ({
+            data: this.props.data.map((item) => ({
               x: new Date(item.date),
               y: item.avgSentiment,
             })),
@@ -213,40 +200,6 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         ],
       });
     }
-  }
-
-  aggregateData(data: SentimentValidJson[], coin: string) {
-    const groupedByDate: AggregateData = {};
-
-    data.forEach((item) => {
-      const dateString = new Date(item.date).toDateString();
-      if (!groupedByDate[dateString]) {
-        groupedByDate[dateString] = [];
-      }
-      groupedByDate[dateString].push(item);
-    });
-
-    return Object.keys(groupedByDate).map((dateString) => {
-      const items = groupedByDate[dateString];
-      const avgSentiment = (
-        items.reduce((acc, cur) => {
-          const sentimentValue = cur.coin_sentiment[coin];
-          return acc + sentimentValue;
-        }, 0) / items.length
-      ).toFixed(2);
-      const tooltipContent =
-        `<strong>Sentiment: ${avgSentiment}</strong><br>` +
-        items
-          .map((item) => `${item.username}: ${item.coin_sentiment[coin]}`)
-          .join("<br>");
-      console.log("asdasdasdasd: ", items);
-
-      return {
-        date: new Date(dateString),
-        avgSentiment,
-        tooltipContent,
-      };
-    });
   }
 
   render() {

@@ -92,6 +92,6 @@ export {
 /*
 [{"tweet_url": "https://twitter.com/TheFlowHorse/status1711795839675297847","username": "TheFlowHorse","coin_sentiment": {"Crypto": 0},"date": 1696896000000}
 {"tweet_url": "https://twitter.com/TheFlowHorse/status/1711796217145905180","username": "TheFlowHorse","coin_sentiment": {"Crypto": 0},"date": 1696896000000}
-{"tweet_url": "https://twitter.com/BlankBrainTrade/status/1712431008392544574","username": "BlankBrainTrade","coin_sentiment": {"AVAX": 1},"date": 1697068800000}
+{"tweet_url": "https://twitter.com/BlankBrainTrade/status/1712431008392544574","username": "BlankBrainTrade","coin_sentiment": {"Crypto": 1},"date": 1696896000000}
 {"tweet_url": "https://twitter.com/hedgedhog7/status/1712383596135100417","username": "hedgedhog7","coin_sentiment": {"Crypto": -1},"date": 1697068800000}]
 */
