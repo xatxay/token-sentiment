@@ -14,32 +14,39 @@ import CoinsByDay from "../twitter/coinsByDay";
 // import { StartDate } from "../utils/interface";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import {
-  LeftContainer,
-  TopicHeader,
-  TwitterPage,
-} from "../twitter/twitterStyle";
+import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
-import PieChart from "../chart/pieChart";
 
 const Homepage = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isCoinByDateModalOpen, setIsCoinByDateModalOpen] =
+    useState<boolean>(false);
+  const [isSentimentByCoinModalOpen, setIsSentimentByCoinModalOpen] =
+    useState<boolean>(false);
   const [selectedCoin, setSelectedCoin] = useState<string | null>(null);
 
-  const openModal = useCallback(
-    (coin?: string) => {
-      console.log("opening modal", isOpen, selectedCoin, coin);
-      if (isOpen) return;
-      setIsOpen(true);
-      if (coin) setSelectedCoin(coin);
+  const openCoinByDateModal = useCallback(
+    (coin: string) => {
+      if (isCoinByDateModalOpen) return;
+      setIsCoinByDateModalOpen(true);
+      setSelectedCoin(coin);
+      console.log("opening modal", isCoinByDateModalOpen, selectedCoin, coin);
     },
-    [isOpen, selectedCoin]
+    [isCoinByDateModalOpen, selectedCoin]
   );
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const openSentimentByCoinModal = () => {
+    if (isSentimentByCoinModalOpen) return;
+    setIsSentimentByCoinModalOpen(true);
+  };
+
+  const closeCoinByDateModal = () => {
+    setIsCoinByDateModalOpen(false);
     setSelectedCoin(null);
+  };
+
+  const closeSentimentByCoinModal = () => {
+    setIsSentimentByCoinModalOpen(false);
   };
   const menuItems = ["Twitter", "Youtube", "Tiktok", "Reddit", "Polls"];
   return (
@@ -68,10 +75,10 @@ const Homepage = () => {
         <CoinsByDay
           // startDate={startDate}
           // setStartDate={setStartDate}
-          openModal={openModal}
-          isOpen={isOpen}
+          openModal={openCoinByDateModal}
+          isOpen={isCoinByDateModalOpen}
           coin={selectedCoin}
-          closeModal={closeModal}
+          closeModal={closeCoinByDateModal}
         />
       </TwitterPage>
       <TwitterPage>
@@ -79,9 +86,9 @@ const Homepage = () => {
       </TwitterPage>
       <TwitterPage>
         <SentimentByCoin
-          openModal={openModal}
-          closeModal={closeModal}
-          isOpen={isOpen}
+          openModal={openSentimentByCoinModal}
+          closeModal={closeSentimentByCoinModal}
+          isOpen={isSentimentByCoinModalOpen}
         />
       </TwitterPage>
       <TwitterPage>

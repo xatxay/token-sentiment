@@ -1,10 +1,6 @@
 import { toast } from "react-toastify";
-import { sentimentFormatted, useFetch } from "../utils/utils";
-import {
-  BackgroundTable,
-  RightContainer,
-  TwitterTableName,
-} from "./twitterStyle";
+import { fetchQuery, sentimentFormatted, useFetch } from "../utils/utils";
+import { BackgroundTable, TwitterTableName } from "./twitterStyle";
 import {
   SentimentByInfluencer,
   SentimentByUserProps,
@@ -14,13 +10,17 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
 import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
+import { useQuery } from "@tanstack/react-query";
 
 const SentimentByUser = () => {
   const defaultUser = "Awawat_Trades";
   const [username, setUsername] = useState<string>(defaultUser);
   const apiUrl = String(process.env.REACT_APP_SENTIMENT_BY_USER);
   const apiUrlInfluencers = String(process.env.REACT_APP_SENTIMENT_USERS);
-  const { data, error, loading } = useFetch(apiUrl, { username: username });
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["sentimentByUser", username],
+    queryFn: () => fetchQuery(apiUrl, username),
+  });
   const { data: twitterInfluencers, error: userError } =
     useFetch(apiUrlInfluencers);
   let parseData: SentimentByUserProps[] = [];
@@ -79,16 +79,22 @@ const SentimentByUser = () => {
     [columnHelper, username]
   );
 
-  if (!loading && parseData.length === 0) {
+  if (!isLoading && parseData.length === 0) {
     console.log("no data: ", parseData);
   }
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error || userError) {
-    toast.error(error || userError);
+  if (error) {
+    console.error("Sentiment user error: ", error);
+    toast.error(error.message);
+  }
+
+  if (userError) {
+    console.error("user error: ", error);
+    toast.error(userError);
   }
   return (
     <SentimentByUserPlacement
@@ -136,7 +142,11 @@ const SentimentByUserPlacement = ({
                 );
               })}
             </DropDownMenu>
-            <h1>Please select a different user</h1>
+            <h1>
+              No Data For This User {`:(`}
+              <br /> <br />
+              Please select a different user
+            </h1>
           </>
         )}
       </BackgroundTable>

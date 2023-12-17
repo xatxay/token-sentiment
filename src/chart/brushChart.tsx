@@ -8,6 +8,12 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
   constructor(props: any) {
     super(props);
 
+    const events = props?.isClickable
+      ? {
+          click: () => props.openModal(),
+        }
+      : {};
+
     // console.log("brush: ", props.data);
     // console.log("miasda: ", props.min, props.max);
     this.state = {
@@ -32,11 +38,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           zoom: {
             enabled: false,
           },
-          events: {
-            click: () => {
-              props.openModal();
-            },
-          },
+          events: events,
         },
         colors: [lineColor],
         stroke: {

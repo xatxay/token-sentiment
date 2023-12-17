@@ -58,10 +58,11 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     const twitterResult = extractTwitterSentimentByDay(data);
     // console.log("twitter result: ", twitterResult);
     const arrayData = insertArrayData(twitterResult);
-    // console.log("array: ", arrayData);
+    console.log("array: ", arrayData);
     noDuplicateData = removeDuplicate(arrayData) || [];
     console.log("no duplicate: ", noDuplicateData);
     duplicateData = duplicateCoins(arrayData, coin || "") || [];
+    console.log("duplicate data: ", duplicateData);
     pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
   }
 

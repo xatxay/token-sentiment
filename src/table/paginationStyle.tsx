@@ -41,6 +41,14 @@ const PaginationButton = styled.button`
     transform: scaleX(1);
   }
 
+  &:disabled {
+    cursor: default;
+
+    &:hover::after {
+      transform: scaleX(0);
+    }
+  }
+
   span {
     position: relative;
     z-index: 1;

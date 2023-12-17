@@ -28,6 +28,7 @@ const SentimentByCoin = ({
   const [coin, setCoin] = useState<string>("ETH");
   const [filterData, setFilterData] = useState<BrushChartData[]>([]);
   const [modifiedData, setModifiedData] = useState<SentimentValidJson[]>([]);
+  const [dataTable, setDataTable] = useState<SentimentValidJson[]>([]);
   const apiUrl = process.env.REACT_APP_SENTIMENT_BY_COIN;
   const { data, error, loading } = useFetch(apiUrl || "");
   const { min, max } = { min: -1, max: 1 };
@@ -45,10 +46,13 @@ const SentimentByCoin = ({
       }),
       columnHelper.accessor("coin_sentiment", {
         header: "Sentiment",
-        cell: (info) =>
-          Object.entries(info.getValue())
+        cell: (info) => {
+          const sentiment = Object.entries(info.getValue())
             .map(([key, value]) => `${key}: ${value}`)
-            .join(", "),
+            .join(", ");
+          console.log("cell: ", sentiment);
+          return sentiment;
+        },
       }),
       columnHelper.accessor("tweet_url", {
         header: "Tweet",
@@ -69,6 +73,7 @@ const SentimentByCoin = ({
 
   const processData = (coin: string, data: SentimentValidJson[]) => {
     const sentimentData = querySentimentCoin(coin, data);
+    setDataTable(sentimentData);
     const groupedData = aggregateSentimentByCoinData(sentimentData, coin);
     setFilterData(groupedData);
   };
@@ -101,7 +106,7 @@ const SentimentByCoin = ({
   if (error) {
     return <div>{error}</div>;
   }
-  // console.log("submit coin: ", coin);
+  console.log("filter data: ", filterData);
   return (
     <>
       <TopicContainer>
@@ -119,10 +124,11 @@ const SentimentByCoin = ({
           openModal={openModal}
           min={min}
           max={max}
+          isClickable={true}
         />
       </TopicContainer>
       <DataTableModal
-        data={filterData}
+        data={dataTable}
         columns={columns}
         isOpen={isOpen}
         closeModal={closeModal}

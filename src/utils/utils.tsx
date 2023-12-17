@@ -58,6 +58,22 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
   return { data, error, loading };
 };
 
+const fetchQuery = async (url: string, username: string): Promise<any> => {
+  const apiUrl = new URL(url);
+  apiUrl.searchParams.append("username", username);
+  try {
+    const response = await fetch(apiUrl.toString());
+    if (!response.ok) {
+      throw new Error("Network respsonse error");
+    }
+    const responseJson = await response.json();
+    return responseJson;
+  } catch (err) {
+    console.error("Failed fetching data: ", err);
+    throw err;
+  }
+};
+
 const extractTwitterSentimentByDay = (data: TweetByDay): Result => {
   try {
     const result: Result = {};
@@ -133,6 +149,8 @@ const removeDuplicate = (data: ArrayTweetResult[]) => {
 
 const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
   try {
+    console.log("passing data: ", data);
+    console.log("passing ticker: ", ticker);
     const filterData = data.filter((coin) => {
       if (coin.coin === ticker) {
         return true;
@@ -367,4 +385,5 @@ export {
   calculateMinMax,
   chartContentFormatted,
   formatCoinSentimentByDayPieChart,
+  fetchQuery,
 };

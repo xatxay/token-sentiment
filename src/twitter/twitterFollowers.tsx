@@ -67,7 +67,12 @@ const TwitterFollowes = () => {
             );
           })}
         </DropDownMenu>
-        <BrushChart data={userFollowersChange} min={min} max={max} />
+        <BrushChart
+          data={userFollowersChange}
+          min={min}
+          max={max}
+          isClickable={false}
+        />
       </TopicContainer>
     </>
   );

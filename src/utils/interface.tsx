@@ -129,6 +129,7 @@ export interface BrushChartProps extends SentimentByCoinProps {
   data: any[];
   min: number;
   max: number;
+  isClickable: boolean;
 }
 
 export interface AggregateSentimentByCoinData {
@@ -180,4 +181,10 @@ export interface FollowersChanges {
 export interface PieChartData {
   series: number[];
   labels: string[];
+}
+
+export interface TypewriterProps {
+  text: string;
+  speed?: number;
+  loopDelay?: number;
 }
