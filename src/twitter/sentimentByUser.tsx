@@ -11,6 +11,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
 import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import { useQuery } from "@tanstack/react-query";
+import TypewriterEffect from "../globalStyle/typewrite";
 
 const SentimentByUser = () => {
   const defaultUser = "Awawat_Trades";
@@ -142,11 +143,13 @@ const SentimentByUserPlacement = ({
                 );
               })}
             </DropDownMenu>
-            <h1>
-              No Data For This User {`:(`}
-              <br /> <br />
-              Please select a different user
-            </h1>
+            <h3>
+              <span>
+                No Data For This User
+                <br /> <br />
+                Please select a different user <TypewriterEffect text=":(" />
+              </span>
+            </h3>
           </>
         )}
       </BackgroundTable>

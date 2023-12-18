@@ -3,6 +3,7 @@ import BrushChart from "../chart/brushChart";
 import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import {
   BrushChartData,
+  ChartDataConfig,
   FollowersChanges,
   TwitterFollower,
 } from "../utils/interface";
@@ -41,12 +42,21 @@ const TwitterFollowes = () => {
   }
 
   if (parseData && parseData.length > 0) {
-    uniqueUser = extractUniqueUsers(parseData);
+    uniqueUser = extractUniqueUsers(parseData, "username");
     followersChanges = twitterFollowersBrushData(parseData, username);
     console.log("follower changes: ", followersChanges);
-    userFollowersChange = chartContentFormatted(followersChanges);
-  }
 
+    const twitterConfig: ChartDataConfig<FollowersChanges> = {
+      getDataValue: (data) => data.data,
+      getTooltipContent: (data) =>
+        `<strong>${data.username}: ${data.data}</strong>`,
+      getDate: (data) => data.date,
+    };
+    userFollowersChange = chartContentFormatted(
+      followersChanges,
+      twitterConfig
+    );
+  }
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setUsername(event.target.value);
   };

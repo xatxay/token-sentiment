@@ -101,9 +101,6 @@ const CoinByDayYT = ({
     toast.error(error);
   }
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
   return (
     <>
       <TopicContainer>

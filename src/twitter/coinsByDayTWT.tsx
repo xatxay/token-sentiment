@@ -22,6 +22,7 @@ import { BackgroundTable, LeftContainer } from "./twitterStyle";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
+import TypewriterEffect from "../globalStyle/typewrite";
 
 const CoinDataTable = ({
   data,
@@ -38,7 +39,19 @@ const CoinDataTable = ({
           {!modal && startDate && setStartDate && (
             <DateSelector startDate={startDate} setStartDate={setStartDate} />
           )}
-          <DataTable data={data} columns={columns} />
+          {data.length === 0 ? (
+            <>
+              <h3>
+                <span>
+                  No data for this current day. Please select a different date
+                  <TypewriterEffect text="..." />
+                </span>
+              </h3>
+              <DataTable data={data} columns={columns} />{" "}
+            </>
+          ) : (
+            <DataTable data={data} columns={columns} />
+          )}
         </BackgroundTable>
       </LeftContainer>
     </>

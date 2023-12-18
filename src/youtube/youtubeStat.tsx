@@ -1,20 +1,47 @@
+import { toast } from "react-toastify";
 import BrushChart from "../chart/brushChart";
 import { TopicContainer } from "../twitter/twitterStyle";
-import { BrushChartData, YoutubeStat } from "../utils/interface";
-import { calculateMinMax, formatYoutubeStats, useFetch } from "../utils/utils";
+import {
+  BrushChartData,
+  ChartDataConfig,
+  YoutubeStat,
+} from "../utils/interface";
+import {
+  calculateMinMax,
+  chartContentFormatted,
+  extractYtKeyword,
+  useFetch,
+} from "../utils/utils";
 
 const YoutubeStats = () => {
-  const { data, error, loading } = useFetch(
-    String(process.env.REACT_APP_YOUTUBE_STAT)
-  );
+  const { data, error } = useFetch(String(process.env.REACT_APP_YOUTUBE_STAT));
 
   let youtubeStatChart: BrushChartData[] = [];
   if (data) {
     const parseData: YoutubeStat[] = JSON.parse(data);
-    console.log("youtube stats: ", parseData);
-    youtubeStatChart = formatYoutubeStats(parseData);
-    console.log("brush yt data: ", youtubeStatChart);
+    // console.log("youtube stats: ", parseData);
+    const youtubeConfig: ChartDataConfig<YoutubeStat> = {
+      getDataValue: (start) => start.total_views,
+      getTooltipContent: (stat) => {
+        const keyword = extractYtKeyword(stat.common_words);
+        return `<strong>Total Views: ${stat.total_views.toLocaleString(
+          "en-US"
+        )}</strong><br><strong>Top Keywords: ${keyword}`;
+      },
+      getDate: (stat) => stat.date,
+    };
+    youtubeStatChart = chartContentFormatted(parseData, youtubeConfig);
+    // console.log("brush yt data: ", youtubeStatChart);
   }
+
+  if (error) {
+    console.error("Error fetching yt stat: ", error);
+    toast.error(error);
+  }
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
   const { min, max } = calculateMinMax(youtubeStatChart, "data");
   return (
     <TopicContainer>

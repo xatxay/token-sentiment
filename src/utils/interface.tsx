@@ -172,8 +172,15 @@ export interface UserChanges {
   [date: string]: number;
 }
 
-export interface FollowersChanges {
+export interface FollowersChanges extends FilterData {
   username: string;
+}
+
+export interface YoutubeViewsChange extends FilterData {
+  channelName: string;
+}
+
+export interface FilterData {
   date: string;
   data: number;
 }
@@ -214,4 +221,18 @@ export interface YoutubeStat {
   common_words: string;
   date: number;
   total_views: number;
+}
+
+export interface YoutubeChannelsDataType {
+  date: string;
+  channel_id: string;
+  channel_name: string;
+  subscriber_count: string;
+  total_views: string;
+}
+
+export interface ChartDataConfig<T> {
+  getDataValue: (item: T) => number | string;
+  getTooltipContent: (item: T) => string;
+  getDate: (item: T) => Date | number | string;
 }

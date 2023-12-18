@@ -3,6 +3,7 @@ import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
 import CoinByDayYT from "../youtube/coinsByDayYT";
 import { fetchQuery, formatDate } from "../utils/utils";
 import YoutubeStats from "../youtube/youtubeStat";
+import YoutubeChannelsData from "../youtube/ytChannelsData";
 
 const YoutubeHomePage = () => {
   const [selectedCoinYt, setSeletedCoinYt] = useState<string>("");
@@ -60,6 +61,9 @@ const YoutubeHomePage = () => {
           setYtSelectedData={setYtSelectedData}
           videoFetchData={videoFetchData}
         />
+      </TwitterPage>
+      <TwitterPage>
+        <YoutubeChannelsData />
       </TwitterPage>
     </>
   );

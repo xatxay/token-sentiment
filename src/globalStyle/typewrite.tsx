@@ -7,24 +7,22 @@ const TypewriterEffect = ({
   loopDelay = 1000,
 }: TypewriterProps) => {
   const [typedText, setTypedText] = useState("");
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    let index = 0;
-    const type = () => {
-      if (index < text.length) {
-        setTypedText((prev) => prev + text.charAt(index));
-        index++;
-      } else {
-        setTimeout(() => {
-          setTypedText("");
-          index = 0;
-        }, loopDelay);
-      }
-    };
-    const timer = setInterval(type, speed);
-    return () => clearInterval(timer);
-  }, [text, speed, loopDelay]);
-  return <div>{typedText}</div>;
+    if (index < text.length) {
+      setTimeout(() => {
+        setTypedText(typedText + text.charAt(index));
+        setIndex(index + 1);
+      }, speed);
+    } else if (index === text.length) {
+      setTimeout(() => {
+        setTypedText("");
+        setIndex(0);
+      }, loopDelay);
+    }
+  }, [index, loopDelay, speed, text, typedText]);
+  return <>{typedText}</>;
 };
 
 export default TypewriterEffect;

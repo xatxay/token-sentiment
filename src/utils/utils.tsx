@@ -3,6 +3,7 @@ import {
   AggregateSentimentByCoinData,
   ArrayTweetResult,
   BrushChartData,
+  ChartDataConfig,
   Fetchparams,
   FollowersChanges,
   GroupData,
@@ -15,7 +16,9 @@ import {
   TweetsData,
   TwitterFollower,
   UserSentimentGroup,
+  YoutubeChannelsDataType,
   YoutubeStat,
+  YoutubeViewsChange,
 } from "./interface";
 
 const useFetch = (apiUrl: string, params?: Fetchparams) => {
@@ -224,10 +227,13 @@ const querySentimentCoin = (
   }
 };
 
-const extractUniqueUsers = (data: TwitterFollower[]): string[] => {
+const extractUniqueUsers = <T extends object, K extends keyof T>(
+  data: T[],
+  propertyName: K
+): T[K][] => {
   try {
-    const uniqueUsersSet = new Set<string>();
-    data.forEach((user) => uniqueUsersSet.add(user.username));
+    const uniqueUsersSet = new Set<T[K]>();
+    data.forEach((user) => uniqueUsersSet.add(user[propertyName]));
     const uniqueUserArray = Array.from(uniqueUsersSet);
     return uniqueUserArray;
   } catch (err) {
@@ -349,17 +355,16 @@ const calculateMinMax = <T extends object, K extends keyof T>(
   }
 };
 
-const chartContentFormatted = (data: FollowersChanges[]): BrushChartData[] => {
+const chartContentFormatted = <T,>(
+  data: T[],
+  config: ChartDataConfig<T>
+): BrushChartData[] => {
   try {
-    const chartFormatted = data.map((data) => {
-      const tooltipContent = `<strong>${data.username}: ${data.data}</strong>`;
-      return {
-        date: new Date(data.date),
-        data: data.data,
-        tooltipContent: tooltipContent,
-      };
-    });
-    return chartFormatted;
+    return data.map((item) => ({
+      date: new Date(config.getDate(item)),
+      data: config.getDataValue(item),
+      tooltipContent: config.getTooltipContent(item),
+    }));
   } catch (err) {
     console.log("Error formatting chart data: ", err);
     throw err;
@@ -417,6 +422,32 @@ const extractYtKeyword = (data: string) => {
   }
 };
 
+const calculateYtViewsByDay = (
+  data: YoutubeChannelsDataType[],
+  channelName: string
+) => {
+  try {
+    const userChannel = data.filter(
+      (channel) =>
+        channel.channel_name === channelName &&
+        Number(channel.total_views) !== 0
+    );
+    // console.log("userchannel: ", userChannel);
+    const viewsChange: YoutubeViewsChange[] = [];
+
+    for (let i = 1; i < userChannel.length; i++) {
+      const prev = userChannel[i - 1];
+      const current = userChannel[i];
+      // console.log("curent: ", current, "prev: ", prev);
+      const change = parseInt(current.total_views) - parseInt(prev.total_views);
+      viewsChange.push({ channelName, data: change, date: current.date });
+    }
+    return viewsChange;
+  } catch (err) {
+    console.error("Error calculating yt views by day: ", err);
+  }
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
@@ -437,4 +468,6 @@ export {
   fetchQuery,
   formatYoutubeStats,
   formatYAxisValue,
+  extractYtKeyword,
+  calculateYtViewsByDay,
 };
