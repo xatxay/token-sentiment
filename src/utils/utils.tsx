@@ -10,8 +10,10 @@ import {
   MinMax,
   PieChartData,
   Result,
+  SelectTiktokData,
   SentimentByUserProps,
   SentimentValidJson,
+  TiktokStat,
   TweetByDay,
   TweetsData,
   TwitterFollower,
@@ -402,16 +404,21 @@ const formatYoutubeStats = (data: YoutubeStat[]): BrushChartData[] => {
 };
 
 const formatYAxisValue = (value: number): string => {
-  if (value >= 1e6) {
-    return (value / 1e6).toFixed(2) + "M";
-  } else if (value >= 1e3) {
-    return (value / 1e3).toFixed(2) + "K";
-  } else {
-    return value.toFixed(0);
+  try {
+    if (value >= 1e6) {
+      return (value / 1e6).toFixed(2) + "M";
+    } else if (value >= 1e3) {
+      return (value / 1e3).toFixed(2) + "K";
+    } else {
+      return value.toFixed(0);
+    }
+  } catch (err) {
+    console.error("Error formattting value: ", err);
+    throw err;
   }
 };
 
-const extractYtKeyword = (data: string) => {
+const extractYtKeyword = (data: string): string => {
   try {
     const validJson = data.replace(/'/g, '"');
     const jsonArray: { [key: string]: number }[] = JSON.parse(validJson);
@@ -419,13 +426,14 @@ const extractYtKeyword = (data: string) => {
     return result;
   } catch (err) {
     console.error("Failed extracting keyword: ", err);
+    throw err;
   }
 };
 
 const calculateYtViewsByDay = (
   data: YoutubeChannelsDataType[],
   channelName: string
-) => {
+): YoutubeViewsChange[] => {
   try {
     const userChannel = data.filter(
       (channel) =>
@@ -445,6 +453,70 @@ const calculateYtViewsByDay = (
     return viewsChange;
   } catch (err) {
     console.error("Error calculating yt views by day: ", err);
+    throw err;
+  }
+};
+
+const extractTiktokMenu = (data: TiktokStat[]): string[] => {
+  try {
+    if (data.length > 0) {
+      return Object.keys(data[0]);
+    }
+    return [];
+  } catch (err) {
+    console.error("Error extracting tiktok menu: ", err);
+    throw err;
+  }
+};
+
+const menuOptionsKeyMapping = (menu: string): keyof TiktokStat | undefined => {
+  const menuKeyMapping: { [key: string]: keyof TiktokStat } = {
+    "New Followers": "total_followers",
+    "New Likes": "total_likes",
+    "Views (Last 10 Vid)": "views_last_10",
+    "Comments (Last 10 Vid)": "comments_last_10",
+    "Shares (Last 10 Vid)": "shares_last_10",
+    "Likes (Last 10 Vid)": "likes_last_10",
+    "Sentiment (Last 10 Vid)": "sentiment_last_10",
+  };
+  return menuKeyMapping[menu];
+};
+
+const handleTikTokMenuSelection = (
+  data: TiktokStat[],
+  username: string,
+  menu: string
+): SelectTiktokData[] => {
+  try {
+    const menuSelected = menuOptionsKeyMapping(menu);
+    if (!menuSelected) {
+      throw new Error("Invalid menu option selected");
+    }
+    const userData = data.filter((user) => user.username === username);
+    if (userData.length === 0) {
+      throw new Error("User not found");
+    }
+    const menuData = userData.map((data) => ({
+      date: data.date,
+      username: data.username,
+      [menuSelected]: data[menuSelected],
+    }));
+    // console.log("menu selected: ", menuSelected);
+    return menuData;
+  } catch (err) {
+    console.error("Failed handling tiktok menu selection: ", err);
+    throw err;
+  }
+};
+
+const getTiktokConfigValue = (stat: SelectTiktokData): string => {
+  try {
+    const keys = Object.keys(stat);
+    const keysValue = keys.find((key) => key !== "date" && key !== "username");
+    return keysValue ? stat[keysValue] : "";
+  } catch (err) {
+    console.error("Error getting tiktok config value: ", err);
+    throw err;
   }
 };
 
@@ -470,4 +542,7 @@ export {
   formatYAxisValue,
   extractYtKeyword,
   calculateYtViewsByDay,
+  extractTiktokMenu,
+  handleTikTokMenuSelection,
+  getTiktokConfigValue,
 };

@@ -13,6 +13,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import TiktokHomepage from "./homepage/tiktokHomepage";
 
 ReactModal.setAppElement("#root");
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<Navigate to="/twitter" replace />} />
             <Route path="/twitter" element={<TwitterHomePage />} />
             <Route path="/youtube" element={<YoutubeHomePage />} />
+            <Route path="/tiktok" element={<TiktokHomepage />} />
           </Routes>
           <ToastContainer
             position="top-right"

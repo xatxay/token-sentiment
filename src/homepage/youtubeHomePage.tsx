@@ -46,7 +46,7 @@ const YoutubeHomePage = () => {
   return (
     <>
       <TopicHeader>
-        <h3>Youtube Statistics</h3>
+        <h3>Youtube Sentiment</h3>
       </TopicHeader>
       <TwitterPage>
         <YoutubeStats />

@@ -236,3 +236,28 @@ export interface ChartDataConfig<T> {
   getTooltipContent: (item: T) => string;
   getDate: (item: T) => Date | number | string;
 }
+
+export interface TiktokStat {
+  comments_last_10: string;
+  date: string;
+  likes_last_10: string;
+  sentiment_last_10: string;
+  shares_last_10: string;
+  total_followers: string;
+  total_likes: string;
+  username: string;
+  views_last_10: string;
+}
+
+export interface SelectTiktokData {
+  [x: string]: string;
+  date: string;
+  username: string;
+}
+
+export interface TikTokVideo {
+  created_time: string;
+  sentiment_dict: string;
+  username: string;
+  video_id: string;
+}
