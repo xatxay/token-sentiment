@@ -1,8 +1,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Homepage from "./homepage/homepage";
+import TwitterHomePage from "./homepage/twitterHomePage";
 import ReactModal from "react-modal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Global } from "@emotion/react";
+import GlobalStyle from "./globalStyle/globalStyle";
+import HomepageHeader from "./homepage/homepageHeader";
+import YoutubeHomePage from "./homepage/youtubeHomePage";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 
 ReactModal.setAppElement("#root");
 const queryClient = new QueryClient();
@@ -11,14 +21,22 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          closeOnClick
-          pauseOnHover
-          theme="dark"
-        />
-        <Homepage />
+        <Router>
+          <Global styles={GlobalStyle} />
+          <HomepageHeader />
+          <Routes>
+            <Route path="/" element={<Navigate to="/twitter" replace />} />
+            <Route path="/twitter" element={<TwitterHomePage />} />
+            <Route path="/youtube" element={<YoutubeHomePage />} />
+          </Routes>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            closeOnClick
+            pauseOnHover
+            theme="dark"
+          />
+        </Router>
       </QueryClientProvider>
     </>
   );

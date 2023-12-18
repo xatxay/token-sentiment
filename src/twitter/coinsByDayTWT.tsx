@@ -18,7 +18,7 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTableModal from "../table/modal";
 import { toast } from "react-toastify";
-import { BackgroundTable, LeftContainer } from "../twitter/twitterStyle";
+import { BackgroundTable, LeftContainer } from "./twitterStyle";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
@@ -45,7 +45,7 @@ const CoinDataTable = ({
   );
 };
 
-const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
+const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const dateFormat = formatDate(startDate);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
@@ -58,11 +58,11 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     const twitterResult = extractTwitterSentimentByDay(data);
     // console.log("twitter result: ", twitterResult);
     const arrayData = insertArrayData(twitterResult);
-    console.log("array: ", arrayData);
+    // console.log("array: ", arrayData);
     noDuplicateData = removeDuplicate(arrayData) || [];
-    console.log("no duplicate: ", noDuplicateData);
+    // console.log("no duplicate: ", noDuplicateData);
     duplicateData = duplicateCoins(arrayData, coin || "") || [];
-    console.log("duplicate data: ", duplicateData);
+    // console.log("duplicate data: ", duplicateData);
     pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
   }
 
@@ -147,4 +147,4 @@ const CoinsByDay = ({ openModal, isOpen, coin, closeModal }: Modal) => {
   );
 };
 
-export default CoinsByDay;
+export { CoinDataTable, CoinByDayTwt };

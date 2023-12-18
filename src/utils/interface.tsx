@@ -1,5 +1,5 @@
 import { Updater } from "@tanstack/react-table";
-import { ChangeEvent } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 export interface TopCoinsDict {
   [key: string]: TopCoinsDictInfo;
@@ -64,7 +64,7 @@ export interface Modal {
 }
 
 export interface CoinDataTableProps {
-  data: ArrayTweetResult[];
+  data: ArrayTweetResult[] | CoinByDateYTProps[];
   columns: any[];
   isOpen?: boolean;
   coin?: string | null;
@@ -175,7 +175,7 @@ export interface UserChanges {
 export interface FollowersChanges {
   username: string;
   date: string;
-  data: number | string;
+  data: number;
 }
 
 export interface PieChartData {
@@ -187,4 +187,31 @@ export interface TypewriterProps {
   text: string;
   speed?: number;
   loopDelay?: number;
+}
+
+export interface CoinByDateYTProps {
+  coin: string;
+  date: string;
+  num_videos: string;
+  sentiment: string;
+  total_views: string;
+  title: string;
+  views: string;
+  id: string;
+}
+
+export interface CoinByDayDataYt {
+  openCoinByDateModalYt: (coin: string) => void;
+  closeCoinByDateModalYt: () => void;
+  isOpenYtModal: boolean;
+  selectedCoinYt: string;
+  ytSelectedDate: Date;
+  setYtSelectedData: Dispatch<SetStateAction<Date>>;
+  videoFetchData: string;
+}
+
+export interface YoutubeStat {
+  common_words: string;
+  date: number;
+  total_views: number;
 }

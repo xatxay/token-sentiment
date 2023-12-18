@@ -19,7 +19,7 @@ const SentimentByUser = () => {
   const apiUrlInfluencers = String(process.env.REACT_APP_SENTIMENT_USERS);
   const { data, error, isLoading } = useQuery({
     queryKey: ["sentimentByUser", username],
-    queryFn: () => fetchQuery(apiUrl, username),
+    queryFn: () => fetchQuery(apiUrl, { username }),
   });
   const { data: twitterInfluencers, error: userError } =
     useFetch(apiUrlInfluencers);

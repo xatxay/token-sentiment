@@ -36,6 +36,7 @@ const DataTable = ({ data, columns }: DataTableProps) => {
     const newPageIndex = pageIndexNumber - 1;
     setPageIndexNumber(newPageIndex);
   };
+  // if (data.length === 0 || columns.length === 0) return;
 
   return (
     <>

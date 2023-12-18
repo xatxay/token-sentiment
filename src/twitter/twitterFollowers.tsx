@@ -50,7 +50,7 @@ const TwitterFollowes = () => {
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setUsername(event.target.value);
   };
-  const { min, max } = calculateMinMax(followersChanges);
+  const { min, max } = calculateMinMax(followersChanges, "data");
   console.log("qweqwewq: ", min, max);
   console.log("select username: ", username);
 

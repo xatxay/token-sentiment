@@ -1,24 +1,11 @@
-import { Global } from "@emotion/react";
-import GlobalStyle from "../globalStyle/globalStyle";
-import {
-  HeaderContainer,
-  HeaderMenu,
-  HeaderText,
-  LogoImage,
-  LogoutButton,
-  MenuItems,
-  MenuList,
-} from "./homepageStyle";
-import logo from "./logo.png";
-import CoinsByDay from "../twitter/coinsByDay";
-// import { StartDate } from "../utils/interface";
+import {CoinByDayTwt} from "../twitter/coinsByDayTWT";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
 import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
 
-const Homepage = () => {
+const TwitterHomePage = () => {
   const [isCoinByDateModalOpen, setIsCoinByDateModalOpen] =
     useState<boolean>(false);
   const [isSentimentByCoinModalOpen, setIsSentimentByCoinModalOpen] =
@@ -48,41 +35,19 @@ const Homepage = () => {
   const closeSentimentByCoinModal = () => {
     setIsSentimentByCoinModalOpen(false);
   };
-  const menuItems = ["Twitter", "Youtube", "Tiktok", "Reddit", "Polls"];
+
   return (
     <>
-      <Global styles={GlobalStyle} />
-      <HeaderContainer>
-        <HeaderText>
-          <LogoImage src={logo} />
-          Token Sentiment
-        </HeaderText>
-        <HeaderMenu>
-          {menuItems.map((item) => {
-            return (
-              <MenuList key={item}>
-                <MenuItems>{item}</MenuItems>
-              </MenuList>
-            );
-          })}
-        </HeaderMenu>
-        <LogoutButton>Logout</LogoutButton>
-      </HeaderContainer>
       <TopicHeader>
         <h3>Twitter Sentiment</h3>
       </TopicHeader>
       <TwitterPage>
-        <CoinsByDay
-          // startDate={startDate}
-          // setStartDate={setStartDate}
+        <CoinByDayTwt
           openModal={openCoinByDateModal}
           isOpen={isCoinByDateModalOpen}
           coin={selectedCoin}
           closeModal={closeCoinByDateModal}
         />
-      </TwitterPage>
-      <TwitterPage>
-        <SentimentByUser />
       </TwitterPage>
       <TwitterPage>
         <SentimentByCoin
@@ -92,10 +57,13 @@ const Homepage = () => {
         />
       </TwitterPage>
       <TwitterPage>
+        <SentimentByUser />
+      </TwitterPage>
+      <TwitterPage>
         <TwitterFollowes />
       </TwitterPage>
     </>
   );
 };
 
-export default Homepage;
+export default TwitterHomePage;

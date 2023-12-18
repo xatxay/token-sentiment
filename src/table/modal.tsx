@@ -18,7 +18,7 @@ const DataTableModal = ({
       className="modal"
       overlayClassName="overlay"
     >
-      {/* <span>{coin}</span> */}
+      {/* <span>testing</span> */}
       <DataTable data={data} columns={columns} />
     </ReactModal>
   );

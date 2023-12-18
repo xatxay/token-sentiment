@@ -3,6 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { BrushChartProps, BrushChartState } from "../utils/interface";
 import { BrushChartContainer } from "./brushChartStyle";
 import { dateRangeSelector, lineColor, white } from "../color/color";
+import { formatYAxisValue } from "../utils/utils";
 
 class BrushChart extends Component<BrushChartProps, BrushChartState> {
   constructor(props: any) {
@@ -87,7 +88,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           max: props.max,
           tickAmount: 2,
           labels: {
-            formatter: (val: number) => val.toFixed(0),
+            formatter: formatYAxisValue,
             style: {
               colors: white,
               fontSize: "11px",
@@ -169,7 +170,7 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           max: props.max,
           tickAmount: 2,
           labels: {
-            formatters: (val: number) => val.toFixed(0),
+            formatter: formatYAxisValue,
             style: {
               colors: white,
               fontSize: "11px",

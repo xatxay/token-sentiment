@@ -15,6 +15,7 @@ import {
   TweetsData,
   TwitterFollower,
   UserSentimentGroup,
+  YoutubeStat,
 } from "./interface";
 
 const useFetch = (apiUrl: string, params?: Fetchparams) => {
@@ -58,9 +59,13 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
   return { data, error, loading };
 };
 
-const fetchQuery = async (url: string, username: string): Promise<any> => {
+const fetchQuery = async (url: string, params: Fetchparams): Promise<any> => {
   const apiUrl = new URL(url);
-  apiUrl.searchParams.append("username", username);
+  Object.keys(params).forEach((key) => {
+    if (params[key]) {
+      apiUrl.searchParams.append(key, params[key]);
+    }
+  });
   try {
     const response = await fetch(apiUrl.toString());
     if (!response.ok) {
@@ -328,9 +333,12 @@ const twitterFollowersBrushData = (
   }
 };
 
-const calculateMinMax = (dataArray: { data: string | number }[]): MinMax => {
+const calculateMinMax = <T extends object, K extends keyof T>(
+  dataArray: T[],
+  propertyName: K
+): MinMax => {
   try {
-    const numberValue = dataArray.map((item) => Number(item.data));
+    const numberValue = dataArray.map((item) => Number(item[propertyName]));
     const min = Math.min(...numberValue);
     const max = Math.max(...numberValue);
     console.log("min and max: ", min, max);
@@ -368,6 +376,47 @@ const formatCoinSentimentByDayPieChart = (
   return pieChartData;
 };
 
+const formatYoutubeStats = (data: YoutubeStat[]): BrushChartData[] => {
+  try {
+    const chartFormatted = data.map((stat) => {
+      const keyword = extractYtKeyword(stat.common_words);
+      const tooltipContent = `<strong>Total Views: ${stat.total_views.toLocaleString(
+        "en-US"
+      )}</strong><br><strong>Top KeyWords: ${keyword}`;
+      return {
+        date: new Date(stat.date),
+        data: stat.total_views,
+        tooltipContent,
+      };
+    });
+    return chartFormatted;
+  } catch (err) {
+    console.error("Failed formating youtube stats: ", err);
+    throw err;
+  }
+};
+
+const formatYAxisValue = (value: number): string => {
+  if (value >= 1e6) {
+    return (value / 1e6).toFixed(2) + "M";
+  } else if (value >= 1e3) {
+    return (value / 1e3).toFixed(2) + "K";
+  } else {
+    return value.toFixed(0);
+  }
+};
+
+const extractYtKeyword = (data: string) => {
+  try {
+    const validJson = data.replace(/'/g, '"');
+    const jsonArray: { [key: string]: number }[] = JSON.parse(validJson);
+    const result = jsonArray.map((obj) => Object.keys(obj)[0]).join(", ");
+    return result;
+  } catch (err) {
+    console.error("Failed extracting keyword: ", err);
+  }
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
@@ -386,4 +435,6 @@ export {
   chartContentFormatted,
   formatCoinSentimentByDayPieChart,
   fetchQuery,
+  formatYoutubeStats,
+  formatYAxisValue,
 };
