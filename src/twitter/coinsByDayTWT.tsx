@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+/** @jsxImportSource @emotion/react */
+import React, { useEffect, useMemo, useState } from "react";
 import {
   duplicateCoins,
   extractTwitterSentimentByDay,
@@ -22,50 +23,49 @@ import { BackgroundTable, LeftContainer } from "./twitterStyle";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
-import TypewriterEffect from "../globalStyle/typewrite";
+import NoData from "../table/noData";
+import { fadeIn } from "../globalStyle/fadeIn";
 
-const CoinDataTable = ({
-  data,
-  columns,
-  startDate,
-  setStartDate,
-  modal,
-}: CoinDataTableProps) => {
-  return (
-    <>
-      <LeftContainer>
-        <BackgroundTable>
-          <h3>Top Coins By Day</h3>
-          {!modal && startDate && setStartDate && (
-            <DateSelector startDate={startDate} setStartDate={setStartDate} />
-          )}
-          {data.length === 0 ? (
-            <>
-              <h3>
-                <span>
-                  No data for this current day. Please select a different date
-                  <TypewriterEffect text="..." />
-                </span>
-              </h3>
-              <DataTable data={data} columns={columns} />{" "}
-            </>
-          ) : (
-            <DataTable data={data} columns={columns} />
-          )}
-        </BackgroundTable>
-      </LeftContainer>
-    </>
-  );
-};
+const CoinDataTable = React.memo(
+  ({
+    data,
+    columns,
+    startDate,
+    setStartDate,
+    modal,
+    poll,
+  }: CoinDataTableProps) => {
+    return (
+      <>
+        <LeftContainer>
+          <BackgroundTable poll={poll || false}>
+            <h3>Top Coins By Day</h3>
+            {!modal && startDate && setStartDate && (
+              <DateSelector startDate={startDate} setStartDate={setStartDate} />
+            )}
+            {data.length === 0 ? (
+              <NoData data={data} columns={columns} />
+            ) : (
+              <DataTable data={data} columns={columns} />
+            )}
+          </BackgroundTable>
+        </LeftContainer>
+      </>
+    );
+  }
+);
 
 const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
   const [startDate, setStartDate] = useState<Date>(new Date());
+  const [isLoaded, setIsLoaded] = useState(false);
   const dateFormat = formatDate(startDate);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
   let noDuplicateData: ArrayTweetResult[] = [];
   let duplicateData: ArrayTweetResult[] = [];
   let pieChartData: PieChartData = { series: [0], labels: [""] };
-  const { data, error } = useFetch(twitterUrl || "", { date: dateFormat });
+  const { data, error, loading } = useFetch(twitterUrl || "", {
+    date: dateFormat,
+  });
 
   if (data) {
     const twitterResult = extractTwitterSentimentByDay(data);
@@ -132,19 +132,31 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     [columnHelper, isOpen, openModal]
   );
 
+  useEffect(() => {
+    if (!loading && data) {
+      setIsLoaded(true);
+    }
+  }, [data, loading]);
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <>
       <LeftContainer>
-        <CoinDataTable
-          data={noDuplicateData}
-          columns={columns}
-          isOpen={isOpen || false}
-          coin={coin || null}
-          closeModal={closeModal}
-          modal={false}
-          startDate={startDate}
-          setStartDate={setStartDate}
-        />
+        <div css={isLoaded ? fadeIn : undefined}>
+          <CoinDataTable
+            data={noDuplicateData}
+            columns={columns}
+            isOpen={isOpen || false}
+            coin={coin || null}
+            closeModal={closeModal}
+            modal={false}
+            startDate={startDate}
+            setStartDate={setStartDate}
+          />
+        </div>
       </LeftContainer>
       <RightContainer>
         <PieChart series={pieChartData.series} labels={pieChartData.labels} />

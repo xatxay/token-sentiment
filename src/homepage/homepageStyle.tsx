@@ -7,8 +7,9 @@ const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   height: 80px;
-  position: relative;
+  position: absolute;
   box-sizing: border-box;
+  width: 100%;
 `;
 
 const HeaderText = styled.span`
@@ -16,11 +17,9 @@ const HeaderText = styled.span`
   align-items: center;
   font-size: 20px;
   text-transform: uppercase;
-  width: 100%;
 `;
 
 const HeaderMenu = styled.ul`
-  position: absolute;
   width: 100%;
   list-style: none;
   display: flex;

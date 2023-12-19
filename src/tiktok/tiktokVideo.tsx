@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { toast } from "react-toastify";
 import {
   BackgroundTable,
@@ -8,10 +9,13 @@ import { sentimentFormatted, useFetch } from "../utils/utils";
 import { TikTokVideo } from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
+import { useEffect, useState } from "react";
+import { fadeIn } from "../globalStyle/fadeIn";
 
 const TiktokVideo = () => {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const apiUrl = String(process.env.REACT_APP_TIKTOK_VIDEOS_DATA);
-  const { data, error } = useFetch(apiUrl);
+  const { data, error, loading } = useFetch(apiUrl);
   let parseData: TikTokVideo[] = [];
 
   if (data) {
@@ -30,6 +34,12 @@ const TiktokVideo = () => {
     console.error("Error fetching tiktok video data: ", error);
     toast.error(error);
   }
+
+  useEffect(() => {
+    if (!loading && data) {
+      setIsLoaded(true);
+    }
+  }, [data, loading]);
 
   const columnHelper = createColumnHelper<TikTokVideo>();
   const columns = [
@@ -68,12 +78,14 @@ const TiktokVideo = () => {
   ];
   return (
     <>
-      <TopicContainer>
-        <BackgroundTable>
-          <h3>Tiktok Videos</h3>
-          <DataTable data={parseData} columns={columns} />
-        </BackgroundTable>
-      </TopicContainer>
+      <div css={isLoaded ? fadeIn : undefined}>
+        <TopicContainer>
+          <BackgroundTable>
+            <h3>Tiktok Videos</h3>
+            <DataTable data={parseData} columns={columns} />
+          </BackgroundTable>
+        </TopicContainer>
+      </div>
     </>
   );
 };

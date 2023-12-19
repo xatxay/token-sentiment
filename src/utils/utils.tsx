@@ -9,6 +9,12 @@ import {
   GroupData,
   MinMax,
   PieChartData,
+  PollData,
+  PollExtract,
+  QueryRedditChartData,
+  RedditChartData,
+  RedditCoinByDay,
+  RedditData,
   Result,
   SelectTiktokData,
   SentimentByUserProps,
@@ -482,6 +488,17 @@ const menuOptionsKeyMapping = (menu: string): keyof TiktokStat | undefined => {
   return menuKeyMapping[menu];
 };
 
+const menuOptionReddit = (menu: string): keyof RedditChartData => {
+  const menuReddit: { [key: string]: keyof RedditChartData } = {
+    "New Subscribers": "subscribers",
+    "Total Top 10 Upvotes": "total_upvotes_top_10",
+    "Users Online": "users_online",
+    "New Posts": "num_posts",
+    "New Comments": "num_comments",
+  };
+  return menuReddit[menu];
+};
+
 const handleTikTokMenuSelection = (
   data: TiktokStat[],
   username: string,
@@ -520,6 +537,90 @@ const getTiktokConfigValue = (stat: SelectTiktokData): string => {
   }
 };
 
+const queryRedditData = (
+  selectedDate: string,
+  data: RedditData[]
+): string | undefined => {
+  try {
+    const selectedData = data.find((info) => info.date === selectedDate);
+    const topCoin = selectedData ? selectedData.top_coins : undefined;
+    return topCoin;
+  } catch (err) {
+    console.error("Failed query reddit data: ", err);
+    throw err;
+  }
+};
+
+const formatRedditData = (data: string): RedditCoinByDay[] => {
+  try {
+    console.log("daaaa: ", data);
+    const newData = data.replace(/'/g, '"');
+    console.log("new data: ", newData);
+    const parseData = JSON.parse(newData);
+    const arrayData = Object.entries(parseData).map(([key, value]) => ({
+      coin: key,
+      occurences: value as number,
+    }));
+    return arrayData;
+  } catch (err) {
+    console.error("Failed format reddit data");
+    throw err;
+  }
+};
+
+const querySelectedRedditMenuData = (
+  data: RedditChartData[],
+  menu: string
+): QueryRedditChartData[] => {
+  try {
+    const menuSelected = menuOptionReddit(menu);
+    if (!menuSelected) {
+      throw new Error("No menu selection");
+    }
+    const menuData = data.map((reddit, index, array) => {
+      let subscibeChange: number | null = null;
+      if (index !== 0) {
+        const prev = array[index - 1];
+        subscibeChange =
+          parseInt(reddit.subscribers) - parseInt(prev.subscribers);
+      }
+
+      return {
+        date: reddit.date,
+        data:
+          menuSelected === "subscribers"
+            ? subscibeChange
+            : reddit[menuSelected],
+        tooltipContent: `<strong>${menu}: ${
+          menuSelected === "subscribers" ? subscibeChange : reddit[menuSelected]
+        }</strong>`,
+      };
+    });
+    return menuData;
+  } catch (err) {
+    console.error("Error querying reddit chart data: ", err);
+    throw err;
+  }
+};
+
+const extractPollData = (data: PollData[]): PollExtract[] => {
+  try {
+    const pollData = data.map((data) => {
+      const pollDict: number[] = Object.values(
+        JSON.parse(data.poll_dict.replace(/'/g, '"'))
+      );
+      return {
+        ...data,
+        poll_dict: pollDict,
+      };
+    });
+    return pollData;
+  } catch (err) {
+    console.error("Error extracting poll data: ", err);
+    throw err;
+  }
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,
@@ -545,4 +646,9 @@ export {
   extractTiktokMenu,
   handleTikTokMenuSelection,
   getTiktokConfigValue,
+  queryRedditData,
+  formatRedditData,
+  menuOptionReddit,
+  querySelectedRedditMenuData,
+  extractPollData,
 };

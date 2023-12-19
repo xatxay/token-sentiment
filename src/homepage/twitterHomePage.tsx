@@ -1,7 +1,7 @@
-import {CoinByDayTwt} from "../twitter/coinsByDayTWT";
+import { CoinByDayTwt } from "../twitter/coinsByDayTWT";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
+import {TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
 
@@ -38,9 +38,6 @@ const TwitterHomePage = () => {
 
   return (
     <>
-      <TopicHeader>
-        <h3>Twitter Sentiment</h3>
-      </TopicHeader>
       <TwitterPage>
         <CoinByDayTwt
           openModal={openCoinByDateModal}

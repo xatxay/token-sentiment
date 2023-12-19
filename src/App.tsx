@@ -14,6 +14,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import TiktokHomepage from "./homepage/tiktokHomepage";
+import RedditHomePage from "./homepage/redditHomepage";
+import PollsHomepage from "./homepage/pollsHomepage";
 
 ReactModal.setAppElement("#root");
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ function App() {
             <Route path="/twitter" element={<TwitterHomePage />} />
             <Route path="/youtube" element={<YoutubeHomePage />} />
             <Route path="/tiktok" element={<TiktokHomepage />} />
+            <Route path="/reddit" element={<RedditHomePage />} />
+            <Route path="/polls" element={<PollsHomepage />} />
           </Routes>
           <ToastContainer
             position="top-right"

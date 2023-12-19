@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TopicHeader, TwitterPage } from "../twitter/twitterStyle";
+import { TwitterPage } from "../twitter/twitterStyle";
 import CoinByDayYT from "../youtube/coinsByDayYT";
 import { fetchQuery, formatDate } from "../utils/utils";
 import YoutubeStats from "../youtube/youtubeStat";
@@ -45,9 +45,6 @@ const YoutubeHomePage = () => {
 
   return (
     <>
-      <TopicHeader>
-        <h3>Youtube Sentiment</h3>
-      </TopicHeader>
       <TwitterPage>
         <YoutubeStats />
       </TwitterPage>

@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { backgroundColor } from "../color/color";
+import { backgroundColor, menuColor } from "../color/color";
 
 const GlobalStyle = css`
   body {
@@ -7,6 +7,22 @@ const GlobalStyle = css`
     letter-spacing: 0.5px;
     background-color: ${backgroundColor};
     color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: ${backgroundColor};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${menuColor};
+    border-radius: 6px;
+    &:hover {
+      background-color: gray;
+    }
   }
 `;
 

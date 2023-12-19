@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import {
   HeaderContainer,
   HeaderMenu,
-  HeaderText,
   LogoImage,
   LogoutButton,
   MenuItems,
@@ -16,10 +15,7 @@ const HomepageHeader = () => {
 
   return (
     <HeaderContainer>
-      <HeaderText>
-        <LogoImage src={logo} />
-        Token Sentiment
-      </HeaderText>
+      <LogoImage src={logo} />
       <HeaderMenu>
         {menuItems.map((item) => {
           return (

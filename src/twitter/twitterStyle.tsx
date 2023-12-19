@@ -17,6 +17,7 @@ const TopicContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-top: 50px;
 `;
 
 const TwitterPage = styled.div`
@@ -43,12 +44,12 @@ const RightContainer = styled.div`
   justify-content: center;
 `;
 
-const BackgroundTable = styled.div`
+const BackgroundTable = styled.div<{ poll?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 650px;
+  width: ${(props) => (props.poll ? "800px" : "650px")};
   height: 500px;
   border-radius: 15px;
 `;

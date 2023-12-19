@@ -64,7 +64,11 @@ export interface Modal {
 }
 
 export interface CoinDataTableProps {
-  data: ArrayTweetResult[] | CoinByDateYTProps[];
+  data:
+    | ArrayTweetResult[]
+    | CoinByDateYTProps[]
+    | RedditCoinByDay[]
+    | PollExtract[];
   columns: any[];
   isOpen?: boolean;
   coin?: string | null;
@@ -72,6 +76,7 @@ export interface CoinDataTableProps {
   modal: boolean;
   startDate?: Date;
   setStartDate?: (date: Date) => void;
+  poll?: boolean;
 }
 
 export interface Pagination {
@@ -260,4 +265,70 @@ export interface TikTokVideo {
   sentiment_dict: string;
   username: string;
   video_id: string;
+}
+
+export interface RedditData {
+  date: string;
+  top_words: string;
+  top_coins: string;
+}
+
+export interface RedditCoinByDay {
+  coin: string;
+  occurences: number;
+}
+
+export interface RedditChartData {
+  date: string;
+  num_comments: string;
+  num_posts: string;
+  subreddit: string;
+  subscribers: string;
+  total_upvotes_top_10: string;
+  users_online: string;
+}
+
+export interface QueryRedditChartData {
+  date: string;
+  data: string | null | number;
+  tooltipContent: string;
+}
+
+export interface StackedChartProps {
+  data: PollData[];
+}
+
+export interface StackFormat {
+  name: string;
+  data: number[];
+}
+
+export interface StackedChartState {
+  series: StackFormat[];
+  options: any;
+}
+
+interface PollBase {
+  timestamp: string;
+  tweet_url: string;
+  tweet_text: string;
+  result: string;
+  category: string;
+}
+
+export interface PollData extends PollBase {
+  poll_dict: string;
+}
+
+export interface PollExtract extends PollBase {
+  poll_dict: number[];
+}
+
+export interface PollChart {
+  poll_dict: string[];
+}
+
+export interface PollBarProps {
+  values: number[];
+  colors: string[];
 }
