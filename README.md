@@ -1,5 +1,7 @@
 # Token Sentiment
 
+[Website URL](https://tokensentiment.netlify.app/)
+
 This project was my rework for [Token Sentiment Website](https://token-sentiment.com/). ([Video Demo](https://youtu.be/zu_Y2wRAhIE))
 
 ![image](https://github.com/xatxay/token-sentiment/assets/29783278/dc7b25a8-84bf-47ce-9a68-63096a366528)
