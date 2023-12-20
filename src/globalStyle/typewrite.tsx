@@ -10,19 +10,21 @@ const TypewriterEffect = ({
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (index < text.length) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setTypedText(typedText + text.charAt(index));
         setIndex(index + 1);
       }, speed);
     } else if (index === text.length) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setTypedText("");
         setIndex(0);
       }, loopDelay);
     }
+    return () => clearTimeout(timer);
   }, [index, loopDelay, speed, text, typedText]);
-  return <>{typedText}</>;
+  return <>{typedText || "\u00A0"}</>;
 };
 
 export default TypewriterEffect;

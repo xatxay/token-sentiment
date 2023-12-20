@@ -1,7 +1,7 @@
 import styled from "@emotion/styled/macro";
 
 const PollContainer = styled.div`
-  width: 150px;
+  width: 225px;
   background-color: white;
   border-radius: 4px;
   overflow: hidden;
@@ -11,6 +11,12 @@ const PollSegment = styled.div<{ width: number; color: string }>`
   background-color: ${(props) => props.color};
   height: 20px;
   float: left;
+  color: black;
+  font-size: 11px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-weight: bold;
   width: ${(props) => `${props.width}%`};
 `;
 

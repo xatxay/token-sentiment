@@ -49,7 +49,7 @@ const BackgroundTable = styled.div<{ poll?: boolean }>`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: ${(props) => (props.poll ? "800px" : "650px")};
+  width: ${(props) => (props.poll ? "900px" : "650px")};
   height: 500px;
   border-radius: 15px;
 `;

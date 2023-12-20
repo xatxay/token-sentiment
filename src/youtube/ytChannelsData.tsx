@@ -28,7 +28,7 @@ const YoutubeChannelsData = () => {
 
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedChannel(event.target.value);
-    console.log("selected channel: ", selectedChannel);
+    // console.log("selected channel: ", selectedChannel);
   };
 
   if (data) {

@@ -44,7 +44,7 @@ const TwitterFollowes = () => {
   if (parseData && parseData.length > 0) {
     uniqueUser = extractUniqueUsers(parseData, "username");
     followersChanges = twitterFollowersBrushData(parseData, username);
-    console.log("follower changes: ", followersChanges);
+    // console.log("follower changes: ", followersChanges);
 
     const twitterConfig: ChartDataConfig<FollowersChanges> = {
       getDataValue: (data) => data.data,
@@ -61,8 +61,8 @@ const TwitterFollowes = () => {
     setUsername(event.target.value);
   };
   const { min, max } = calculateMinMax(followersChanges, "data");
-  console.log("qweqwewq: ", min, max);
-  console.log("select username: ", username);
+  // console.log("qweqwewq: ", min, max);
+  // console.log("select username: ", username);
 
   return (
     <>

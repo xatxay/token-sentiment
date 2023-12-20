@@ -87,7 +87,7 @@ const CoinByDayYT = ({
 
   if (data) {
     parseData = JSON.parse(data);
-    console.log("yt data: ", parseData);
+    // console.log("yt data: ", parseData);
   }
 
   let parseVideoData: CoinByDateYTProps[] = [];

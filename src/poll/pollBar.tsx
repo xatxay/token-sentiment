@@ -5,7 +5,9 @@ const PollBar = ({ values, colors }: PollBarProps) => {
   return (
     <PollContainer>
       {values.map((value, index) => (
-        <PollSegment key={index} width={value} color={colors[index]} />
+        <PollSegment key={index} width={value} color={colors[index]}>
+          {value}
+        </PollSegment>
       ))}
     </PollContainer>
   );

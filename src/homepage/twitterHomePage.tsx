@@ -1,11 +1,13 @@
 import { CoinByDayTwt } from "../twitter/coinsByDayTWT";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import {TwitterPage } from "../twitter/twitterStyle";
+import { TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
+import HomepageHeader from "./homepageHeader";
+import { LoginProps } from "../utils/interface";
 
-const TwitterHomePage = () => {
+const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
   const [isCoinByDateModalOpen, setIsCoinByDateModalOpen] =
     useState<boolean>(false);
   const [isSentimentByCoinModalOpen, setIsSentimentByCoinModalOpen] =
@@ -17,9 +19,9 @@ const TwitterHomePage = () => {
       if (isCoinByDateModalOpen) return;
       setIsCoinByDateModalOpen(true);
       setSelectedCoin(coin);
-      console.log("opening modal", isCoinByDateModalOpen, selectedCoin, coin);
+      // console.log("opening modal", isCoinByDateModalOpen, selectedCoin, coin);
     },
-    [isCoinByDateModalOpen, selectedCoin]
+    [isCoinByDateModalOpen]
   );
 
   const openSentimentByCoinModal = () => {
@@ -38,6 +40,7 @@ const TwitterHomePage = () => {
 
   return (
     <>
+      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
       <TwitterPage>
         <CoinByDayTwt
           openModal={openCoinByDateModal}

@@ -34,12 +34,12 @@ const MenuList = styled.li`
   margin: 0;
 `;
 
-const MenuItems = styled.a`
+const MenuItems = styled.a<{ isActive: boolean }>`
   font-size: 20px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  color: ${menuColor};
+  color: ${(props) => (props.isActive ? "white" : menuColor)};
 
   ::after {
     content: "";

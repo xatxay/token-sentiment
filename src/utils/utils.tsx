@@ -129,7 +129,7 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
     // console.log("array: ", tableData);
     return tableData;
   } catch (err) {
-    console.log("Error inserting data to array: ", err);
+    console.error("Error inserting data to array: ", err);
     throw err;
   }
 };
@@ -142,7 +142,7 @@ const formatDate = (date: Date): string => {
     const dateFormat = `${year}-${month}-${newDate}`;
     return dateFormat;
   } catch (err) {
-    console.log("Error formating date: ", err);
+    console.error("Error formating date: ", err);
     throw err;
   }
 };
@@ -159,14 +159,14 @@ const removeDuplicate = (data: ArrayTweetResult[]) => {
     });
     return filterData;
   } catch (err) {
-    console.log("Error removing duplicate: ", err);
+    console.error("Error removing duplicate: ", err);
   }
 };
 
 const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
   try {
-    console.log("passing data: ", data);
-    console.log("passing ticker: ", ticker);
+    // console.log("passing data: ", data);
+    // console.log("passing ticker: ", ticker);
     const filterData = data.filter((coin) => {
       if (coin.coin === ticker) {
         return true;
@@ -317,7 +317,7 @@ const groupedDataByDate = (data: TwitterFollower[]): GroupData => {
       }
       groupedByDate[item.date].push(item);
     });
-    console.log("groupdatabydate: ", groupedByDate);
+    // console.log("groupdatabydate: ", groupedByDate);
     return groupedByDate;
   } catch (err) {
     console.error("Failed grouping data by date: ", err);
@@ -355,7 +355,7 @@ const calculateMinMax = <T extends object, K extends keyof T>(
     const numberValue = dataArray.map((item) => Number(item[propertyName]));
     const min = Math.min(...numberValue);
     const max = Math.max(...numberValue);
-    console.log("min and max: ", min, max);
+    // console.log("min and max: ", min, max);
     return { min, max };
   } catch (err) {
     console.error("Failed calculating mix and max: ", err);
@@ -374,7 +374,7 @@ const chartContentFormatted = <T,>(
       tooltipContent: config.getTooltipContent(item),
     }));
   } catch (err) {
-    console.log("Error formatting chart data: ", err);
+    console.error("Error formatting chart data: ", err);
     throw err;
   }
 };
@@ -385,7 +385,7 @@ const formatCoinSentimentByDayPieChart = (
   const labels = data.map((coin) => coin.coin);
   const series = data.map((mention) => mention.mentions);
   const pieChartData = { series, labels };
-  console.log("hjkhkk: ", pieChartData);
+  // console.log("hjkhkk: ", pieChartData);
   return pieChartData;
 };
 
@@ -553,9 +553,9 @@ const queryRedditData = (
 
 const formatRedditData = (data: string): RedditCoinByDay[] => {
   try {
-    console.log("daaaa: ", data);
+    // console.log("daaaa: ", data);
     const newData = data.replace(/'/g, '"');
-    console.log("new data: ", newData);
+    // console.log("new data: ", newData);
     const parseData = JSON.parse(newData);
     const arrayData = Object.entries(parseData).map(([key, value]) => ({
       coin: key,

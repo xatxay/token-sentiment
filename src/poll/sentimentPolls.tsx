@@ -5,7 +5,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { PollExtract } from "../utils/interface";
 import PollBar from "./pollBar";
 import { PollDescription, PollDescriptionContainer } from "./pollStyle";
-import { BackgroundTable } from "../twitter/twitterStyle";
+import { BackgroundTable, TwitterTableName } from "../twitter/twitterStyle";
 import { DataTable } from "../table/dataTable";
 import { useEffect, useState } from "react";
 import { fadeIn } from "../globalStyle/fadeIn";
@@ -21,9 +21,9 @@ const SentimentPolls = () => {
 
   if (data) {
     const parseData = JSON.parse(data);
-    console.log("polls data: ", parseData);
+    // console.log("polls data: ", parseData);
     dataExtracted = extractPollData(parseData);
-    console.log("extract: ", dataExtracted);
+    // console.log("extract: ", dataExtracted);
   }
 
   if (error) {
@@ -45,13 +45,25 @@ const SentimentPolls = () => {
     }),
     columnHelper.accessor("tweet_text", {
       header: "Question",
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const row = info.row.original;
+        // console.log("rowww: ", row.tweet_url, "question: ", row.tweet_text);
+        return (
+          <TwitterTableName
+            href={row.tweet_url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {row.tweet_text}
+          </TwitterTableName>
+        );
+      },
     }),
     columnHelper.accessor("poll_dict", {
       header: "Result",
       cell: (info) => {
         const pollData = info.row.original.poll_dict;
-        console.log("dataasdasd: ", pollData);
+        // console.log("dataasdasd: ", pollData);
         return (
           <div>
             <PollBar values={pollData} colors={colors} />
@@ -69,7 +81,7 @@ const SentimentPolls = () => {
             {colors.map((color, index) => (
               <>
                 <span>{description[index]}:</span>
-                <PollDescription color={color} />
+                <PollDescription color={color} key={index} />
               </>
             ))}
           </PollDescriptionContainer>

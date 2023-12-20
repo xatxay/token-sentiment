@@ -294,20 +294,6 @@ export interface QueryRedditChartData {
   tooltipContent: string;
 }
 
-export interface StackedChartProps {
-  data: PollData[];
-}
-
-export interface StackFormat {
-  name: string;
-  data: number[];
-}
-
-export interface StackedChartState {
-  series: StackFormat[];
-  options: any;
-}
-
 interface PollBase {
   timestamp: string;
   tweet_url: string;
@@ -331,4 +317,13 @@ export interface PollChart {
 export interface PollBarProps {
   values: number[];
   colors: string[];
+}
+
+export interface AuthenticatedRouteProps {
+  isAuthenticated: boolean;
+  children: JSX.Element;
+}
+
+export interface LoginProps {
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
