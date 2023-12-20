@@ -1,10 +1,9 @@
 # Token Sentiment
 
-This project was my rework for [Token Sentiment Website](https://token-sentiment.com/).
+This project was my rework for [Token Sentiment Website](https://token-sentiment.com/). ([Video Demo](https://youtu.be/zu_Y2wRAhIE))
 
 ![image](https://github.com/xatxay/token-sentiment/assets/29783278/dc7b25a8-84bf-47ce-9a68-63096a366528)
 ![image](https://github.com/xatxay/token-sentiment/assets/29783278/6265168f-f657-457f-80a5-09fa4e928fe7)
-[Video Demo](https://youtu.be/zu_Y2wRAhIE)
 
 ### Clone repository
 
