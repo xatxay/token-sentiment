@@ -41,3 +41,4 @@ You will also see any lint errors in the console.
 -Have an option to put header/params to query specific coin data from the api instead of query all of coins data.\
 -Change format for backend data handling.\
 -Some data is outdated or invalid.\
+-Light/dark mode.
