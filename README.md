@@ -34,7 +34,7 @@ You will also see any lint errors in the console.
 -Use OpenAI speech to text to analyze youtube and tiktok videos.\
 -Better sentiment score format (suggestion: -100 for most bearish 0 neutral and 100 for most bullish).\
 -Use Chatgpt to analyze the data and give sentiment score (suggestion).\
--Script to fetch the followers every 24hrs.
+-Script to fetch the followers every 24hrs.\
 -Better login/authentication (use jwt with expiration so it doesn't have to call the api every refresh) .\
 -Create a script to fetch twitter followers every 24hrs.\
 -Change coin sentiment data to JSON format.\
