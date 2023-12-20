@@ -1,12 +1,27 @@
-# Getting Started with Create React App
+# Token Sentiment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was my rework for [Token Sentiment Website](https://token-sentiment.com/).
+
+![image](https://github.com/xatxay/token-sentiment/assets/29783278/dc7b25a8-84bf-47ce-9a68-63096a366528)
+![image](https://github.com/xatxay/token-sentiment/assets/29783278/6265168f-f657-457f-80a5-09fa4e928fe7)
+
+### Clone repository
+
+To clone the repository, use the following commands:
+
+```sh
+git clone https://github.com/xatxay/token-sentiment.git
+cd token-sentiment
+npm install
+```
 
 ## Available Scripts
 
+**Note: Input the api links in the .env file before running. 
+
 In the project directory, you can run:
 
-### `npm start`
+### `npm run start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -14,33 +29,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+## Improvement
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+-Use OpenAI speech to text to analyze youtube and tiktok videos.\
+-Better sentiment score format (suggestion: -100 for most bearish 0 neutral and 100 for most bullish).\
+-Use Chatgpt to analyze the data and give sentiment score (suggestion).\
+-Script to fetch the followers every 24hrs.\
+-Better login/authentication (use jwt with expiration so it doesn't have to call the api every refresh) .\
+-Create a script to fetch twitter followers every 24hrs.\
+-Change coin sentiment data to JSON format.\
+-Have an option to put header/params to query specific coin data from the api instead of query all of coins data.\
+-Change format for backend data handling.\
+-Some data is outdated or invalid.\
