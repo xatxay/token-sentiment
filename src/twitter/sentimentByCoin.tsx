@@ -107,6 +107,7 @@ const SentimentByCoin = ({
     return <div>{error}</div>;
   }
   console.log("filter data: ", filterData);
+  if ((filterData.length = 0)) return <div>NO data</div>;
   return (
     <>
       <TopicContainer>

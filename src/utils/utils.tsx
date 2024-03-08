@@ -90,12 +90,22 @@ const fetchQuery = async (url: string, params: Fetchparams): Promise<any> => {
   }
 };
 
-const extractTwitterSentimentByDay = (data: TweetByDay): Result => {
+const extractTwitterSentimentByDay = (data: TweetByDay): Result | null => {
   try {
+    console.log("data: ", data);
+    if (
+      !data ||
+      !data.top_coins_dict ||
+      typeof data.top_coins_dict !== "object" ||
+      !data.tweets_data
+    )
+      return null;
+
     const result: Result = {};
     for (const coin of Object.keys(data.top_coins_dict)) {
       const coinData = data.top_coins_dict[coin];
       const tweetData = data.tweets_data;
+      console.log("daasdasd: ", tweetData);
       if (tweetData) {
         const parseTweetData: TweetsData[] = JSON.parse(tweetData[coin]);
         result[coin] = {

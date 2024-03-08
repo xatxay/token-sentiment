@@ -69,14 +69,16 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
 
   if (data) {
     const twitterResult = extractTwitterSentimentByDay(data);
-    // console.log("twitter result: ", twitterResult);
-    const arrayData = insertArrayData(twitterResult);
-    // console.log("array: ", arrayData);
-    noDuplicateData = removeDuplicate(arrayData) || [];
-    // console.log("no duplicate: ", noDuplicateData);
-    duplicateData = duplicateCoins(arrayData, coin || "") || [];
-    // console.log("duplicate data: ", duplicateData);
-    pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
+    console.log("twitter result: ", twitterResult);
+    if (twitterResult !== null) {
+      const arrayData = insertArrayData(twitterResult);
+      // console.log("array: ", arrayData);
+      noDuplicateData = removeDuplicate(arrayData) || [];
+      // console.log("no duplicate: ", noDuplicateData);
+      duplicateData = duplicateCoins(arrayData, coin || "") || [];
+      // console.log("duplicate data: ", duplicateData);
+      pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
+    }
   }
 
   if (error) {
