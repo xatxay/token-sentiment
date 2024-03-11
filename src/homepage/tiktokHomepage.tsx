@@ -1,11 +1,25 @@
 import TiktokStatistic from "../tiktok/tiktokStatistic";
 import TiktokVideo from "../tiktok/tiktokVideo";
-import { TwitterPage } from "../twitter/twitterStyle";
 import { LoginProps } from "../utils/interface";
 import HomepageHeader from "./homepageHeader";
 
 const TiktokHomepage = ({ setIsAuthenticated }: LoginProps) => {
   return (
+    <>
+      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <TiktokVideo />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <TiktokStatistic />
+      </div>
+    </>
+  );
+};
+
+export default TiktokHomepage;
+/*
+ return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
       <TwitterPage>
@@ -16,6 +30,4 @@ const TiktokHomepage = ({ setIsAuthenticated }: LoginProps) => {
       </TwitterPage>
     </>
   );
-};
-
-export default TiktokHomepage;
+  */

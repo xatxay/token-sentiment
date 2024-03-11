@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { TwitterPage } from "../twitter/twitterStyle";
 import CoinByDayYT from "../youtube/coinsByDayYT";
 import { fetchQuery, formatDate } from "../utils/utils";
 import YoutubeStats from "../youtube/youtubeStat";
@@ -48,6 +47,33 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
   return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <YoutubeStats />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <CoinByDayYT
+          openCoinByDateModalYt={openCoinByDateModalYt}
+          closeCoinByDateModalYt={closeCoinByDateModalYt}
+          isOpenYtModal={isOpenYtModal}
+          selectedCoinYt={selectedCoinYt}
+          ytSelectedDate={ytSelectedDate}
+          setYtSelectedData={setYtSelectedData}
+          videoFetchData={videoFetchData}
+        />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <YoutubeChannelsData />
+      </div>
+    </>
+  );
+};
+
+export default YoutubeHomePage;
+
+/*
+  return (
+    <>
+      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
       <TwitterPage>
         <YoutubeStats />
       </TwitterPage>
@@ -67,6 +93,4 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
       </TwitterPage>
     </>
   );
-};
-
-export default YoutubeHomePage;
+  */

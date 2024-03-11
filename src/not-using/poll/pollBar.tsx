@@ -1,4 +1,4 @@
-import { PollBarProps } from "../utils/interface";
+import { PollBarProps } from "../../utils/interface";
 import { PollContainer, PollSegment } from "./pollStyle";
 
 const PollBar = ({ values, colors }: PollBarProps) => {

@@ -1,5 +1,4 @@
 import { Pagination } from "../utils/interface";
-import { PaginationButton } from "./paginationStyle";
 
 const PaginationControll = ({
   canPreviousPage,
@@ -12,33 +11,56 @@ const PaginationControll = ({
 }: Pagination) => {
   return (
     <>
-      <PaginationButton
+      <button
+        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+          !canPreviousPage
+            ? "cursor-default hover:bg-gray-300"
+            : "cursor-pointer hover:bg-gray-500"
+        }`}
         onClick={() => setPageIndex(0)}
         disabled={!canPreviousPage}
       >
-        <span>{`<<`}</span>
-      </PaginationButton>
-      <PaginationButton
+        {"<<"}
+      </button>
+      <button
+        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+          !canPreviousPage
+            ? "cursor-default hover:bg-gray-300"
+            : "cursor-pointer hover:bg-gray-500"
+        }`}
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
       >
-        <span>{`<`}</span>
-      </PaginationButton>
+        {"<"}
+      </button>
       <span>
         Page{" "}
         <strong>
           {pageIndex + 1} of {pageCount}
         </strong>
       </span>
-      <PaginationButton onClick={() => nextPage()} disabled={!canNextPage}>
-        <span>{`>`}</span>
-      </PaginationButton>
-      <PaginationButton
+      <button
+        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+          !canPreviousPage
+            ? "cursor-default hover:bg-gray-300"
+            : "cursor-pointer hover:bg-gray-500"
+        }`}
+        onClick={() => nextPage()}
+        disabled={!canNextPage}
+      >
+        {">"}
+      </button>
+      <button
+        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+          !canPreviousPage
+            ? "cursor-default hover:bg-gray-300"
+            : "cursor-pointer hover:bg-gray-500"
+        }`}
         onClick={() => setPageIndex(pageCount - 1)}
         disabled={!canNextPage}
       >
-        <span>{`>>`}</span>
-      </PaginationButton>
+        {">>"}
+      </button>
     </>
   );
 };

@@ -3,7 +3,6 @@ import { formatDate, useFetch } from "../utils/utils";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CoinByDateYTProps, CoinByDayDataYt } from "../utils/interface";
 import { CoinDataTable } from "../twitter/coinsByDayTWT";
-import { TopicContainer, TwitterTableName } from "../twitter/twitterStyle";
 import DataTableModal from "../table/modal";
 
 const CoinByDayYT = ({
@@ -19,8 +18,6 @@ const CoinByDayYT = ({
   const formattedDate = formatDate(ytSelectedDate);
   const { data, error } = useFetch(apiUrl, { date: formattedDate });
   let parseData: CoinByDateYTProps[] = [];
-
-  // console.log("selected coin: ", selectedCoinYt);
 
   const columnHelper = createColumnHelper<CoinByDateYTProps>();
   const columns = [
@@ -48,11 +45,12 @@ const CoinByDayYT = ({
       header: "More Details",
       cell: (info) => {
         return (
-          <TwitterTableName
+          <span
+            className="hover:text-white"
             onClick={() => openCoinByDateModalYt(info.row.original.coin)}
           >
             View More
-          </TwitterTableName>
+          </span>
         );
       },
     }),
@@ -67,9 +65,14 @@ const CoinByDayYT = ({
           row.id
         }`;
         return (
-          <TwitterTableName href={youtubeLink} target="_blank">
+          <a
+            rel="noreferrer"
+            className="hover:text-white"
+            href={youtubeLink}
+            target="_blank"
+          >
             {row.title}
-          </TwitterTableName>
+          </a>
         );
       },
     }),
@@ -87,23 +90,20 @@ const CoinByDayYT = ({
 
   if (data) {
     parseData = JSON.parse(data);
-    // console.log("yt data: ", parseData);
   }
 
   let parseVideoData: CoinByDateYTProps[] = [];
   if (videoFetchData) {
     parseVideoData = JSON.parse(videoFetchData);
-    // console.log("fetch parse data: ", parseVideoData);
   }
 
   if (error) {
     console.error("Error fetching coin by day yt data: ", error);
     toast.error(error);
   }
-
   return (
     <>
-      <TopicContainer>
+      <div className="flex flex-col items-center justify-center w-full">
         <CoinDataTable
           data={parseData}
           columns={columns}
@@ -111,7 +111,7 @@ const CoinByDayYT = ({
           setStartDate={setYtSelectedData}
           modal={false}
         />
-      </TopicContainer>
+      </div>
       <DataTableModal
         data={parseVideoData}
         columns={modalColumns}

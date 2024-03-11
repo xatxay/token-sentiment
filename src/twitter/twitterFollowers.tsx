@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import BrushChart from "../chart/brushChart";
-import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import {
   BrushChartData,
   ChartDataConfig,
@@ -14,7 +13,6 @@ import {
   twitterFollowersBrushData,
   useFetch,
 } from "../utils/utils";
-import { TopicContainer } from "./twitterStyle";
 import { toast } from "react-toastify";
 
 const TwitterFollowes = () => {
@@ -30,7 +28,6 @@ const TwitterFollowes = () => {
 
   if (data) {
     parseData = JSON.parse(data);
-    // console.log("followers data: ", parseData);
   }
 
   if (error) {
@@ -44,7 +41,6 @@ const TwitterFollowes = () => {
   if (parseData && parseData.length > 0) {
     uniqueUser = extractUniqueUsers(parseData, "username");
     followersChanges = twitterFollowersBrushData(parseData, username);
-    // console.log("follower changes: ", followersChanges);
 
     const twitterConfig: ChartDataConfig<FollowersChanges> = {
       getDataValue: (data) => data.data,
@@ -61,29 +57,34 @@ const TwitterFollowes = () => {
     setUsername(event.target.value);
   };
   const { min, max } = calculateMinMax(followersChanges, "data");
-  // console.log("qweqwewq: ", min, max);
-  // console.log("select username: ", username);
-
   return (
     <>
-      <TopicContainer>
+      <div className="flex flex-col items-center justify-center w-full">
         <h3>Twitter Followers</h3>
-        <DropDownMenu value={username} onChange={handleSelectUser}>
+        <select
+          className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+          value={username}
+          onChange={handleSelectUser}
+        >
           {uniqueUser.map((user) => {
             return (
-              <DropDownOptions key={user} value={user}>
+              <option
+                className="text-black font-semibold"
+                key={user}
+                value={user}
+              >
                 {user}
-              </DropDownOptions>
+              </option>
             );
           })}
-        </DropDownMenu>
+        </select>
         <BrushChart
           data={userFollowersChange}
           min={min}
           max={max}
           isClickable={false}
         />
-      </TopicContainer>
+      </div>
     </>
   );
 };

@@ -1,7 +1,7 @@
-import SentimentPolls from "../poll/sentimentPolls";
-import { TwitterPage } from "../twitter/twitterStyle";
+import SentimentPolls from "./poll/sentimentPolls";
+import { TwitterPage } from "./twitterStyle";
 import { LoginProps } from "../utils/interface";
-import HomepageHeader from "./homepageHeader";
+import HomepageHeader from "../homepage/homepageHeader";
 
 const PollsHomepage = ({ setIsAuthenticated }: LoginProps) => {
   return (

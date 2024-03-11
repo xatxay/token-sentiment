@@ -1,7 +1,6 @@
 import { CoinByDayTwt } from "../twitter/coinsByDayTWT";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import { TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
 import HomepageHeader from "./homepageHeader";
@@ -19,7 +18,6 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
       if (isCoinByDateModalOpen) return;
       setIsCoinByDateModalOpen(true);
       setSelectedCoin(coin);
-      // console.log("opening modal", isCoinByDateModalOpen, selectedCoin, coin);
     },
     [isCoinByDateModalOpen]
   );
@@ -38,6 +36,37 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
     setIsSentimentByCoinModalOpen(false);
   };
 
+  return (
+    <>
+      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <CoinByDayTwt
+          openModal={openCoinByDateModal}
+          isOpen={isCoinByDateModalOpen}
+          coin={selectedCoin}
+          closeModal={closeCoinByDateModal}
+        />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <SentimentByCoin
+          openModal={openSentimentByCoinModal}
+          closeModal={closeSentimentByCoinModal}
+          isOpen={isSentimentByCoinModalOpen}
+        />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <SentimentByUser />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center">
+        <TwitterFollowes />
+      </div>
+    </>
+  );
+};
+
+export default TwitterHomePage;
+
+/*
   return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
@@ -64,6 +93,4 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
       </TwitterPage>
     </>
   );
-};
-
-export default TwitterHomePage;
+  */

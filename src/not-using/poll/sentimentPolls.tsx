@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { toast } from "react-toastify";
-import { extractPollData, useFetch } from "../utils/utils";
+import { extractPollData, useFetch } from "../../utils/utils";
 import { createColumnHelper } from "@tanstack/react-table";
-import { PollExtract } from "../utils/interface";
+import { PollExtract } from "../../utils/interface";
 import PollBar from "./pollBar";
 import { PollDescription, PollDescriptionContainer } from "./pollStyle";
-import { BackgroundTable, TwitterTableName } from "../twitter/twitterStyle";
-import { DataTable } from "../table/dataTable";
+import { BackgroundTable, TwitterTableName } from "../twitterStyle";
+import { DataTable } from "../../table/dataTable";
 import { useEffect, useState } from "react";
-import { fadeIn } from "../globalStyle/fadeIn";
+import { fadeIn } from "../../globalStyle/fadeIn";
 
 const SentimentPolls = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -21,9 +21,7 @@ const SentimentPolls = () => {
 
   if (data) {
     const parseData = JSON.parse(data);
-    // console.log("polls data: ", parseData);
     dataExtracted = extractPollData(parseData);
-    // console.log("extract: ", dataExtracted);
   }
 
   if (error) {
@@ -47,7 +45,6 @@ const SentimentPolls = () => {
       header: "Question",
       cell: (info) => {
         const row = info.row.original;
-        // console.log("rowww: ", row.tweet_url, "question: ", row.tweet_text);
         return (
           <TwitterTableName
             href={row.tweet_url}
@@ -63,7 +60,6 @@ const SentimentPolls = () => {
       header: "Result",
       cell: (info) => {
         const pollData = info.row.original.poll_dict;
-        // console.log("dataasdasd: ", pollData);
         return (
           <div>
             <PollBar values={pollData} colors={colors} />

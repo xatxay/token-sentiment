@@ -12,8 +12,6 @@ import {
   YoutubeChannelsDataType,
   YoutubeViewsChange,
 } from "../utils/interface";
-import { TopicContainer } from "../twitter/twitterStyle";
-import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import BrushChart from "../chart/brushChart";
 import { ChangeEvent, useState } from "react";
 
@@ -28,16 +26,12 @@ const YoutubeChannelsData = () => {
 
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedChannel(event.target.value);
-    // console.log("selected channel: ", selectedChannel);
   };
 
   if (data) {
     const parseData: YoutubeChannelsDataType[] = JSON.parse(data);
-    // console.log("yt channels data: ", parseData);
     uniqueChannel = extractUniqueUsers(parseData, "channel_name");
-    // console.log("unique channels: ", uniqueChannel);
     const selectChannelData = calculateYtViewsByDay(parseData, selectedChannel);
-    // console.log("selected channel data: ", selectChannelData);
     const ytChannelsDataConfig: ChartDataConfig<YoutubeViewsChange> = {
       getDataValue: (stat) => stat.data,
       getTooltipContent: (stat) =>
@@ -48,7 +42,6 @@ const YoutubeChannelsData = () => {
       selectChannelData || [],
       ytChannelsDataConfig
     );
-    // console.log("chart yt data format: ", channelsChartData);
   }
 
   if (error) {
@@ -61,24 +54,32 @@ const YoutubeChannelsData = () => {
   }
   const { min, max } = calculateMinMax(channelsChartData, "data");
   return (
-    <TopicContainer>
+    <div className="flex flex-col items-center justify-center w-full">
       <h3>Total Channel Views Per Day</h3>
-      <DropDownMenu value={selectedChannel} onChange={handleSelectUser}>
+      <select
+        className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+        value={selectedChannel}
+        onChange={handleSelectUser}
+      >
         {uniqueChannel.map((channel) => {
           return (
-            <DropDownOptions key={channel} value={channel}>
+            <option
+              className="text-black font-semibold"
+              key={channel}
+              value={channel}
+            >
               {channel}
-            </DropDownOptions>
+            </option>
           );
         })}
-      </DropDownMenu>
+      </select>
       <BrushChart
         data={channelsChartData}
         min={min}
         max={max}
         isClickable={false}
       />
-    </TopicContainer>
+    </div>
   );
 };
 

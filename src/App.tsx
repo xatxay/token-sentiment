@@ -14,7 +14,6 @@ import {
 } from "react-router-dom";
 import TiktokHomepage from "./homepage/tiktokHomepage";
 import RedditHomePage from "./homepage/redditHomepage";
-import PollsHomepage from "./homepage/pollsHomepage";
 import Login from "./login/loginPage";
 import { useState } from "react";
 import AuthenticatedRoute from "./login/authenticateRoute";
@@ -24,8 +23,6 @@ const queryClient = new QueryClient();
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // console.log("isAuthenticated: ", isAuthenticated);
-
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -40,20 +37,20 @@ function App() {
               path="/"
               element={
                 <AuthenticatedRoute isAuthenticated={isAuthenticated}>
-                  <Navigate to="/twitter" replace />
+                  <Navigate to="/youtube" replace />
                 </AuthenticatedRoute>
-              }
-            />
-            <Route
-              path="/twitter"
-              element={
-                <TwitterHomePage setIsAuthenticated={setIsAuthenticated} />
               }
             />
             <Route
               path="/youtube"
               element={
                 <YoutubeHomePage setIsAuthenticated={setIsAuthenticated} />
+              }
+            />
+            <Route
+              path="/twitter"
+              element={
+                <TwitterHomePage setIsAuthenticated={setIsAuthenticated} />
               }
             />
             <Route
@@ -68,12 +65,12 @@ function App() {
                 <RedditHomePage setIsAuthenticated={setIsAuthenticated} />
               }
             />
-            <Route
+            {/* <Route
               path="/polls"
               element={
                 <PollsHomepage setIsAuthenticated={setIsAuthenticated} />
               }
-            />
+            /> */}
           </Routes>
           <ToastContainer
             position="top-right"

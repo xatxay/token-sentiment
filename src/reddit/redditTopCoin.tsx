@@ -18,15 +18,11 @@ const TopCoinInCommentReddit = () => {
 
   if (data) {
     const parseData: RedditData[] = JSON.parse(data);
-    // console.log("top coin reddit: ", parseData);
     const formattedDate = formatDate(selectedDate);
-    // console.log("date: ", formattedDate);
     const queryData = queryRedditData(formattedDate, parseData);
-    // console.log("query Data: ", queryData);
     if (queryData) {
       selectedData = formatRedditData(queryData || "");
     }
-    // console.log("data formatted: ", selectedData);
   }
 
   if (error) {

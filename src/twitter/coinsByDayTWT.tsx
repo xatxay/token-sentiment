@@ -9,7 +9,6 @@ import {
   removeDuplicate,
   useFetch,
 } from "../utils/utils";
-import { RightContainer, TwitterTableName } from "./twitterStyle";
 import {
   ArrayTweetResult,
   CoinDataTableProps,
@@ -19,7 +18,6 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTableModal from "../table/modal";
 import { toast } from "react-toastify";
-import { BackgroundTable, LeftContainer } from "./twitterStyle";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
@@ -37,8 +35,8 @@ const CoinDataTable = React.memo(
   }: CoinDataTableProps) => {
     return (
       <>
-        <LeftContainer>
-          <BackgroundTable poll={poll || false}>
+        <div className="flex-1 flex flex-row items-center justify-center">
+          <div className="flex items-center justify-center flex-col">
             <h3>Top Coins By Day</h3>
             {!modal && startDate && setStartDate && (
               <DateSelector startDate={startDate} setStartDate={setStartDate} />
@@ -48,8 +46,8 @@ const CoinDataTable = React.memo(
             ) : (
               <DataTable data={data} columns={columns} />
             )}
-          </BackgroundTable>
-        </LeftContainer>
+          </div>
+        </div>
       </>
     );
   }
@@ -69,14 +67,10 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
 
   if (data) {
     const twitterResult = extractTwitterSentimentByDay(data);
-    console.log("twitter result: ", twitterResult);
     if (twitterResult !== null) {
       const arrayData = insertArrayData(twitterResult);
-      // console.log("array: ", arrayData);
       noDuplicateData = removeDuplicate(arrayData) || [];
-      // console.log("no duplicate: ", noDuplicateData);
       duplicateData = duplicateCoins(arrayData, coin || "") || [];
-      // console.log("duplicate data: ", duplicateData);
       pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
     }
   }
@@ -112,20 +106,26 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
           const row = info.row.original;
           if (row.uniqueUser > 1 && openModal && !isOpen) {
             return (
-              <TwitterTableName
+              <span
+                className="cursor-pointer hover:text-white"
                 onClick={(event) => {
                   event.stopPropagation();
                   openModal(row.coin);
                 }}
               >
                 View More
-              </TwitterTableName>
+              </span>
             );
           } else {
             return (
-              <TwitterTableName href={row.twitterUrl} target="_blank">
+              <a
+                href={row.twitterUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white"
+              >
                 {row.twitterUser}
-              </TwitterTableName>
+              </a>
             );
           }
         },
@@ -140,13 +140,9 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     }
   }, [data, loading]);
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <>
-      <LeftContainer>
+      <div className="flex-1 flex flex-row items-center justify-center">
         <div css={isLoaded ? fadeIn : undefined}>
           <CoinDataTable
             data={noDuplicateData}
@@ -159,10 +155,10 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
             setStartDate={setStartDate}
           />
         </div>
-      </LeftContainer>
-      <RightContainer>
+      </div>
+      <div className="flex-1 flex items-center justify-center">
         <PieChart series={pieChartData.series} labels={pieChartData.labels} />
-      </RightContainer>
+      </div>
       <DataTableModal
         data={duplicateData}
         columns={columns}

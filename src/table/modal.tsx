@@ -9,8 +9,6 @@ const DataTableModal = ({
   isOpen,
   closeModal,
 }: DataTableProps) => {
-  // console.log("isopen: ", isOpen);
-  // console.log("modal data: ", data);
   return (
     <ReactModal
       isOpen={isOpen || false}
@@ -18,7 +16,6 @@ const DataTableModal = ({
       className="modal"
       overlayClassName="overlay"
     >
-      {/* <span>testing</span> */}
       <DataTable data={data} columns={columns} />
     </ReactModal>
   );
