@@ -35,18 +35,18 @@ const CoinDataTable = React.memo(
   }: CoinDataTableProps) => {
     return (
       <>
-        <div className="flex-1 flex flex-row items-center justify-center">
-          <div className="flex items-center justify-center flex-col">
-            <h3>Top Coins By Day</h3>
-            {!modal && startDate && setStartDate && (
-              <DateSelector startDate={startDate} setStartDate={setStartDate} />
-            )}
-            {data.length === 0 ? (
-              <NoData data={data} columns={columns} />
-            ) : (
-              <DataTable data={data} columns={columns} />
-            )}
-          </div>
+        <div className="flex items-center justify-center flex-col">
+          <h3 className="font-extrabold text-xl md:text-2xl my-4">
+            Top Coins By Day
+          </h3>
+          {!modal && startDate && setStartDate && (
+            <DateSelector startDate={startDate} setStartDate={setStartDate} />
+          )}
+          {data.length === 0 ? (
+            <NoData data={data} columns={columns} />
+          ) : (
+            <DataTable data={data} columns={columns} />
+          )}
         </div>
       </>
     );
@@ -54,7 +54,9 @@ const CoinDataTable = React.memo(
 );
 
 const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().setDate(new Date().getDate() - 1))
+  );
   const [isLoaded, setIsLoaded] = useState(false);
   const dateFormat = formatDate(startDate);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
@@ -157,7 +159,12 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">
-        <PieChart series={pieChartData.series} labels={pieChartData.labels} />
+        <div className="flex items-center justify-center flex-col">
+          <h3 className="font-extrabold text-xl md:text-2xl my-4">
+            Top Coins By Day
+          </h3>
+          <PieChart series={pieChartData.series} labels={pieChartData.labels} />
+        </div>
       </div>
       <DataTableModal
         data={duplicateData}

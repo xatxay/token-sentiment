@@ -41,7 +41,9 @@ const RedditChart = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
-        <h3>Reddit Statistics</h3>
+        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+          Reddit Statistics
+        </h3>
         <select
           className="text-gray-800 p-3 box-border font-semibold bg-gray-400"
           value={menu}

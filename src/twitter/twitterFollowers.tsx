@@ -60,7 +60,9 @@ const TwitterFollowes = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
-        <h3>Twitter Followers</h3>
+        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+          Twitter Followers
+        </h3>
         <select
           className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
           value={username}

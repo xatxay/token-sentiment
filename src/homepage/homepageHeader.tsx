@@ -13,20 +13,23 @@ const HomepageHeader = ({ setIsAuthenticated }: LoginProps) => {
   };
 
   return (
-    <div className="w-full flex flex-row box-border items-center justify-around">
-      <img
-        className="cursor-pointer w-9 ml-5"
-        src={logo}
-        alt="token sentiment logo"
-      />
-      <ul className="list-none flex items-center justify-center box-border w-full">
+    <div className="w-full flex flex-row box-border items-center justify-around my-4">
+      <div className="flex space-x-2 items-center justify-center">
+        <img
+          className="lg:w-12 max-w-6 h-auto"
+          src={logo}
+          alt="token sentiment logo"
+        />
+        <h2 className="text-xs md:text-2xl">Token Sentiment</h2>
+      </div>
+      <ul className="list-none flex items-center justify-center box-border">
         {menuItems.map((item) => {
           const path = `/${item.toLowerCase()}`;
           const isActive = location.pathname === path;
           return (
-            <li key={item} className="no-underline p-5">
+            <li key={item} className="no-underline lg:p-5 p-1">
               <span
-                className={`text-xl relative overflow-hidden cursor-pointer hover:text-gray-600 ${
+                className={`md:text-xl text-sm relative overflow-hidden cursor-pointer hover:text-gray-600 ${
                   isActive ? "text-white" : "text-gray-400"
                 }`}
                 onClick={() => navigate(path)}
@@ -38,7 +41,7 @@ const HomepageHeader = ({ setIsAuthenticated }: LoginProps) => {
         })}
       </ul>
       <span
-        className="text-white z-10 hover:text-gray-600 cursor-pointer underline mr-7 text-xl"
+        className="text-white z-10 hover:text-gray-600 cursor-pointer underline md:text-xl text-sm"
         onClick={handleLogout}
       >
         Logout

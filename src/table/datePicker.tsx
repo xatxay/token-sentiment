@@ -4,16 +4,41 @@ import "./datePickerStyle.css";
 import { StartDate } from "../utils/interface";
 
 const DateSelector = ({ startDate, setStartDate }: StartDate) => {
-  const maxDate = new Date();
+  const maxDate = new Date(new Date().setDate(new Date().getDate() - 1));
   maxDate.setHours(0, 0, 0, 0);
+
+  const goBackADay = () => {
+    const previousDay = new Date(startDate.setDate(startDate.getDate() - 1));
+    setStartDate(previousDay);
+  };
+
+  const goForwardADay = () => {
+    const nextDay = new Date(startDate.setDate(startDate.getDate() + 1));
+    if (nextDay <= maxDate) {
+      setStartDate(nextDay);
+    }
+  };
   return (
-    <DatePicer
-      showIcon
-      selected={startDate}
-      dateFormat="yyyy-MM-dd"
-      maxDate={maxDate}
-      onChange={(date: Date) => setStartDate(date)}
-    />
+    <div className="flex flex-row items-center justify-center">
+      <button
+        className="bg-gray-400 cursor-pointer mx-4 px-2 hover:bg-gray-600"
+        onClick={goBackADay}
+      >
+        {"<"}
+      </button>
+      <DatePicer
+        selected={startDate}
+        dateFormat="yyyy-MM-dd"
+        maxDate={maxDate}
+        onChange={(date: Date) => setStartDate(date)}
+      />
+      <button
+        className="bg-gray-400 cursor-pointer mx-4 px-2 hover:bg-gray-600"
+        onClick={goForwardADay}
+      >
+        {">"}
+      </button>
+    </div>
   );
 };
 

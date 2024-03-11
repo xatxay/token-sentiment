@@ -69,7 +69,9 @@ const TiktokStatistic = () => {
   const { min, max } = calculateMinMax(tiktokChartData, "data");
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <h3>Tiktok Statistics Chart</h3>
+      <h3 className="font-extrabold text-xl md:text-2xl my-4">
+        Tiktok Statistics Chart
+      </h3>
       <div className="flex flex-row items-center justify-center w-full space-x-10">
         <select
           className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"

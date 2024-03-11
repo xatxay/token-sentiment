@@ -11,10 +11,10 @@
 .react-datepicker__input-container input {
   background-color: #a9adc1;
   padding: 10px;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   border: none;
   text-align: center;
-  width: 200px;
+  /* width: 200px; */
   height: 15px;
   font-size: 15px;
   font-weight: bold;

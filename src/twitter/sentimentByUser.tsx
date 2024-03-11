@@ -118,7 +118,9 @@ const SentimentByUserPlacement = ({
   return (
     <>
       <div className="flex items-center justify-center flex-col">
-        <h3>Sentiment By User</h3>
+        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+          Sentiment By User
+        </h3>
         {data && data.length > 0 ? (
           <>
             <select

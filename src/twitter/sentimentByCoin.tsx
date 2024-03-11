@@ -105,7 +105,9 @@ const SentimentByCoin = ({
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
-        <h3>Sentiment By Coin</h3>
+        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+          Sentiment By Coin
+        </h3>
         <form onSubmit={handleSubmit}>
           <input
             className="p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
