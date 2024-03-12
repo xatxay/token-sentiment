@@ -258,6 +258,7 @@ const aggregateSentimentByCoinData = (
   data: SentimentValidJson[],
   coin: string
 ): BrushChartData[] => {
+  console.log("data: ", data);
   const groupedByDate: AggregateSentimentByCoinData = {};
 
   //group data by date
@@ -272,11 +273,12 @@ const aggregateSentimentByCoinData = (
   return Object.keys(groupedByDate).map((dateString) => {
     const items = groupedByDate[dateString];
     let userSentiments: UserSentimentGroup = {};
+    console.log("items: ", items);
 
     //group data by username
     items.forEach((item) => {
       const username = item.username;
-      const sentiment = item.coin_sentiment[coin].toString();
+      const sentiment = item.coin_sentiment[coin]?.toString();
       if (!userSentiments[username]) {
         userSentiments[username] = [];
       }
@@ -299,6 +301,11 @@ const aggregateSentimentByCoinData = (
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
+    console.log("fdsfdsf: ", {
+      date: new Date(dateString),
+      data: avgSentiment,
+      tooltipContent,
+    });
 
     return {
       date: new Date(dateString),
