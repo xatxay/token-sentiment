@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import { fetchQuery, sentimentFormatted, useFetch } from "../utils/utils";
-import { BackgroundTable, TwitterTableName } from "./twitterStyle";
 import {
   SentimentByInfluencer,
   SentimentByUserProps,
@@ -9,7 +8,6 @@ import {
 import { ChangeEvent, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
-import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import { useQuery } from "@tanstack/react-query";
 import TypewriterEffect from "../globalStyle/typewrite";
 
@@ -59,19 +57,21 @@ const SentimentByUser = () => {
         cell: (info) => {
           const tickerSentiment = info.getValue();
           const formattedSentiment = sentimentFormatted(tickerSentiment);
-          return <TwitterTableName>{formattedSentiment}</TwitterTableName>;
+          return <span>{formattedSentiment}</span>;
         },
       }),
       columnHelper.accessor("tweet_url", {
         header: "Link",
         cell: (info) => {
           return (
-            <TwitterTableName
+            <a
+              rel="noreferrer"
+              className="hover:text-white"
               href={info.row.original.tweet_url}
               target="_blank"
             >
               Link
-            </TwitterTableName>
+            </a>
           );
         },
       }),
@@ -117,32 +117,50 @@ const SentimentByUserPlacement = ({
 }: SentimentByInfluencer) => {
   return (
     <>
-      <BackgroundTable>
-        <h3>Sentiment By User</h3>
+      <div className="flex items-center justify-center flex-col space-y-4">
+        <h3 className="font-extrabold text-xl md:text-2xl">
+          Sentiment By User
+        </h3>
         {data && data.length > 0 ? (
           <>
-            <DropDownMenu value={username} onChange={handleSelectUser}>
+            <select
+              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+              value={username}
+              onChange={handleSelectUser}
+            >
               {twitterInfluencers.map((influencer) => {
                 return (
-                  <DropDownOptions key={influencer} value={influencer}>
+                  <option
+                    className="text-black font-semibold"
+                    key={influencer}
+                    value={influencer}
+                  >
                     {influencer}
-                  </DropDownOptions>
+                  </option>
                 );
               })}
-            </DropDownMenu>
+            </select>
             <DataTable data={data} columns={columns} />
           </>
         ) : (
           <>
-            <DropDownMenu value={username} onChange={handleSelectUser}>
+            <select
+              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+              value={username}
+              onChange={handleSelectUser}
+            >
               {twitterInfluencers.map((influencer) => {
                 return (
-                  <DropDownOptions key={influencer} value={influencer}>
+                  <option
+                    className="text-black font-semibold"
+                    key={influencer}
+                    value={influencer}
+                  >
                     {influencer}
-                  </DropDownOptions>
+                  </option>
                 );
               })}
-            </DropDownMenu>
+            </select>
             <h3>
               <span>
                 No Data For This User
@@ -152,7 +170,7 @@ const SentimentByUserPlacement = ({
             </h3>
           </>
         )}
-      </BackgroundTable>
+      </div>
     </>
   );
 };

@@ -4,8 +4,6 @@ import {
   querySelectedRedditMenuData,
   useFetch,
 } from "../utils/utils";
-import { TopicContainer } from "../twitter/twitterStyle";
-import { DropDownMenu, DropDownOptions } from "../table/dropdownStyle";
 import { ChangeEvent, useState } from "react";
 import { QueryRedditChartData, RedditChartData } from "../utils/interface";
 import BrushChart from "../chart/brushChart";
@@ -31,9 +29,7 @@ const RedditChart = () => {
 
   if (data) {
     const parseData: RedditChartData[] = JSON.parse(data);
-    // console.log("reddit chart: ", parseData);
     queryData = querySelectedRedditMenuData(parseData, menu);
-    // console.log("queryData: ", queryData);
   }
 
   if (error) {
@@ -44,19 +40,29 @@ const RedditChart = () => {
   const { min, max } = calculateMinMax(queryData, "data");
   return (
     <>
-      <TopicContainer>
-        <h3>Reddit Statistics</h3>
-        <DropDownMenu value={menu} onChange={handleSelectMenu}>
+      <div className="flex flex-col items-center justify-center w-full space-y-4">
+        <h3 className="font-extrabold text-xl md:text-2xl">
+          Reddit Statistics
+        </h3>
+        <select
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          value={menu}
+          onChange={handleSelectMenu}
+        >
           {menuOption.map((option) => {
             return (
-              <DropDownOptions key={option} value={option}>
+              <option
+                className="text-black font-semibold"
+                key={option}
+                value={option}
+              >
                 {option}
-              </DropDownOptions>
+              </option>
             );
           })}
-        </DropDownMenu>
+        </select>
         <BrushChart data={queryData} min={min} max={max} isClickable={false} />
-      </TopicContainer>
+      </div>
     </>
   );
 };

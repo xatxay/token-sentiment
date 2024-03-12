@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import BrushChart from "../chart/brushChart";
-import { TopicContainer } from "../twitter/twitterStyle";
 import {
   BrushChartData,
   ChartDataConfig,
@@ -19,7 +18,6 @@ const YoutubeStats = () => {
   let youtubeStatChart: BrushChartData[] = [];
   if (data) {
     const parseData: YoutubeStat[] = JSON.parse(data);
-    // console.log("youtube stats: ", parseData);
     const youtubeConfig: ChartDataConfig<YoutubeStat> = {
       getDataValue: (start) => start.total_views,
       getTooltipContent: (stat) => {
@@ -31,7 +29,6 @@ const YoutubeStats = () => {
       getDate: (stat) => stat.date,
     };
     youtubeStatChart = chartContentFormatted(parseData, youtubeConfig);
-    // console.log("brush yt data: ", youtubeStatChart);
   }
 
   if (error) {
@@ -44,15 +41,17 @@ const YoutubeStats = () => {
   // }
   const { min, max } = calculateMinMax(youtubeStatChart, "data");
   return (
-    <TopicContainer>
-      <h3>Youtube Statistics Chart</h3>
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">
+        YouTube Statistics Chart
+      </h3>
       <BrushChart
         data={youtubeStatChart}
         min={min}
         max={max}
         isClickable={false}
       />
-    </TopicContainer>
+    </div>
   );
 };
 

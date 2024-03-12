@@ -55,7 +55,6 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
         const jsonResponse = await response.json();
         setData(jsonResponse);
         setError(null);
-        return { data, error };
       } catch (err) {
         setError((err as Error).message);
         console.error("error fetching: ", err);
@@ -92,7 +91,6 @@ const fetchQuery = async (url: string, params: Fetchparams): Promise<any> => {
 
 const extractTwitterSentimentByDay = (data: TweetByDay): Result | null => {
   try {
-    console.log("data: ", data);
     if (
       !data ||
       !data.top_coins_dict ||
@@ -105,7 +103,6 @@ const extractTwitterSentimentByDay = (data: TweetByDay): Result | null => {
     for (const coin of Object.keys(data.top_coins_dict)) {
       const coinData = data.top_coins_dict[coin];
       const tweetData = data.tweets_data;
-      console.log("daasdasd: ", tweetData);
       if (tweetData) {
         const parseTweetData: TweetsData[] = JSON.parse(tweetData[coin]);
         result[coin] = {
@@ -136,7 +133,6 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
         });
       });
     });
-    // console.log("array: ", tableData);
     return tableData;
   } catch (err) {
     console.error("Error inserting data to array: ", err);
@@ -147,8 +143,8 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
 const formatDate = (date: Date): string => {
   try {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const newDate = date.getDate();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const newDate = date.getDate().toString().padStart(2, "0");
     const dateFormat = `${year}-${month}-${newDate}`;
     return dateFormat;
   } catch (err) {
@@ -175,8 +171,6 @@ const removeDuplicate = (data: ArrayTweetResult[]) => {
 
 const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
   try {
-    // console.log("passing data: ", data);
-    // console.log("passing ticker: ", ticker);
     const filterData = data.filter((coin) => {
       if (coin.coin === ticker) {
         return true;
@@ -269,7 +263,6 @@ const aggregateSentimentByCoinData = (
   //group data by date
   data.forEach((item) => {
     const dateString = new Date(item.date).toDateString();
-    // console.log("loop: ", item.date);
     if (!groupedByDate[dateString]) {
       groupedByDate[dateString] = [];
     }
@@ -306,8 +299,6 @@ const aggregateSentimentByCoinData = (
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
-    // console.log("coinsentimentdata: ", items);
-    // console.log("date: ", dateString, new Date(dateString));
 
     return {
       date: new Date(dateString),
@@ -320,14 +311,12 @@ const aggregateSentimentByCoinData = (
 const groupedDataByDate = (data: TwitterFollower[]): GroupData => {
   try {
     const groupedByDate: GroupData = {};
-    // if (!data || data.length === 0) return null;
     data.forEach((item) => {
       if (!groupedByDate[item.date]) {
         groupedByDate[item.date] = [];
       }
       groupedByDate[item.date].push(item);
     });
-    // console.log("groupdatabydate: ", groupedByDate);
     return groupedByDate;
   } catch (err) {
     console.error("Failed grouping data by date: ", err);
@@ -365,7 +354,6 @@ const calculateMinMax = <T extends object, K extends keyof T>(
     const numberValue = dataArray.map((item) => Number(item[propertyName]));
     const min = Math.min(...numberValue);
     const max = Math.max(...numberValue);
-    // console.log("min and max: ", min, max);
     return { min, max };
   } catch (err) {
     console.error("Failed calculating mix and max: ", err);
@@ -395,7 +383,6 @@ const formatCoinSentimentByDayPieChart = (
   const labels = data.map((coin) => coin.coin);
   const series = data.map((mention) => mention.mentions);
   const pieChartData = { series, labels };
-  // console.log("hjkhkk: ", pieChartData);
   return pieChartData;
 };
 
@@ -456,13 +443,11 @@ const calculateYtViewsByDay = (
         channel.channel_name === channelName &&
         Number(channel.total_views) !== 0
     );
-    // console.log("userchannel: ", userChannel);
     const viewsChange: YoutubeViewsChange[] = [];
 
     for (let i = 1; i < userChannel.length; i++) {
       const prev = userChannel[i - 1];
       const current = userChannel[i];
-      // console.log("curent: ", current, "prev: ", prev);
       const change = parseInt(current.total_views) - parseInt(prev.total_views);
       viewsChange.push({ channelName, data: change, date: current.date });
     }
@@ -528,7 +513,6 @@ const handleTikTokMenuSelection = (
       username: data.username,
       [menuSelected]: data[menuSelected],
     }));
-    // console.log("menu selected: ", menuSelected);
     return menuData;
   } catch (err) {
     console.error("Failed handling tiktok menu selection: ", err);
@@ -563,9 +547,7 @@ const queryRedditData = (
 
 const formatRedditData = (data: string): RedditCoinByDay[] => {
   try {
-    // console.log("daaaa: ", data);
     const newData = data.replace(/'/g, '"');
-    // console.log("new data: ", newData);
     const parseData = JSON.parse(newData);
     const arrayData = Object.entries(parseData).map(([key, value]) => ({
       coin: key,

@@ -1,7 +1,6 @@
 import { Component } from "react";
 import ReactApexChart from "react-apexcharts";
 import { BrushChartProps, BrushChartState } from "../utils/interface";
-import { BrushChartContainer } from "./brushChartStyle";
 import { dateRangeSelector, lineColor, white } from "../color/color";
 import { formatYAxisValue } from "../utils/utils";
 
@@ -14,9 +13,6 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
           click: () => props.openModal(),
         }
       : {};
-
-    // console.log("brush: ", props.data);
-    // console.log("miasda: ", props.min, props.max);
     this.state = {
       series: [
         {
@@ -67,10 +63,6 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
         },
         markers: {
           size: 0,
-          // onClick: () => {
-          //   console.log("clicking");
-          //   props.openModal();
-          // }, (not working)
         },
         xaxis: {
           type: "datetime",
@@ -235,22 +227,22 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
   render() {
     return (
       <>
-        <BrushChartContainer id="chart-line2">
+        <div className="text-black w-3/4" id="chart-line2">
           <ReactApexChart
             options={this.state.options}
             series={this.state.series}
             type="line"
             height={280}
           />
-        </BrushChartContainer>
-        <BrushChartContainer id="chart-line">
+        </div>
+        <div className="text-black w-3/4" id="chart-line">
           <ReactApexChart
             options={this.state.optionsLine}
             series={this.state.seriesLine}
             type="area"
             height={150}
           />
-        </BrushChartContainer>
+        </div>
       </>
     );
   }

@@ -9,16 +9,13 @@ const DataTableModal = ({
   isOpen,
   closeModal,
 }: DataTableProps) => {
-  // console.log("isopen: ", isOpen);
-  // console.log("modal data: ", data);
   return (
     <ReactModal
       isOpen={isOpen || false}
       onRequestClose={closeModal}
-      className="modal"
-      overlayClassName="overlay"
+      className="absolute flex items-center justify-center border-none p-8 modal w-5/6 h-5/6 md:h-3/4 m-auto overflow-hidden"
+      overlayClassName="fixed top-0 left-0 right-0 bottom-0 z-50 overlay flex items-center justify-center"
     >
-      {/* <span>testing</span> */}
       <DataTable data={data} columns={columns} />
     </ReactModal>
   );

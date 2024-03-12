@@ -1,13 +1,12 @@
 import { CoinByDayTwt } from "../twitter/coinsByDayTWT";
 import { useCallback, useState } from "react";
 import SentimentByUser from "../twitter/sentimentByUser";
-import { TwitterPage } from "../twitter/twitterStyle";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
 import HomepageHeader from "./homepageHeader";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 
-const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
+const TwitterHomePage = ({ twitterName, twitterPfp }: HomePageProps) => {
   const [isCoinByDateModalOpen, setIsCoinByDateModalOpen] =
     useState<boolean>(false);
   const [isSentimentByCoinModalOpen, setIsSentimentByCoinModalOpen] =
@@ -19,7 +18,6 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
       if (isCoinByDateModalOpen) return;
       setIsCoinByDateModalOpen(true);
       setSelectedCoin(coin);
-      // console.log("opening modal", isCoinByDateModalOpen, selectedCoin, coin);
     },
     [isCoinByDateModalOpen]
   );
@@ -40,28 +38,28 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
 
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
+      <div className="flex flex-row h-full w-full justify-between items-start md:py-10 py-4">
         <CoinByDayTwt
           openModal={openCoinByDateModal}
           isOpen={isCoinByDateModalOpen}
           coin={selectedCoin}
           closeModal={closeCoinByDateModal}
         />
-      </TwitterPage>
-      <TwitterPage>
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <SentimentByCoin
           openModal={openSentimentByCoinModal}
           closeModal={closeSentimentByCoinModal}
           isOpen={isSentimentByCoinModalOpen}
         />
-      </TwitterPage>
-      <TwitterPage>
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <SentimentByUser />
-      </TwitterPage>
-      <TwitterPage>
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TwitterFollowes />
-      </TwitterPage>
+      </div>
     </>
   );
 };

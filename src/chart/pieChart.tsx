@@ -65,7 +65,7 @@ class PieChart extends Component<PieChartData, PieChartState> {
           options={this.state.chartOptions}
           series={this.state.series}
           type="pie"
-          width={380}
+          width={400}
         />
       </div>
     );

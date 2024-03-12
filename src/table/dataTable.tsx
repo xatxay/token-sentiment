@@ -1,8 +1,6 @@
 // import { useTable, usePagination } from "react-table";
 import { DataTableProps } from "../utils/interface";
-import { Table, TableContainer, TableHead } from "./tableStyle";
 import PaginationControll from "./pagination";
-import { PaginationContainer } from "./paginationStyle";
 import {
   useReactTable,
   flexRender,
@@ -40,20 +38,23 @@ const DataTable = ({ data, columns }: DataTableProps) => {
 
   return (
     <>
-      <TableContainer>
-        <Table>
+      <div className="flex flex-col items-center w-full">
+        <table className="w-full border-collapse">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead head key={header.id}>
+                  <td
+                    className="p-1 md:p-3 text-xs md:text-sm text-center border-2 border-gray-500"
+                    key={header.id}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                  </TableHead>
+                  </td>
                 ))}
               </tr>
             ))}
@@ -62,15 +63,18 @@ const DataTable = ({ data, columns }: DataTableProps) => {
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableHead key={cell.id}>
+                  <td
+                    className="p-1 md:p-3 text-xs md:text-sm text-center border-2 border-gray-500 text-gray-400"
+                    key={cell.id}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableHead>
+                  </td>
                 ))}
               </tr>
             ))}
           </tbody>
-        </Table>
-        <PaginationContainer>
+        </table>
+        <div className="flex flex-row items-center justify-center w-full gap-5 mt-5">
           <PaginationControll
             canPreviousPage={table.getCanPreviousPage()}
             canNextPage={table.getCanNextPage()}
@@ -80,8 +84,8 @@ const DataTable = ({ data, columns }: DataTableProps) => {
             pageCount={table.getPageCount()}
             setPageIndex={(newPageIndex) => setPageIndexNumber(newPageIndex)}
           />
-        </PaginationContainer>
-      </TableContainer>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,10 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { toast } from "react-toastify";
-import {
-  BackgroundTable,
-  TopicContainer,
-  TwitterTableName,
-} from "../twitter/twitterStyle";
 import { sentimentFormatted, useFetch } from "../utils/utils";
 import { TikTokVideo } from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -27,7 +22,6 @@ const TiktokVideo = () => {
           new Date(a.created_time).getTime()
         );
       });
-    console.log("video data: ", parseData);
   }
 
   if (error) {
@@ -56,11 +50,7 @@ const TiktokVideo = () => {
       cell: (info) => {
         const sentiment = info.getValue();
         const newSentiment = sentimentFormatted(sentiment);
-        return (
-          <TwitterTableName>
-            {newSentiment ? newSentiment : "N/A"}
-          </TwitterTableName>
-        );
+        return <span>{newSentiment ? newSentiment : "N/A"}</span>;
       },
     }),
     columnHelper.accessor("video_id", {
@@ -69,9 +59,14 @@ const TiktokVideo = () => {
         const row = info.row.original;
         const tiktokLink = `https://www.tiktok.com/@${row.username}/video/${row.video_id}`;
         return (
-          <TwitterTableName href={tiktokLink} target="_blank">
+          <a
+            href={tiktokLink}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white"
+          >
             View Link
-          </TwitterTableName>
+          </a>
         );
       },
     }),
@@ -79,12 +74,10 @@ const TiktokVideo = () => {
   return (
     <>
       <div css={isLoaded ? fadeIn : undefined}>
-        <TopicContainer>
-          <BackgroundTable>
-            <h3>Tiktok Videos</h3>
-            <DataTable data={parseData} columns={columns} />
-          </BackgroundTable>
-        </TopicContainer>
+        <div className="flex flex-col items-center justify-center w-full space-y-4">
+          <h3 className="font-extrabold text-xl md:text-2xl">Tiktok Videos</h3>
+          <DataTable data={parseData} columns={columns} />
+        </div>
       </div>
     </>
   );

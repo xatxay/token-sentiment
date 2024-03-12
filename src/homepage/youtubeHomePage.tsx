@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { TwitterPage } from "../twitter/twitterStyle";
 import CoinByDayYT from "../youtube/coinsByDayYT";
 import { fetchQuery, formatDate } from "../utils/utils";
 import YoutubeStats from "../youtube/youtubeStat";
 import YoutubeChannelsData from "../youtube/ytChannelsData";
 import HomepageHeader from "./homepageHeader";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 
-const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
+const YoutubeHomePage = ({ twitterName, twitterPfp }: HomePageProps) => {
   const [selectedCoinYt, setSeletedCoinYt] = useState<string>("");
   const [isOpenYtModal, setIsOpenYtModal] = useState<boolean>(false);
-  const [ytSelectedDate, setYtSelectedData] = useState<Date>(new Date());
+  const [ytSelectedDate, setYtSelectedData] = useState<Date>(
+    new Date(new Date().setDate(new Date().getDate() - 1))
+  );
   const [videoFetchData, setVideoFetchData] = useState<string>("");
   const videoApiUrl = String(process.env.REACT_APP_YOUTUBE_COIN_BY_DAY_VIDEO);
   const date = formatDate(ytSelectedDate);
@@ -35,6 +36,7 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
       };
       const fetchData = async () => {
         try {
+          // console.log("fetch: ", videoParams, " asdas: ", selectedCoinYt);
           const videoData = await fetchQuery(videoApiUrl || "", videoParams);
           setVideoFetchData(videoData);
         } catch (err) {
@@ -47,11 +49,8 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
 
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
-        <YoutubeStats />
-      </TwitterPage>
-      <TwitterPage>
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <CoinByDayYT
           openCoinByDateModalYt={openCoinByDateModalYt}
           closeCoinByDateModalYt={closeCoinByDateModalYt}
@@ -61,10 +60,13 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
           setYtSelectedData={setYtSelectedData}
           videoFetchData={videoFetchData}
         />
-      </TwitterPage>
-      <TwitterPage>
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
+        <YoutubeStats />
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <YoutubeChannelsData />
-      </TwitterPage>
+      </div>
     </>
   );
 };

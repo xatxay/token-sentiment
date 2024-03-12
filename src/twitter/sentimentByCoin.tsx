@@ -12,11 +12,6 @@ import {
   querySentimentCoin,
   useFetch,
 } from "../utils/utils";
-import {
-  SentimentByCoinInput,
-  TopicContainer,
-  TwitterTableName,
-} from "./twitterStyle";
 import DataTableModal from "../table/modal";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -50,7 +45,6 @@ const SentimentByCoin = ({
           const sentiment = Object.entries(info.getValue())
             .map(([key, value]) => `${key}: ${value}`)
             .join(", ");
-          console.log("cell: ", sentiment);
           return sentiment;
         },
       }),
@@ -58,12 +52,14 @@ const SentimentByCoin = ({
         header: "Tweet",
         cell: (info) => {
           return (
-            <TwitterTableName
+            <a
+              rel="noreferrer"
+              className="hover:text-white"
               href={info.row.original.tweet_url}
               target="_blank"
             >
               View Tweet
-            </TwitterTableName>
+            </a>
           );
         },
       }),
@@ -99,21 +95,22 @@ const SentimentByCoin = ({
     }
     processData(coin, modifiedData);
   };
-  // console.log("valid data: ", modifiedData);
   if (loading) {
     return <div>Loading</div>;
   }
   if (error) {
     return <div>{error}</div>;
   }
-  console.log("filter data: ", filterData);
   if ((filterData.length = 0)) return <div>NO data</div>;
   return (
     <>
-      <TopicContainer>
-        <h3>Sentiment By Coin</h3>
+      <div className="flex flex-col items-center justify-center w-full space-y-4">
+        <h3 className="font-extrabold text-xl md:text-2xl">
+          Sentiment By Coin
+        </h3>
         <form onSubmit={handleSubmit}>
-          <SentimentByCoinInput
+          <input
+            className="p-1 md:p-2 lg:p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
             required
             placeholder="Enter a coin! For Example: ETH"
             value={coin}
@@ -127,7 +124,7 @@ const SentimentByCoin = ({
           max={max}
           isClickable={true}
         />
-      </TopicContainer>
+      </div>
       <DataTableModal
         data={dataTable}
         columns={columns}

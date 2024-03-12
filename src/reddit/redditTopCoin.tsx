@@ -11,22 +11,20 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { CoinDataTable } from "../twitter/coinsByDayTWT";
 
 const TopCoinInCommentReddit = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    new Date(new Date().setDate(new Date().getDate() - 1))
+  );
   const apiUrl = String(process.env.REACT_APP_REDDIT_WORDS);
   const { data, error } = useFetch(apiUrl);
   let selectedData: RedditCoinByDay[] = [];
 
   if (data) {
     const parseData: RedditData[] = JSON.parse(data);
-    // console.log("top coin reddit: ", parseData);
     const formattedDate = formatDate(selectedDate);
-    // console.log("date: ", formattedDate);
     const queryData = queryRedditData(formattedDate, parseData);
-    // console.log("query Data: ", queryData);
     if (queryData) {
       selectedData = formatRedditData(queryData || "");
     }
-    // console.log("data formatted: ", selectedData);
   }
 
   if (error) {
@@ -46,13 +44,15 @@ const TopCoinInCommentReddit = () => {
     }),
   ];
   return (
-    <CoinDataTable
-      data={selectedData}
-      columns={columns}
-      startDate={selectedDate}
-      setStartDate={setSelectedDate}
-      modal={false}
-    />
+    <div className="w-full h-full flex items-center justify-center">
+      <CoinDataTable
+        data={selectedData}
+        columns={columns}
+        startDate={selectedDate}
+        setStartDate={setSelectedDate}
+        modal={false}
+      />
+    </div>
   );
 };
 

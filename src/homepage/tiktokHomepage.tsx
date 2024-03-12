@@ -1,19 +1,18 @@
 import TiktokStatistic from "../tiktok/tiktokStatistic";
 import TiktokVideo from "../tiktok/tiktokVideo";
-import { TwitterPage } from "../twitter/twitterStyle";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 import HomepageHeader from "./homepageHeader";
 
-const TiktokHomepage = ({ setIsAuthenticated }: LoginProps) => {
+const TiktokHomepage = ({ twitterName, twitterPfp }: HomePageProps) => {
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TiktokVideo />
-      </TwitterPage>
-      <TwitterPage>
+      </div>
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TiktokStatistic />
-      </TwitterPage>
+      </div>
     </>
   );
 };

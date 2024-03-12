@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import { TopicContainer } from "../twitter/twitterStyle";
 import {
   calculateMinMax,
   chartContentFormatted,
@@ -8,11 +7,6 @@ import {
   handleTikTokMenuSelection,
   useFetch,
 } from "../utils/utils";
-import {
-  DropDownContainer,
-  DropDownMenu,
-  DropDownOptions,
-} from "../table/dropdownStyle";
 import { ChangeEvent, useState } from "react";
 import {
   BrushChartData,
@@ -52,12 +46,9 @@ const TiktokStatistic = () => {
 
   if (data) {
     const parseData: TiktokStat[] = JSON.parse(data);
-    // console.log("tiktok data: ", parseData);
     uniqueUser = extractUniqueUsers(parseData, "username");
-    // console.log("tiktok unique user: ", uniqueUser);
     const dataSelected: SelectTiktokData[] =
       handleTikTokMenuSelection(parseData, selectedUser, menu) || [];
-    // console.log("selected data: ", dataSelected);
     const tiktokStatConfig: ChartDataConfig<SelectTiktokData> = {
       getDataValue: (stat) => getTiktokConfigValue(stat),
       getTooltipContent: (stat) => {
@@ -69,7 +60,6 @@ const TiktokStatistic = () => {
       getDate: (stat) => stat.date,
     };
     tiktokChartData = chartContentFormatted(dataSelected, tiktokStatConfig);
-    // console.log("tiktok chart data: ", tiktokChartData);
   }
 
   if (error) {
@@ -78,31 +68,49 @@ const TiktokStatistic = () => {
   }
   const { min, max } = calculateMinMax(tiktokChartData, "data");
   return (
-    <TopicContainer>
-      <h3>Tiktok Statistics Chart</h3>
-      <DropDownContainer>
-        <DropDownMenu value={selectedUser} onChange={handleSelectUser}>
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">
+        Tiktok Statistics Chart
+      </h3>
+      <div className="flex flex-row items-center justify-center w-full space-x-4 lg:space-x-10">
+        <select
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          value={selectedUser}
+          onChange={handleSelectUser}
+        >
           {uniqueUser.map((user) => {
             return (
-              <DropDownOptions key={user} value={user}>
+              <option
+                className="text-black font-semibold"
+                key={user}
+                value={user}
+              >
                 {user}
-              </DropDownOptions>
+              </option>
             );
           })}
-        </DropDownMenu>
-        <DropDownMenu value={menu} onChange={handleSelectMenu}>
+        </select>
+        <select
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          value={menu}
+          onChange={handleSelectMenu}
+        >
           {menuOptions.map((menu) => {
-            return <DropDownOptions key={menu}>{menu}</DropDownOptions>;
+            return (
+              <option className="text-black font-semibold" key={menu}>
+                {menu}
+              </option>
+            );
           })}
-        </DropDownMenu>
-      </DropDownContainer>
+        </select>
+      </div>
       <BrushChart
         data={tiktokChartData}
         min={min}
         max={max}
         isClickable={false}
       />
-    </TopicContainer>
+    </div>
   );
 };
 

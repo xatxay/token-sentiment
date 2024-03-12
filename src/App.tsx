@@ -14,9 +14,8 @@ import {
 } from "react-router-dom";
 import TiktokHomepage from "./homepage/tiktokHomepage";
 import RedditHomePage from "./homepage/redditHomepage";
-import PollsHomepage from "./homepage/pollsHomepage";
 import Login from "./login/loginPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthenticatedRoute from "./login/authenticateRoute";
 
 ReactModal.setAppElement("#root");
@@ -24,8 +23,11 @@ const queryClient = new QueryClient();
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // console.log("isAuthenticated: ", isAuthenticated);
-
+  const [twitterName, setTwitterName] = useState("");
+  const [twitterPfp, setTwitterPfp] = useState("");
+  useEffect(() => {
+    console.log("isauthenticated: ", isAuthenticated);
+  }, [isAuthenticated]);
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -34,46 +36,73 @@ function App() {
           <Routes>
             <Route
               path="/login"
-              element={<Login setIsAuthenticated={setIsAuthenticated} />}
+              element={
+                <Login
+                  isAuthenticated={isAuthenticated}
+                  setIsAuthenticated={setIsAuthenticated}
+                  setTwitterName={setTwitterName}
+                  setTwitterPfp={setTwitterPfp}
+                />
+              }
             />
             <Route
               path="/"
               element={
                 <AuthenticatedRoute isAuthenticated={isAuthenticated}>
-                  <Navigate to="/twitter" replace />
+                  <Navigate to="/youtube" replace />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/youtube"
+              element={
+                <AuthenticatedRoute isAuthenticated={isAuthenticated}>
+                  <YoutubeHomePage
+                    twitterName={twitterName}
+                    twitterPfp={twitterPfp}
+                  />
                 </AuthenticatedRoute>
               }
             />
             <Route
               path="/twitter"
               element={
-                <TwitterHomePage setIsAuthenticated={setIsAuthenticated} />
-              }
-            />
-            <Route
-              path="/youtube"
-              element={
-                <YoutubeHomePage setIsAuthenticated={setIsAuthenticated} />
+                <AuthenticatedRoute isAuthenticated={isAuthenticated}>
+                  <TwitterHomePage
+                    twitterName={twitterName}
+                    twitterPfp={twitterPfp}
+                  />
+                </AuthenticatedRoute>
               }
             />
             <Route
               path="/tiktok"
               element={
-                <TiktokHomepage setIsAuthenticated={setIsAuthenticated} />
+                <AuthenticatedRoute isAuthenticated={isAuthenticated}>
+                  <TiktokHomepage
+                    twitterName={twitterName}
+                    twitterPfp={twitterPfp}
+                  />
+                </AuthenticatedRoute>
               }
             />
             <Route
               path="/reddit"
               element={
-                <RedditHomePage setIsAuthenticated={setIsAuthenticated} />
+                <AuthenticatedRoute isAuthenticated={isAuthenticated}>
+                  <RedditHomePage
+                    twitterName={twitterName}
+                    twitterPfp={twitterPfp}
+                  />
+                </AuthenticatedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/polls"
               element={
-                <PollsHomepage setIsAuthenticated={setIsAuthenticated} />
+                <PollsHomepage twitterName={twitterName} twitterPfp={twitterPfp} />
               }
-            />
+            /> */}
           </Routes>
           <ToastContainer
             position="top-right"
