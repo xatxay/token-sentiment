@@ -1,16 +1,16 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "./logo.png";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 
-const HomepageHeader = ({ setIsAuthenticated }: LoginProps) => {
+const HomepageHeader = ({ twitterName, twitterPfp }: HomePageProps) => {
   const menuItems = ["YouTube", "Twitter", "Tiktok", "Reddit"];
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    navigate("/login");
-  };
+  // const handleLogout = () => {
+  // setIsAuthenticated(false);
+  //   navigate("/login");
+  // };
 
   return (
     <div className="w-full flex flex-row box-border items-center justify-around my-4">
@@ -20,7 +20,7 @@ const HomepageHeader = ({ setIsAuthenticated }: LoginProps) => {
           src={logo}
           alt="token sentiment logo"
         />
-        <h2 className="text-xs md:text-2xl">Token Sentiment</h2>
+        <h2 className="text-xs md:text-xl">Token Sentiment</h2>
       </div>
       <ul className="list-none flex items-center justify-center box-border">
         {menuItems.map((item) => {
@@ -40,35 +40,14 @@ const HomepageHeader = ({ setIsAuthenticated }: LoginProps) => {
           );
         })}
       </ul>
-      <span
-        className="text-white z-10 hover:text-gray-600 cursor-pointer underline md:text-xl text-sm"
-        onClick={handleLogout}
-      >
-        Logout
-      </span>
+      <div className="flex space-x-2 items-center justify-center">
+        <h2 className="hidden md:inline-block text-xs md:text-xl">
+          {twitterName}
+        </h2>
+        <img alt="user pfp" src={twitterPfp} className="w-3/4" />
+      </div>
     </div>
   );
 };
 
 export default HomepageHeader;
-
-/*
-return (
-    <HeaderContainer>
-      <LogoImage src={logo} />
-      <HeaderMenu>
-        {menuItems.map((item) => {
-          const path = `/${item.toLowerCase()}`;
-          const isActive = location.pathname === path;
-          return (
-            <MenuList key={item}>
-              <MenuItems onClick={() => navigate(path)} isActive={isActive}>
-                {item}
-              </MenuItems>
-            </MenuList>
-          );
-        })}
-      </HeaderMenu>
-      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-    </HeaderContainer>
-  );*/

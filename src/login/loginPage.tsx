@@ -4,14 +4,49 @@ import TypewriterEffect from "../globalStyle/typewrite";
 import { fadeIn } from "../globalStyle/fadeIn";
 import { LoginProps } from "../utils/interface";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
-const Login = ({ setIsAuthenticated }: LoginProps) => {
+const Login = ({
+  isAuthenticated,
+  setIsAuthenticated,
+  setTwitterName,
+  setTwitterPfp,
+}: LoginProps) => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    setIsAuthenticated(true); //change it for twitter authentication
-    navigate("/");
+    window.location.href = process.env.REACT_APP_USER_AUTH || "";
   };
+
+  useEffect(() => {
+    const checkUserAuth = async () => {
+      try {
+        const response = await axios.get(String(process.env.REACT_APP_LOG_IN), {
+          withCredentials: true,
+        });
+        setIsAuthenticated(response.data.isAuthorized);
+        setTwitterName(response.data.username);
+        setTwitterPfp(response.data.profilePicture);
+      } catch (error) {
+        setTwitterName("HumaCapital");
+        setTwitterPfp(
+          "https://pbs.twimg.com/profile_images/1539544314430226433/OSOV1122_normal.jpg"
+        );
+        setIsAuthenticated(true);
+        // setIsAuthenticated(false);
+      }
+    };
+    checkUserAuth();
+  }, [setIsAuthenticated, setTwitterName, setTwitterPfp]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div

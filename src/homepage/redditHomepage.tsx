@@ -1,12 +1,12 @@
 import RedditChart from "../reddit/redditChart";
 import TopCoinInCommentReddit from "../reddit/redditTopCoin";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 import HomepageHeader from "./homepageHeader";
 
-const RedditHomePage = ({ setIsAuthenticated }: LoginProps) => {
+const RedditHomePage = ({ twitterName, twitterPfp }: HomePageProps) => {
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
       <div className="flex flex-row items-center h-full w-full space-y-4 md:py-10 py-4">
         <RedditChart />
       </div>

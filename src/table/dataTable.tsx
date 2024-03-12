@@ -10,8 +10,6 @@ import {
 import { useState } from "react";
 
 const DataTable = ({ data, columns }: DataTableProps) => {
-  console.log("type: ", typeof data);
-  console.log("data table: ", data);
   const [pageIndexNumber, setPageIndexNumber] = useState<number>(0);
   const maxPageSize = 5;
   const table = useReactTable({

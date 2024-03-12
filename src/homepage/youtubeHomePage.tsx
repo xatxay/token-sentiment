@@ -4,9 +4,9 @@ import { fetchQuery, formatDate } from "../utils/utils";
 import YoutubeStats from "../youtube/youtubeStat";
 import YoutubeChannelsData from "../youtube/ytChannelsData";
 import HomepageHeader from "./homepageHeader";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 
-const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
+const YoutubeHomePage = ({ twitterName, twitterPfp }: HomePageProps) => {
   const [selectedCoinYt, setSeletedCoinYt] = useState<string>("");
   const [isOpenYtModal, setIsOpenYtModal] = useState<boolean>(false);
   const [ytSelectedDate, setYtSelectedData] = useState<Date>(
@@ -49,7 +49,7 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
 
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
       <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <CoinByDayYT
           openCoinByDateModalYt={openCoinByDateModalYt}

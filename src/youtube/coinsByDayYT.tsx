@@ -23,7 +23,6 @@ const CoinByDayYT = ({
   useEffect(() => {
     if (data) {
       const currentData: CoinByDateYTProps[] = JSON.parse(data);
-      console.log("formatted date: ", formattedDate);
       setParseData(currentData.filter((data) => data.date === formattedDate));
     }
   }, [data, formattedDate]);
@@ -55,7 +54,7 @@ const CoinByDayYT = ({
       cell: (info) => {
         return (
           <span
-            className="hover:text-white"
+            className="hover:text-white cursor-pointer"
             onClick={() => openCoinByDateModalYt(info.row.original.coin)}
           >
             View More

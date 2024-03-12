@@ -4,9 +4,9 @@ import SentimentByUser from "../twitter/sentimentByUser";
 import SentimentByCoin from "../twitter/sentimentByCoin";
 import TwitterFollowes from "../twitter/twitterFollowers";
 import HomepageHeader from "./homepageHeader";
-import { LoginProps } from "../utils/interface";
+import { HomePageProps } from "../utils/interface";
 
-const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
+const TwitterHomePage = ({ twitterName, twitterPfp }: HomePageProps) => {
   const [isCoinByDateModalOpen, setIsCoinByDateModalOpen] =
     useState<boolean>(false);
   const [isSentimentByCoinModalOpen, setIsSentimentByCoinModalOpen] =
@@ -38,7 +38,7 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
 
   return (
     <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
+      <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
       <div className="flex flex-row h-full w-full justify-between items-start md:py-10 py-4">
         <CoinByDayTwt
           openModal={openCoinByDateModal}

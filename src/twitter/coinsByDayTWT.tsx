@@ -33,7 +33,6 @@ const CoinDataTable = React.memo(
     modal,
     poll,
   }: CoinDataTableProps) => {
-    console.log("fgjdgkfdghkdfg: ", data);
     return (
       <>
         <div className="flex items-center justify-center flex-col space-y-4">
@@ -61,22 +60,32 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const dateFormat = formatDate(startDate);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
-  let noDuplicateData: ArrayTweetResult[] = [];
-  let duplicateData: ArrayTweetResult[] = [];
-  let pieChartData: PieChartData = { series: [0], labels: [""] };
+  const [noDuplicateData, setNoDuplicateData] = useState<ArrayTweetResult[]>(
+    []
+  );
+  const [duplicateData, setDuplicateData] = useState<ArrayTweetResult[]>([]);
+  const [pieChartData, setPieChartData] = useState<PieChartData>({
+    series: [0],
+    labels: [""],
+  });
   const { data, error, loading } = useFetch(twitterUrl || "", {
     date: dateFormat,
   });
 
-  if (data) {
-    const twitterResult = extractTwitterSentimentByDay(data);
-    if (twitterResult !== null) {
-      const arrayData = insertArrayData(twitterResult);
-      noDuplicateData = removeDuplicate(arrayData) || [];
-      duplicateData = duplicateCoins(arrayData, coin || "") || [];
-      pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
+  useEffect(() => {
+    if (data) {
+      const twitterResult = extractTwitterSentimentByDay(data);
+      if (twitterResult !== null) {
+        const arrayData = insertArrayData(twitterResult);
+        const noDuplicateData = removeDuplicate(arrayData) || [];
+        const duplicateData = duplicateCoins(arrayData, coin || "") || [];
+        const pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
+        setNoDuplicateData(noDuplicateData);
+        setDuplicateData(duplicateData);
+        setPieChartData(pieChartData);
+      }
     }
-  }
+  }, [coin, data]);
 
   if (error) {
     console.error("Failed fetching twitter data: ", error);
@@ -142,10 +151,6 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
       setIsLoaded(true);
     }
   }, [data, loading]);
-
-  useEffect(() => {
-    console.log("no duplicate data: ", noDuplicateData);
-  }, [noDuplicateData]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">

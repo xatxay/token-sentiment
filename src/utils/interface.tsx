@@ -324,6 +324,14 @@ export interface AuthenticatedRouteProps {
   children: JSX.Element;
 }
 
+export interface HomePageProps {
+  twitterName: string;
+  twitterPfp: string;
+}
+
 export interface LoginProps {
+  isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setTwitterName: React.Dispatch<React.SetStateAction<string>>;
+  setTwitterPfp: React.Dispatch<React.SetStateAction<string>>;
 }
