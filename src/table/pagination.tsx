@@ -12,7 +12,7 @@ const PaginationControll = ({
   return (
     <>
       <button
-        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+        className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
             ? "cursor-default hover:bg-gray-300"
             : "cursor-pointer hover:bg-gray-500"
@@ -23,7 +23,7 @@ const PaginationControll = ({
         {"<<"}
       </button>
       <button
-        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+        className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
             ? "cursor-default hover:bg-gray-300"
             : "cursor-pointer hover:bg-gray-500"
@@ -33,14 +33,14 @@ const PaginationControll = ({
       >
         {"<"}
       </button>
-      <span>
+      <span className="text-xs md:text-sm lg:text-base">
         Page{" "}
         <strong>
           {pageIndex + 1} of {pageCount}
         </strong>
       </span>
       <button
-        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+        className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
             ? "cursor-default hover:bg-gray-300"
             : "cursor-pointer hover:bg-gray-500"
@@ -51,7 +51,7 @@ const PaginationControll = ({
         {">"}
       </button>
       <button
-        className={`border-none font-bold text-sm bg-gray-300 px-4 py-1 text-gray-700 ${
+        className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
             ? "cursor-default hover:bg-gray-300"
             : "cursor-pointer hover:bg-gray-500"

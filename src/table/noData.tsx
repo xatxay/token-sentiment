@@ -5,7 +5,7 @@ import { DataTable } from "./dataTable";
 const NoData = ({ data, columns }: DataTableProps) => {
   return (
     <>
-      <span>
+      <span className="text-center">
         No data for this current day. Please select a different date
         <TypewriterEffect text="..." />
       </span>

@@ -41,8 +41,8 @@ const YoutubeStats = () => {
   // }
   const { min, max } = calculateMinMax(youtubeStatChart, "data");
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <h3 className="font-extrabold text-xl md:text-2xl my-4">
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">
         YouTube Statistics Chart
       </h3>
       <BrushChart

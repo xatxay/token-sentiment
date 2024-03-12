@@ -54,12 +54,12 @@ const YoutubeChannelsData = () => {
   }
   const { min, max } = calculateMinMax(channelsChartData, "data");
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <h3 className="font-extrabold text-xl md:text-2xl my-4">
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">
         Total Channel Views Per Day
       </h3>
       <select
-        className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+        className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
         value={selectedChannel}
         onChange={handleSelectUser}
       >

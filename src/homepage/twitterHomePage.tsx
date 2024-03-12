@@ -39,7 +39,7 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
   return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row h-full w-full justify-between items-start md:py-10 py-4">
         <CoinByDayTwt
           openModal={openCoinByDateModal}
           isOpen={isCoinByDateModalOpen}
@@ -47,17 +47,17 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
           closeModal={closeCoinByDateModal}
         />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <SentimentByCoin
           openModal={openSentimentByCoinModal}
           closeModal={closeSentimentByCoinModal}
           isOpen={isSentimentByCoinModalOpen}
         />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <SentimentByUser />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TwitterFollowes />
       </div>
     </>
@@ -65,32 +65,3 @@ const TwitterHomePage = ({ setIsAuthenticated }: LoginProps) => {
 };
 
 export default TwitterHomePage;
-
-/*
-  return (
-    <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
-        <CoinByDayTwt
-          openModal={openCoinByDateModal}
-          isOpen={isCoinByDateModalOpen}
-          coin={selectedCoin}
-          closeModal={closeCoinByDateModal}
-        />
-      </TwitterPage>
-      <TwitterPage>
-        <SentimentByCoin
-          openModal={openSentimentByCoinModal}
-          closeModal={closeSentimentByCoinModal}
-          isOpen={isSentimentByCoinModalOpen}
-        />
-      </TwitterPage>
-      <TwitterPage>
-        <SentimentByUser />
-      </TwitterPage>
-      <TwitterPage>
-        <TwitterFollowes />
-      </TwitterPage>
-    </>
-  );
-  */

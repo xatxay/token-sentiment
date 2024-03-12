@@ -33,16 +33,17 @@ const CoinDataTable = React.memo(
     modal,
     poll,
   }: CoinDataTableProps) => {
+    console.log("fgjdgkfdghkdfg: ", data);
     return (
       <>
-        <div className="flex items-center justify-center flex-col">
-          <h3 className="font-extrabold text-xl md:text-2xl my-4">
+        <div className="flex items-center justify-center flex-col space-y-4">
+          <h3 className="font-extrabold text-xl md:text-2xl">
             Top Coins By Day
           </h3>
           {!modal && startDate && setStartDate && (
             <DateSelector startDate={startDate} setStartDate={setStartDate} />
           )}
-          {data.length === 0 ? (
+          {data === undefined || data.length === 0 ? (
             <NoData data={data} columns={columns} />
           ) : (
             <DataTable data={data} columns={columns} />
@@ -142,9 +143,13 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     }
   }, [data, loading]);
 
+  useEffect(() => {
+    console.log("no duplicate data: ", noDuplicateData);
+  }, [noDuplicateData]);
+
   return (
-    <>
-      <div className="flex-1 flex flex-row items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <div className="flex-1 flex items-center justify-center space-y-4">
         <div css={isLoaded ? fadeIn : undefined}>
           <CoinDataTable
             data={noDuplicateData}
@@ -158,14 +163,14 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
           />
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex items-center justify-center flex-col">
-          <h3 className="font-extrabold text-xl md:text-2xl my-4">
-            Top Coins By Day
+      {noDuplicateData.length > 0 && noDuplicateData !== undefined && (
+        <div className="flex-1 flex items-center justify-center flex-col space-y-6">
+          <h3 className="font-extrabold text-xl md:text-2xl mt-4">
+            Top Coins By Day (Pie Chart)
           </h3>
           <PieChart series={pieChartData.series} labels={pieChartData.labels} />
         </div>
-      </div>
+      )}
       <DataTableModal
         data={duplicateData}
         columns={columns}
@@ -173,7 +178,7 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
         closeModal={closeModal}
         coin={coin}
       />
-    </>
+    </div>
   );
 };
 

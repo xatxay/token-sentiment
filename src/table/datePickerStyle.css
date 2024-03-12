@@ -1,22 +1,20 @@
 .react-datepicker {
-  background-color: #a9adc1;
+  background-color: rgb(156 163 175);
   border-radius: 10%;
   padding: 10px;
 }
 
 .react-datepicker__header {
-  background-color: #a9adc1;
+  background-color: rgb(156 163 175);
 }
 
 .react-datepicker__input-container input {
-  background-color: #a9adc1;
-  padding: 10px;
-  /* margin-bottom: 25px; */
+  background-color: rgb(156 163 175);
+  padding-left: 8px;
+  padding-right: 8px;
   border: none;
   text-align: center;
-  /* width: 200px; */
-  height: 15px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
   &:hover {
     filter: brightness(115%);

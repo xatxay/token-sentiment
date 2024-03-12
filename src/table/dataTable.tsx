@@ -10,6 +10,8 @@ import {
 import { useState } from "react";
 
 const DataTable = ({ data, columns }: DataTableProps) => {
+  console.log("type: ", typeof data);
+  console.log("data table: ", data);
   const [pageIndexNumber, setPageIndexNumber] = useState<number>(0);
   const maxPageSize = 5;
   const table = useReactTable({
@@ -45,7 +47,7 @@ const DataTable = ({ data, columns }: DataTableProps) => {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <td
-                    className="p-3 text-center border-2 border-gray-500"
+                    className="p-1 md:p-3 text-xs md:text-sm text-center border-2 border-gray-500"
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -64,7 +66,7 @@ const DataTable = ({ data, columns }: DataTableProps) => {
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <td
-                    className="p-3 text-center border-2 border-gray-500 text-gray-400"
+                    className="p-1 md:p-3 text-xs md:text-sm text-center border-2 border-gray-500 text-gray-400"
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

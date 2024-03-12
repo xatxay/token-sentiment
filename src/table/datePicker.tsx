@@ -5,19 +5,21 @@ import { StartDate } from "../utils/interface";
 
 const DateSelector = ({ startDate, setStartDate }: StartDate) => {
   const maxDate = new Date(new Date().setDate(new Date().getDate() - 1));
-  maxDate.setHours(0, 0, 0, 0);
 
   const goBackADay = () => {
-    const previousDay = new Date(startDate.setDate(startDate.getDate() - 1));
+    const previousDay = new Date(startDate.getTime());
+    previousDay.setDate(previousDay.getDate() - 1);
     setStartDate(previousDay);
   };
 
   const goForwardADay = () => {
-    const nextDay = new Date(startDate.setDate(startDate.getDate() + 1));
+    const nextDay = new Date(startDate.getTime());
+    nextDay.setDate(nextDay.getDate() + 1);
     if (nextDay <= maxDate) {
       setStartDate(nextDay);
     }
   };
+
   return (
     <div className="flex flex-row items-center justify-center">
       <button

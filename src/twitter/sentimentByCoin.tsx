@@ -104,13 +104,13 @@ const SentimentByCoin = ({
   if ((filterData.length = 0)) return <div>NO data</div>;
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full">
-        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+      <div className="flex flex-col items-center justify-center w-full space-y-4">
+        <h3 className="font-extrabold text-xl md:text-2xl">
           Sentiment By Coin
         </h3>
         <form onSubmit={handleSubmit}>
           <input
-            className="p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
+            className="p-1 md:p-2 lg:p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
             required
             placeholder="Enter a coin! For Example: ETH"
             value={coin}

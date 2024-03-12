@@ -4,6 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { CoinByDateYTProps, CoinByDayDataYt } from "../utils/interface";
 import { CoinDataTable } from "../twitter/coinsByDayTWT";
 import DataTableModal from "../table/modal";
+import { useEffect, useState } from "react";
 
 const CoinByDayYT = ({
   openCoinByDateModalYt,
@@ -16,8 +17,16 @@ const CoinByDayYT = ({
 }: CoinByDayDataYt) => {
   const apiUrl = String(process.env.REACT_APP_YOUTUBE_COIN_BY_DAY);
   const formattedDate = formatDate(ytSelectedDate);
-  const { data, error } = useFetch(apiUrl, { date: formattedDate });
-  let parseData: CoinByDateYTProps[] = [];
+  const { data, error } = useFetch(apiUrl);
+  const [parseData, setParseData] = useState<CoinByDateYTProps[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const currentData: CoinByDateYTProps[] = JSON.parse(data);
+      console.log("formatted date: ", formattedDate);
+      setParseData(currentData.filter((data) => data.date === formattedDate));
+    }
+  }, [data, formattedDate]);
 
   const columnHelper = createColumnHelper<CoinByDateYTProps>();
   const columns = [
@@ -87,10 +96,6 @@ const CoinByDayYT = ({
       cell: (info) => info.getValue(),
     }),
   ];
-
-  if (data) {
-    parseData = JSON.parse(data);
-  }
 
   let parseVideoData: CoinByDateYTProps[] = [];
   if (videoFetchData) {

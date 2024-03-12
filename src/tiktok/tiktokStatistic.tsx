@@ -68,13 +68,13 @@ const TiktokStatistic = () => {
   }
   const { min, max } = calculateMinMax(tiktokChartData, "data");
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <h3 className="font-extrabold text-xl md:text-2xl my-4">
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">
         Tiktok Statistics Chart
       </h3>
-      <div className="flex flex-row items-center justify-center w-full space-x-10">
+      <div className="flex flex-row items-center justify-center w-full space-x-4 lg:space-x-10">
         <select
-          className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
           value={selectedUser}
           onChange={handleSelectUser}
         >
@@ -91,7 +91,7 @@ const TiktokStatistic = () => {
           })}
         </select>
         <select
-          className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
           value={menu}
           onChange={handleSelectMenu}
         >
@@ -115,33 +115,3 @@ const TiktokStatistic = () => {
 };
 
 export default TiktokStatistic;
-
-/*
-  return (
-    <TopicContainer>
-      <h3>Tiktok Statistics Chart</h3>
-      <DropDownContainer>
-        <DropDownMenu value={selectedUser} onChange={handleSelectUser}>
-          {uniqueUser.map((user) => {
-            return (
-              <DropDownOptions key={user} value={user}>
-                {user}
-              </DropDownOptions>
-            );
-          })}
-        </DropDownMenu>
-        <DropDownMenu value={menu} onChange={handleSelectMenu}>
-          {menuOptions.map((menu) => {
-            return <DropDownOptions key={menu}>{menu}</DropDownOptions>;
-          })}
-        </DropDownMenu>
-      </DropDownContainer>
-      <BrushChart
-        data={tiktokChartData}
-        min={min}
-        max={max}
-        isClickable={false}
-      />
-    </TopicContainer>
-  );
-  */

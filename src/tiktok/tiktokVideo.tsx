@@ -74,10 +74,8 @@ const TiktokVideo = () => {
   return (
     <>
       <div css={isLoaded ? fadeIn : undefined}>
-        <div className="flex flex-col items-center justify-center w-full">
-          <h3 className="font-extrabold text-xl md:text-2xl my-4">
-            Tiktok Videos
-          </h3>
+        <div className="flex flex-col items-center justify-center w-full space-y-4">
+          <h3 className="font-extrabold text-xl md:text-2xl">Tiktok Videos</h3>
           <DataTable data={parseData} columns={columns} />
         </div>
       </div>

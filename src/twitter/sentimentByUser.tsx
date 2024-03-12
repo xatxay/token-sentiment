@@ -117,14 +117,14 @@ const SentimentByUserPlacement = ({
 }: SentimentByInfluencer) => {
   return (
     <>
-      <div className="flex items-center justify-center flex-col">
-        <h3 className="font-extrabold text-xl md:text-2xl my-4">
+      <div className="flex items-center justify-center flex-col space-y-4">
+        <h3 className="font-extrabold text-xl md:text-2xl">
           Sentiment By User
         </h3>
         {data && data.length > 0 ? (
           <>
             <select
-              className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
               value={username}
               onChange={handleSelectUser}
             >
@@ -145,7 +145,7 @@ const SentimentByUserPlacement = ({
         ) : (
           <>
             <select
-              className="bg-gray-400 border-none p-3 box-border font-semibold text-gray-800"
+              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
               value={username}
               onChange={handleSelectUser}
             >

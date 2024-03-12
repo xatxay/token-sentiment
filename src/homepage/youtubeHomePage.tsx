@@ -36,6 +36,7 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
       };
       const fetchData = async () => {
         try {
+          // console.log("fetch: ", videoParams, " asdas: ", selectedCoinYt);
           const videoData = await fetchQuery(videoApiUrl || "", videoParams);
           setVideoFetchData(videoData);
         } catch (err) {
@@ -49,7 +50,7 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
   return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <CoinByDayYT
           openCoinByDateModalYt={openCoinByDateModalYt}
           closeCoinByDateModalYt={closeCoinByDateModalYt}
@@ -60,10 +61,10 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
           videoFetchData={videoFetchData}
         />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <YoutubeStats />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <YoutubeChannelsData />
       </div>
     </>
@@ -71,28 +72,3 @@ const YoutubeHomePage = ({ setIsAuthenticated }: LoginProps) => {
 };
 
 export default YoutubeHomePage;
-
-/*
-  return (
-    <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
-        <YoutubeStats />
-      </TwitterPage>
-      <TwitterPage>
-        <CoinByDayYT
-          openCoinByDateModalYt={openCoinByDateModalYt}
-          closeCoinByDateModalYt={closeCoinByDateModalYt}
-          isOpenYtModal={isOpenYtModal}
-          selectedCoinYt={selectedCoinYt}
-          ytSelectedDate={ytSelectedDate}
-          setYtSelectedData={setYtSelectedData}
-          videoFetchData={videoFetchData}
-        />
-      </TwitterPage>
-      <TwitterPage>
-        <YoutubeChannelsData />
-      </TwitterPage>
-    </>
-  );
-  */

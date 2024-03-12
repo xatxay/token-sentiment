@@ -7,10 +7,10 @@ const TiktokHomepage = ({ setIsAuthenticated }: LoginProps) => {
   return (
     <>
       <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TiktokVideo />
       </div>
-      <div className="flex flex-row items-center h-full w-full justify-center md:my-10 my-4 md:py-10 py-4">
+      <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
         <TiktokStatistic />
       </div>
     </>
@@ -18,16 +18,3 @@ const TiktokHomepage = ({ setIsAuthenticated }: LoginProps) => {
 };
 
 export default TiktokHomepage;
-/*
- return (
-    <>
-      <HomepageHeader setIsAuthenticated={setIsAuthenticated} />
-      <TwitterPage>
-        <TiktokVideo />
-      </TwitterPage>
-      <TwitterPage>
-        <TiktokStatistic />
-      </TwitterPage>
-    </>
-  );
-  */

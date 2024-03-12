@@ -55,7 +55,6 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
         const jsonResponse = await response.json();
         setData(jsonResponse);
         setError(null);
-        return { data, error };
       } catch (err) {
         setError((err as Error).message);
         console.error("error fetching: ", err);
@@ -144,8 +143,8 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
 const formatDate = (date: Date): string => {
   try {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const newDate = date.getDate();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const newDate = date.getDate().toString().padStart(2, "0");
     const dateFormat = `${year}-${month}-${newDate}`;
     return dateFormat;
   } catch (err) {
