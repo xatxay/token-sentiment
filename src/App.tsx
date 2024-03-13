@@ -25,6 +25,13 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [twitterName, setTwitterName] = useState("");
   const [twitterPfp, setTwitterPfp] = useState("");
+  const [selectedCoin, setSelectedCoin] = useState<string | null>(null);
+
+  const handleRowClicked = (coin: string) => {
+    selectedCoin === coin ? setSelectedCoin(null) : setSelectedCoin(coin);
+    console.log("clicking: ", selectedCoin, coin);
+  };
+
   useEffect(() => {
     console.log("isauthenticated: ", isAuthenticated);
   }, [isAuthenticated]);
@@ -60,6 +67,8 @@ function App() {
                   <YoutubeHomePage
                     twitterName={twitterName}
                     twitterPfp={twitterPfp}
+                    handleRowClicked={handleRowClicked}
+                    selectedCoin={selectedCoin || ""}
                   />
                 </AuthenticatedRoute>
               }
@@ -71,6 +80,8 @@ function App() {
                   <TwitterHomePage
                     twitterName={twitterName}
                     twitterPfp={twitterPfp}
+                    handleRowClicked={handleRowClicked}
+                    selectedCoin={selectedCoin || ""}
                   />
                 </AuthenticatedRoute>
               }

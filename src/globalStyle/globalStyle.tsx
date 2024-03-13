@@ -5,7 +5,7 @@ const GlobalStyle = css`
   body {
     font-family: "Clarkson", Helvetica, sans-serif;
     letter-spacing: 0.5px;
-    background-color: ${backgroundColor};
+    background-color: black;
     color: white;
   }
 

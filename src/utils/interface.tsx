@@ -5,7 +5,7 @@ export interface TopCoinsDict {
   [key: string]: TopCoinsDictInfo;
 }
 
-interface TopCoinsDictInfo {
+export interface TopCoinsDictInfo {
   avg_post_sentiment: number;
   avg_user_sentiment: number;
   mentions: number;
@@ -40,20 +40,49 @@ export interface Result {
 export interface DataTableProps extends Modal {
   data: any[];
   columns: any[];
+  handleRowClicked?: ((coin: string) => void) | undefined;
+  expandTwitterTableBody?: boolean;
+  twitterExpandData?: ArrayTweetResult[];
+  selectedCoin?: string | null;
+  expandYoutubeTableBody?: boolean;
+  youtubeExpandData?: CoinByDateYTProps[];
+  setParseVideoData?:
+    | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
+    | undefined;
 }
 
 export interface ArrayTweetResult {
   coin: string;
   mentions: number;
   uniqueUser: number;
-  sentiments: number;
+  avgUserSentiments: number;
+  avgPostSentiments: number;
   twitterUser: string | number;
   twitterUrl: string;
+  coinSentiment: number;
+  allCoinsSentiment: { [key: string]: number };
 }
+
+/*
+export interface TopCoinsDictInfo {
+  avg_post_sentiment: number;
+  avg_user_sentiment: number;
+  mentions: number;
+  unique_users: number;
+}
+export interface TweetsData {
+  tweet_url: string;
+  username: string;
+  coin_sentiment: { [key: string]: number };
+  date: number;
+}
+*/
 
 export interface StartDate {
   startDate: Date;
   setStartDate: (date: Date) => void;
+  twitterMaxDate?: Date;
+  allDate?: Date[];
 }
 
 export interface Modal {
@@ -61,6 +90,12 @@ export interface Modal {
   openModal?: (coin: string) => void;
   closeModal?: () => void;
   coin?: string | null;
+}
+
+export interface CoinByDayTwtProps {
+  coin?: string | null;
+  handleRowClicked: (coin: string) => void;
+  selectedCoin: string | null;
 }
 
 export interface CoinDataTableProps {
@@ -72,11 +107,17 @@ export interface CoinDataTableProps {
   columns: any[];
   isOpen?: boolean;
   coin?: string | null;
-  closeModal?: () => void;
-  modal: boolean;
   startDate?: Date;
   setStartDate?: (date: Date) => void;
-  poll?: boolean;
+  twitterMaxDate?: Date;
+  allDate?: Date[];
+  handleRowClicked?: (coin: string) => void;
+  twitterExpandData?: ArrayTweetResult[];
+  youtubeExpandData?: CoinByDateYTProps[];
+  selectedCoin?: string | null;
+  expandTwitterTableBody?: boolean;
+  expandYoutubeTableBody?: boolean;
+  setParseVideoData?: React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>;
 }
 
 export interface Pagination {
@@ -213,13 +254,15 @@ export interface CoinByDateYTProps {
 }
 
 export interface CoinByDayDataYt {
-  openCoinByDateModalYt: (coin: string) => void;
-  closeCoinByDateModalYt: () => void;
-  isOpenYtModal: boolean;
-  selectedCoinYt: string;
+  // openCoinByDateModalYt: (coin: string) => void;
+  // closeCoinByDateModalYt: () => void;
+  // isOpenYtModal: boolean;
+  // selectedCoinYt: string;
   ytSelectedDate: Date;
   setYtSelectedData: Dispatch<SetStateAction<Date>>;
   videoFetchData: string;
+  handleRowClicked: (coin: string) => void;
+  selectedCoin: string;
 }
 
 export interface YoutubeStat {
@@ -328,10 +371,38 @@ export interface HomePageProps {
   twitterName: string;
   twitterPfp: string;
 }
+export interface YoutubeHomepageProps extends HomePageProps {
+  handleRowClicked: (coin: string) => void;
+  selectedCoin: string;
+}
+
+export interface TwitterHomepageProps extends HomePageProps {
+  handleRowClicked: (coin: string) => void;
+  selectedCoin: string;
+}
 
 export interface LoginProps {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setTwitterName: React.Dispatch<React.SetStateAction<string>>;
   setTwitterPfp: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface DataTableWithPieChartProps {
+  isLoaded?: boolean;
+  data: ArrayTweetResult[] | CoinByDateYTProps[];
+  columns: any;
+  coin: string | null | undefined;
+  startDate: Date;
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  maxDate: Date;
+  series: number[];
+  labels: string[];
+  handleRowClicked: (coin: string) => void;
+  twitterExpandData?: ArrayTweetResult[];
+  selectedCoin: string | null;
+  expandTwitterTableBody?: boolean;
+  expandYoutubeTableBody?: boolean;
+  allDate?: Date[];
+  youtubeExpandData?: CoinByDateYTProps[];
 }

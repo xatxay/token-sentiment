@@ -4,6 +4,7 @@ import {
   ArrayTweetResult,
   BrushChartData,
   ChartDataConfig,
+  CoinByDateYTProps,
   Fetchparams,
   FollowersChanges,
   GroupData,
@@ -35,6 +36,9 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
     const fetData = async () => {
       if (!apiUrl) return;
       setLoading(true);
@@ -47,7 +51,7 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
         });
       }
       try {
-        const response = await fetch(url.toString());
+        const response = await fetch(url.toString(), { signal });
         if (!response.ok) {
           console.error("error fetching");
           throw new Error(`${response.status}: ${response.statusText}`);
@@ -56,14 +60,22 @@ const useFetch = (apiUrl: string, params?: Fetchparams) => {
         setData(jsonResponse);
         setError(null);
       } catch (err) {
-        setError((err as Error).message);
-        console.error("error fetching: ", err);
-        setData(null);
+        if (err instanceof Error && err.name === "AbortError") {
+          console.log("fetch aborted");
+        } else {
+          setError((err as Error).message);
+          console.error("error fetching: ", err);
+          setData(null);
+        }
       } finally {
         setLoading(false);
       }
     };
     fetData();
+
+    return () => {
+      abortController.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiUrl, params?.date, params?.username]);
   return { data, error, loading };
@@ -127,9 +139,12 @@ const insertArrayData = (data: Result): ArrayTweetResult[] => {
           coin: coin,
           mentions: coinData.mentions,
           uniqueUser: coinData.unique_users,
-          sentiments: t.coin_sentiment[coin],
+          avgUserSentiments: coinData.avg_user_sentiment,
+          avgPostSentiments: coinData.avg_post_sentiment,
           twitterUser: t.username,
           twitterUrl: t.tweet_url,
+          coinSentiment: t.coin_sentiment[coin],
+          allCoinsSentiment: t.coin_sentiment,
         });
       });
     });
@@ -177,6 +192,8 @@ const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
       }
       return false;
     });
+    console.log("array data: ", data);
+    console.log("filter data: ", filterData);
     return filterData;
   } catch (err) {
     console.error("Error extract duplicate coins");
@@ -258,7 +275,7 @@ const aggregateSentimentByCoinData = (
   data: SentimentValidJson[],
   coin: string
 ): BrushChartData[] => {
-  console.log("data: ", data);
+  // console.log("data: ", data);
   const groupedByDate: AggregateSentimentByCoinData = {};
 
   //group data by date
@@ -273,7 +290,7 @@ const aggregateSentimentByCoinData = (
   return Object.keys(groupedByDate).map((dateString) => {
     const items = groupedByDate[dateString];
     let userSentiments: UserSentimentGroup = {};
-    console.log("items: ", items);
+    // console.log("items: ", items);
 
     //group data by username
     items.forEach((item) => {
@@ -301,11 +318,6 @@ const aggregateSentimentByCoinData = (
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
-    console.log("fdsfdsf: ", {
-      date: new Date(dateString),
-      data: avgSentiment,
-      tooltipContent,
-    });
 
     return {
       date: new Date(dateString),
@@ -618,6 +630,31 @@ const extractPollData = (data: PollData[]): PollExtract[] => {
     console.error("Error extracting poll data: ", err);
     throw err;
   }
+};
+
+export const findClosestDate = (
+  currentDate: Date,
+  direction: "next" | "prev",
+  allDate: Date[]
+): Date => {
+  const sortedDates = allDate.sort((a, b) => a.getTime() - b.getTime());
+  if (direction === "next" && sortedDates !== undefined) {
+    return sortedDates.find((date) => date > currentDate) || currentDate;
+  } else {
+    return (
+      [...sortedDates].reverse().find((date) => date < currentDate) ||
+      currentDate
+    );
+  }
+};
+
+export const formatYoutubeDataPieChart = (
+  data: CoinByDateYTProps[]
+): PieChartData => {
+  const labels = data.map((coin) => coin.coin);
+  const series = data.map((mention) => Number(mention.num_videos));
+  const pieChartData = { series, labels };
+  return pieChartData;
 };
 
 export {

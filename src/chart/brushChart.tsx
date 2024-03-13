@@ -8,6 +8,16 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
   constructor(props: any) {
     super(props);
 
+    const mostRecentDate = new Date();
+    const ninetyDaysAgo = new Date(mostRecentDate);
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+    const maxDate = props.data.date
+      ? new Date(props.data[props.data.length - 1].date)
+      : new Date();
+    const minDate = props.data.date
+      ? new Date(props.data[0].date)
+      : ninetyDaysAgo;
+
     const events = props?.isClickable
       ? {
           click: () => props.openModal(),
@@ -125,10 +135,8 @@ class BrushChart extends Component<BrushChartProps, BrushChartState> {
               opacity: 0.1,
             },
             xaxis: {
-              min: props.data.date ? new Date(props.data[0].date) : undefined,
-              max: props.data.date
-                ? new Date(props.data[props.data.length - 1].date)
-                : undefined,
+              min: minDate.getTime(),
+              max: maxDate.getTime(),
             },
           },
         },

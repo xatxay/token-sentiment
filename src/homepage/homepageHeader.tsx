@@ -13,10 +13,10 @@ const HomepageHeader = ({ twitterName, twitterPfp }: HomePageProps) => {
   // };
 
   return (
-    <div className="w-full flex flex-row box-border items-center justify-around my-4">
+    <div className="w-full flex flex-row box-border items-center justify-around bg-black">
       <div className="flex space-x-2 items-center justify-center">
         <img
-          className="lg:w-12 max-w-6 h-auto"
+          className="w-6 md:w-10 lg:w-12 h-auto"
           src={logo}
           alt="token sentiment logo"
         />
@@ -44,7 +44,11 @@ const HomepageHeader = ({ twitterName, twitterPfp }: HomePageProps) => {
         <h2 className="hidden md:inline-block text-xs md:text-xl">
           {twitterName}
         </h2>
-        <img alt="user pfp" src={twitterPfp} className="w-3/4" />
+        <img
+          alt="user pfp"
+          src={twitterPfp}
+          className="w-6 md:w-10 lg:w-12 h-auto"
+        />
       </div>
     </div>
   );

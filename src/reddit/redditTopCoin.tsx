@@ -44,13 +44,13 @@ const TopCoinInCommentReddit = () => {
     }),
   ];
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center flex-col space-y-4">
+      <h3 className="font-extrabold text-xl md:text-2xl">Top Coins By Day</h3>
       <CoinDataTable
         data={selectedData}
         columns={columns}
         startDate={selectedDate}
         setStartDate={setSelectedDate}
-        modal={false}
       />
     </div>
   );

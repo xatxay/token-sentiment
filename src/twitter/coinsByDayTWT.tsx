@@ -11,17 +11,16 @@ import {
 } from "../utils/utils";
 import {
   ArrayTweetResult,
+  CoinByDayTwtProps,
   CoinDataTableProps,
-  Modal,
+  DataTableWithPieChartProps,
   PieChartData,
 } from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
-import DataTableModal from "../table/modal";
 import { toast } from "react-toastify";
 import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
-import NoData from "../table/noData";
 import { fadeIn } from "../globalStyle/fadeIn";
 
 const CoinDataTable = React.memo(
@@ -30,33 +29,51 @@ const CoinDataTable = React.memo(
     columns,
     startDate,
     setStartDate,
-    modal,
-    poll,
+    twitterMaxDate,
+    allDate,
+    handleRowClicked,
+    twitterExpandData,
+    selectedCoin,
+    expandTwitterTableBody,
+    expandYoutubeTableBody,
+    youtubeExpandData,
+    setParseVideoData,
   }: CoinDataTableProps) => {
+    console.log("data: ", data);
     return (
       <>
         <div className="flex items-center justify-center flex-col space-y-4">
-          <h3 className="font-extrabold text-xl md:text-2xl">
-            Top Coins By Day
-          </h3>
-          {!modal && startDate && setStartDate && (
-            <DateSelector startDate={startDate} setStartDate={setStartDate} />
+          {startDate && setStartDate && (
+            <DateSelector
+              startDate={startDate}
+              setStartDate={setStartDate}
+              twitterMaxDate={twitterMaxDate}
+              allDate={allDate}
+            />
           )}
-          {data === undefined || data.length === 0 ? (
-            <NoData data={data} columns={columns} />
-          ) : (
-            <DataTable data={data} columns={columns} />
-          )}
+          <DataTable
+            data={data}
+            columns={columns}
+            handleRowClicked={handleRowClicked}
+            expandTwitterTableBody={expandTwitterTableBody}
+            twitterExpandData={twitterExpandData}
+            selectedCoin={selectedCoin}
+            expandYoutubeTableBody={expandYoutubeTableBody}
+            youtubeExpandData={youtubeExpandData}
+            setParseVideoData={setParseVideoData}
+          />
         </div>
       </>
     );
   }
 );
 
-const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
-  const [startDate, setStartDate] = useState<Date>(
-    new Date(new Date().setDate(new Date().getDate() - 1))
-  );
+const CoinByDayTwt = ({
+  coin,
+  handleRowClicked,
+  selectedCoin,
+}: CoinByDayTwtProps) => {
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const [isLoaded, setIsLoaded] = useState(false);
   const dateFormat = formatDate(startDate);
   const twitterUrl = process.env.REACT_APP_TWITTER_BY_DAY;
@@ -68,24 +85,37 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
     series: [0],
     labels: [""],
   });
+  const twitterMaxDate = new Date();
   const { data, error, loading } = useFetch(twitterUrl || "", {
     date: dateFormat,
   });
 
   useEffect(() => {
-    if (data) {
-      const twitterResult = extractTwitterSentimentByDay(data);
-      if (twitterResult !== null) {
-        const arrayData = insertArrayData(twitterResult);
-        const noDuplicateData = removeDuplicate(arrayData) || [];
-        const duplicateData = duplicateCoins(arrayData, coin || "") || [];
-        const pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
-        setNoDuplicateData(noDuplicateData);
-        setDuplicateData(duplicateData);
-        setPieChartData(pieChartData);
-      }
+    console.log("use data: ", data);
+    const twitterResult = extractTwitterSentimentByDay(data);
+    if (twitterResult === null) {
+      setNoDuplicateData([]);
+      setDuplicateData([]);
+      setPieChartData({
+        series: [0],
+        labels: [""],
+      });
+    } else {
+      const arrayData = insertArrayData(twitterResult);
+      const sortedArrayData = arrayData.sort((a, b) => b.mentions - a.mentions);
+      const noDuplicateData = removeDuplicate(sortedArrayData) || [];
+      const duplicateData = duplicateCoins(sortedArrayData, coin || "") || [];
+      const pieChartData = formatCoinSentimentByDayPieChart(noDuplicateData);
+      setNoDuplicateData(noDuplicateData);
+      setDuplicateData(duplicateData);
+      setPieChartData(pieChartData);
     }
   }, [coin, data]);
+
+  useEffect(() => {
+    console.log("duplicate data: ", duplicateData);
+    console.log("no duplicate data: ", noDuplicateData);
+  }, [duplicateData, noDuplicateData]);
 
   if (error) {
     console.error("Failed fetching twitter data: ", error);
@@ -100,50 +130,17 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
         header: () => "Coin",
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("mentions", {
-        header: "Mentions",
+      columnHelper.accessor((row) => `${row.mentions} (${row.uniqueUser})`, {
+        id: "mentionUniqueUsers",
+        header: () => "Mentions (Unique Users)",
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("uniqueUser", {
-        header: "Unique Users",
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.accessor("sentiments", {
+      columnHelper.accessor("avgPostSentiments", {
         header: "Sentiment",
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.accessor("twitterUser", {
-        header: "Twitter",
-        cell: (info) => {
-          const row = info.row.original;
-          if (row.uniqueUser > 1 && openModal && !isOpen) {
-            return (
-              <span
-                className="cursor-pointer hover:text-white"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  openModal(row.coin);
-                }}
-              >
-                View More
-              </span>
-            );
-          } else {
-            return (
-              <a
-                href={row.twitterUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white"
-              >
-                {row.twitterUser}
-              </a>
-            );
-          }
-        },
+        cell: (info) => info.getValue()?.toFixed(2),
       }),
     ],
-    [columnHelper, isOpen, openModal]
+    [columnHelper]
   );
 
   useEffect(() => {
@@ -154,35 +151,104 @@ const CoinByDayTwt = ({ openModal, isOpen, coin, closeModal }: Modal) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
-      <div className="flex-1 flex items-center justify-center space-y-4">
-        <div css={isLoaded ? fadeIn : undefined}>
+      {noDuplicateData.length > 0 && noDuplicateData !== undefined ? (
+        <DataTableWithPieChart
+          isLoaded={isLoaded}
+          data={noDuplicateData}
+          columns={columns}
+          coin={coin || null}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          maxDate={twitterMaxDate}
+          series={pieChartData.series}
+          labels={pieChartData.labels}
+          handleRowClicked={handleRowClicked}
+          twitterExpandData={duplicateData}
+          selectedCoin={selectedCoin}
+          expandTwitterTableBody={true}
+        />
+      ) : (
+        <div
+          css={isLoaded ? fadeIn : undefined}
+          className="space-y-4 flex-1 flex items-center justify-center flex-col"
+        >
+          <h3 className="font-extrabold text-xl md:text-2xl">
+            Top Coins By Day
+          </h3>
           <CoinDataTable
             data={noDuplicateData}
             columns={columns}
-            isOpen={isOpen || false}
             coin={coin || null}
-            closeModal={closeModal}
-            modal={false}
             startDate={startDate}
             setStartDate={setStartDate}
+            twitterMaxDate={twitterMaxDate}
+            handleRowClicked={handleRowClicked}
+            twitterExpandData={duplicateData}
+            selectedCoin={selectedCoin}
+            expandTwitterTableBody={true}
           />
         </div>
-      </div>
-      {noDuplicateData.length > 0 && noDuplicateData !== undefined && (
-        <div className="flex-1 flex items-center justify-center flex-col space-y-6">
-          <h3 className="font-extrabold text-xl md:text-2xl mt-4">
-            Top Coins By Day (Pie Chart)
-          </h3>
-          <PieChart series={pieChartData.series} labels={pieChartData.labels} />
-        </div>
       )}
-      <DataTableModal
+      {/* <DataTableModal
         data={duplicateData}
         columns={columns}
         isOpen={isOpen}
         closeModal={closeModal}
         coin={coin}
-      />
+      /> */}
+    </div>
+  );
+};
+
+export const DataTableWithPieChart = ({
+  isLoaded,
+  data,
+  columns,
+  coin,
+  startDate,
+  setStartDate,
+  maxDate,
+  series,
+  labels,
+  handleRowClicked,
+  twitterExpandData,
+  selectedCoin,
+  expandTwitterTableBody,
+  allDate,
+  expandYoutubeTableBody,
+  youtubeExpandData,
+}: DataTableWithPieChartProps) => {
+  return (
+    <div className="flex items-start justify-start lg:space-x-28 flex-col md:flex-row">
+      <div
+        css={isLoaded ? fadeIn : undefined}
+        className="flex items-center justify-center flex-col space-y-4 flex-1 max-w-min"
+      >
+        <h3 className="font-extrabold text-lg md:text-xl mt-4">
+          Top Coins By Day
+        </h3>
+        <CoinDataTable
+          data={data}
+          columns={columns}
+          coin={coin || null}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          twitterMaxDate={maxDate}
+          handleRowClicked={handleRowClicked}
+          twitterExpandData={twitterExpandData}
+          selectedCoin={selectedCoin}
+          expandTwitterTableBody={expandTwitterTableBody}
+          expandYoutubeTableBody={expandYoutubeTableBody}
+          allDate={allDate}
+          youtubeExpandData={youtubeExpandData}
+        />
+      </div>
+      <div className="flex items-center justify-center flex-col space-y-6 flex-1 w-full">
+        <h3 className="font-extrabold text-lg md:text-xl mt-4">
+          Top Coins By Day (#Mentions)
+        </h3>
+        <PieChart series={series} labels={labels} />
+      </div>
     </div>
   );
 };
