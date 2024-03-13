@@ -1,7 +1,6 @@
 // import { useTable, usePagination } from "react-table";
 import { TwitterTableBody } from "../twitter/twitterTableBody";
 import { DataTableProps } from "../utils/interface";
-import { YoutubeTableBody } from "../youtube/youtubeTableBody";
 import PaginationControll from "./pagination";
 import {
   useReactTable,
@@ -12,7 +11,7 @@ import {
 import { useState } from "react";
 
 const cellStyle = {
-  width: "250px",
+  width: "275px",
   overflowWrap: "break-word" as const,
   whiteSpace: "normal" as const,
 };
@@ -29,12 +28,6 @@ const DataTable = ({
   setParseVideoData,
   openTiktokLink,
 }: DataTableProps) => {
-  console.log(
-    "datatable: ",
-    youtubeExpandData,
-    selectedCoin,
-    expandYoutubeTableBody
-  );
   const [pageIndexNumber, setPageIndexNumber] = useState<number>(0);
   const maxPageSize = 5;
   const table = useReactTable({
@@ -95,13 +88,13 @@ const DataTable = ({
                     const tiktokLink = `https://www.tiktok.com/@${row.original.username}/video/${row.original.video_id}`;
                     window.open(tiktokLink, "_blank");
                   }
-                  if (
-                    expandYoutubeTableBody &&
-                    youtubeExpandData &&
-                    youtubeExpandData?.length > 0
-                  ) {
-                    setParseVideoData && setParseVideoData([]);
-                  }
+                  // if (
+                  //   expandYoutubeTableBody &&
+                  //   youtubeExpandData &&
+                  //   youtubeExpandData?.length > 0
+                  // ) {
+                  //   setParseVideoData && setParseVideoData([]);
+                  // }
                   if (handleRowClicked) {
                     handleRowClicked(row.original.coin);
                   }
@@ -127,11 +120,11 @@ const DataTable = ({
               selectedCoin === row.original.coin ? (
                 <TwitterTableBody data={twitterExpandData || []} key={row.id} />
               ) : null}
-              {expandYoutubeTableBody &&
+              {/* {expandYoutubeTableBody &&
               selectedCoin &&
               selectedCoin === row.original.coin ? (
                 <YoutubeTableBody data={youtubeExpandData || []} key={row.id} />
-              ) : null}
+              ) : null} */}
             </>
           ))}
         </tbody>

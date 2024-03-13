@@ -11,6 +11,7 @@ import {
 } from "../utils/utils";
 import {
   ArrayTweetResult,
+  CoinByDateYTProps,
   CoinByDayTwtProps,
   CoinDataTableProps,
   DataTableWithPieChartProps,
@@ -22,6 +23,7 @@ import DateSelector from "../table/datePicker";
 import { DataTable } from "../table/dataTable";
 import PieChart from "../chart/pieChart";
 import { fadeIn } from "../globalStyle/fadeIn";
+import { YoutubeTopCoinsTable } from "../youtube/ytTable";
 
 const CoinDataTable = React.memo(
   ({
@@ -39,6 +41,7 @@ const CoinDataTable = React.memo(
     youtubeExpandData,
     setParseVideoData,
     maxDate,
+    youtubeTable,
   }: CoinDataTableProps) => {
     return (
       <>
@@ -52,17 +55,27 @@ const CoinDataTable = React.memo(
               allDate={allDate}
             />
           )}
-          <DataTable
-            data={data}
-            columns={columns}
-            handleRowClicked={handleRowClicked}
-            expandTwitterTableBody={expandTwitterTableBody}
-            twitterExpandData={twitterExpandData}
-            selectedCoin={selectedCoin}
-            expandYoutubeTableBody={expandYoutubeTableBody}
-            youtubeExpandData={youtubeExpandData}
-            setParseVideoData={setParseVideoData}
-          />
+          {youtubeTable ? (
+            <YoutubeTopCoinsTable
+              data={data as CoinByDateYTProps[]}
+              selectedCoin={selectedCoin}
+              youtubeExpandData={youtubeExpandData}
+              handleRowClicked={handleRowClicked}
+              setParseVideoData={setParseVideoData}
+            />
+          ) : (
+            <DataTable
+              data={data}
+              columns={columns}
+              handleRowClicked={handleRowClicked}
+              expandTwitterTableBody={expandTwitterTableBody}
+              twitterExpandData={twitterExpandData}
+              selectedCoin={selectedCoin}
+              expandYoutubeTableBody={expandYoutubeTableBody}
+              youtubeExpandData={youtubeExpandData}
+              setParseVideoData={setParseVideoData}
+            />
+          )}
         </div>
       </>
     );
@@ -228,9 +241,15 @@ export const DataTableWithPieChart = ({
   expandYoutubeTableBody,
   youtubeExpandData,
   twitterMaxDate,
+  youtubeTable,
+  setParseVideoData,
 }: DataTableWithPieChartProps) => {
   return (
-    <div className="flex items-start justify-start lg:space-x-28 flex-col lg:flex-row">
+    <div
+      className={`flex items-start justify-start lg:space-x-10 flex-col lg:flex-row ${
+        youtubeTable && "w-3/4"
+      }`}
+    >
       <div
         css={isLoaded ? fadeIn : undefined}
         className="flex items-center justify-center flex-col space-y-4 flex-1 w-full"
@@ -253,6 +272,8 @@ export const DataTableWithPieChart = ({
           allDate={allDate}
           maxDate={maxDate}
           youtubeExpandData={youtubeExpandData}
+          youtubeTable={youtubeTable}
+          setParseVideoData={setParseVideoData}
         />
       </div>
       <div className="flex items-center justify-center flex-col space-y-6 flex-1 w-full">

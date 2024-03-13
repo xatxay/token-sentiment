@@ -6,7 +6,6 @@ interface TwitterTableBodyProps {
 }
 
 export const TwitterTableBody = ({ data }: TwitterTableBodyProps) => {
-  console.log("table body: ", data);
   return (
     <>
       {data.length > 0 &&

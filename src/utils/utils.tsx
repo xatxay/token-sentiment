@@ -192,8 +192,8 @@ const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
       }
       return false;
     });
-    console.log("array data: ", data);
-    console.log("filter data: ", filterData);
+    // console.log("array data: ", data);
+    // console.log("filter data: ", filterData);
     return filterData;
   } catch (err) {
     console.error("Error extract duplicate coins");
@@ -637,6 +637,7 @@ export const findClosestDate = (
   direction: "next" | "prev",
   allDate: Date[]
 ): Date => {
+  currentDate.setHours(0, 0, 0, 0);
   const sortedDates = allDate.sort((a, b) => a.getTime() - b.getTime());
   if (direction === "next" && sortedDates !== undefined) {
     return sortedDates.find((date) => date > currentDate) || currentDate;

@@ -1,5 +1,5 @@
 import { Updater } from "@tanstack/react-table";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 export interface TopCoinsDict {
   [key: string]: TopCoinsDictInfo;
@@ -121,6 +121,7 @@ export interface CoinDataTableProps {
   expandYoutubeTableBody?: boolean;
   setParseVideoData?: React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>;
   maxDate?: Date;
+  youtubeTable?: boolean;
 }
 
 export interface Pagination {
@@ -266,6 +267,7 @@ export interface CoinByDayDataYt {
   videoFetchData: string;
   handleRowClicked: (coin: string) => void;
   selectedCoin: string;
+  setVideoFetchData: React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface YoutubeStat {
@@ -409,4 +411,19 @@ export interface DataTableWithPieChartProps {
   allDate?: Date[];
   youtubeExpandData?: CoinByDateYTProps[];
   twitterMaxDate?: Date;
+  youtubeTable?: boolean;
+  setParseVideoData?:
+    | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
+    | undefined;
+}
+
+export interface YoutubeTableProps {
+  data: CoinByDateYTProps[];
+  handleRowClicked?: ((coin: string) => void) | undefined;
+  selectedCoin?: string | null;
+  expandYoutubeTableBody?: boolean;
+  youtubeExpandData?: CoinByDateYTProps[];
+  setParseVideoData:
+    | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
+    | undefined;
 }

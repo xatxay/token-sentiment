@@ -21,6 +21,7 @@ const DateSelector = ({
     : new Date(new Date().setDate(new Date().getDate() - 1));
   maxDateCompare.setHours(0, 0, 0, 0);
   const isLatestDate = startDateCompare >= maxDateCompare;
+  console.log("is latest date: ", isLatestDate);
 
   let goBackADay;
   let goForwardADay;
@@ -31,11 +32,13 @@ const DateSelector = ({
     minDateAllDate = firstDate >= startDateCompare;
     goBackADay = () => {
       if (!minDateAllDate) {
+        console.log("mint date: ", !minDateAllDate);
         const previosAvailableDate = findClosestDate(
           startDate,
           "prev",
           allDate
         );
+        console.log("previous available: ", previosAvailableDate);
         setStartDate(previosAvailableDate);
       }
     };
@@ -50,6 +53,7 @@ const DateSelector = ({
     goBackADay = () => {
       const previousDay = new Date(startDate.getTime());
       previousDay.setDate(previousDay.getDate() - 1);
+      console.log("else going back: ", previousDay);
       setStartDate(previousDay);
     };
 
@@ -67,8 +71,8 @@ const DateSelector = ({
   return (
     <div className="flex flex-row items-center justify-center">
       <button
-        className={`bg-gray-400 cursor-pointer mx-4 px-2 hover:bg-gray-600 ${
-          minDateAllDate ? "cursor-not-allowed opacity-50" : ""
+        className={`bg-gray-400 mx-4 px-2 hover:bg-gray-600 ${
+          minDateAllDate ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         }`}
         onClick={goBackADay}
         disabled={minDateAllDate}
@@ -95,9 +99,9 @@ const DateSelector = ({
         />
       )}
       <button
-        className={`bg-gray-400 cursor-pointer mx-4 px-2 hover:bg-gray-600 ${
-          isLatestDate ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`${
+          isLatestDate ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        } bg-gray-400 mx-4 px-2 hover:bg-gray-600`}
         onClick={goForwardADay}
         disabled={isLatestDate}
       >

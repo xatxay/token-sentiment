@@ -6,14 +6,13 @@ interface YoutubeTableBodyProps {
 }
 
 export const YoutubeTableBody = ({ data }: YoutubeTableBodyProps) => {
-  console.log("table body: ", data);
   return (
     <>
       {data.length > 0 &&
         data.map((d, index) => (
           <React.Fragment key={index}>
             <tr
-              key={index}
+              key={`${index} + ${d.coin}`}
               className="cursor-pointer hover:bg-gray-800"
               onClick={() =>
                 window.open(
@@ -23,15 +22,22 @@ export const YoutubeTableBody = ({ data }: YoutubeTableBodyProps) => {
               }
             >
               <td
+                key={`${d.title} + ${index}`}
                 colSpan={2}
-                className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 text-white bg-zinc-800"
+                className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 text-white bg-zinc-800 overflow-x-hidden"
               >
                 {d.title}
               </td>
-              <td className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
+              <td
+                key={`${d.sentiment} + ${d.coin} + ${index}`}
+                className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800"
+              >
                 {d.sentiment}{" "}
               </td>
-              <td className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
+              <td
+                key={`${d.views} + ${index}`}
+                className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800"
+              >
                 {d.views}{" "}
               </td>
             </tr>
@@ -40,4 +46,3 @@ export const YoutubeTableBody = ({ data }: YoutubeTableBodyProps) => {
     </>
   );
 };
-//className="p-1 md:p-2 lg:px-8 text-xs md:text-sm lg:text-base font-bold text-center border-2 border-gray-500"

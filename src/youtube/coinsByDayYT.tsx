@@ -20,6 +20,7 @@ const CoinByDayYT = ({
   videoFetchData,
   handleRowClicked,
   selectedCoin,
+  setVideoFetchData,
 }: CoinByDayDataYt) => {
   const apiUrl = String(process.env.REACT_APP_YOUTUBE_COIN_BY_DAY);
   const formattedDate = formatDate(ytSelectedDate);
@@ -48,10 +49,6 @@ const CoinByDayYT = ({
     }
   }, [data, formattedDate]);
 
-  useEffect(() => {
-    console.log("youtube parse data: ", parseData);
-  }, [parseData]);
-
   const columnHelper = createColumnHelper<CoinByDateYTProps>();
   const columns = [
     columnHelper.accessor("coin", {
@@ -77,14 +74,11 @@ const CoinByDayYT = ({
 
   useEffect(() => {
     if (videoFetchData) {
-      console.log("if video data: ", videoFetchData);
+      console.log("video fetch string: ", typeof videoFetchData);
       setParseVideoData(JSON.parse(videoFetchData));
+      setVideoFetchData("");
     }
-  }, [videoFetchData]);
-
-  useEffect(() => {
-    console.log("video data: ", parseVideoData);
-  }, [parseVideoData]);
+  }, [setVideoFetchData, videoFetchData]);
 
   if (error) {
     console.error("Error fetching coin by day yt data: ", error);
@@ -92,7 +86,7 @@ const CoinByDayYT = ({
   }
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-3/4 space-y-4">
+      <div className="flex flex-col items-center justify-center w-full space-y-4">
         {parseData !== undefined && parseData.length > 0 ? (
           <DataTableWithPieChart
             data={parseData}
@@ -108,6 +102,8 @@ const CoinByDayYT = ({
             expandYoutubeTableBody={true}
             youtubeExpandData={parseVideoData}
             allDate={allDate}
+            youtubeTable={true}
+            setParseVideoData={setParseVideoData}
           />
         ) : (
           <div className="flex items-center justify-center flex-col space-y-4 flex-1 w-full">
@@ -126,6 +122,7 @@ const CoinByDayYT = ({
               youtubeExpandData={parseVideoData}
               setParseVideoData={setParseVideoData}
               maxDate={ytMaxDate}
+              youtubeTable={true}
             />
           </div>
         )}

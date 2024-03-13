@@ -41,11 +41,6 @@ const YoutubeStats = () => {
     toast.error(error);
   }
   const { min, max } = calculateMinMax(youtubeStatChart, "data");
-  useEffect(() => {
-    console.log("min: ", min);
-    console.log("max: ", max);
-    console.log("youtube stat chart: ", youtubeStatChart);
-  }, [max, min, youtubeStatChart]);
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
       <h3 className="font-extrabold text-xl md:text-2xl">

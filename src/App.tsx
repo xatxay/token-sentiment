@@ -33,6 +33,10 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("selected coin: ", selectedCoin);
+  }, [selectedCoin]);
+
+  useEffect(() => {
     console.log("isauthenticated: ", isAuthenticated);
   }, [isAuthenticated]);
   return (

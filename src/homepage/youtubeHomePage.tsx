@@ -45,6 +45,7 @@ const YoutubeHomePage = ({
         try {
           console.log("fetch: ", videoParams, " asdas: ", selectedCoin);
           const videoData = await fetchQuery(videoApiUrl || "", videoParams);
+          console.log("video fetching: ", typeof videoData);
           setVideoFetchData(videoData);
         } catch (err) {
           console.error("Error fetching video modal data: ", err);
@@ -53,10 +54,6 @@ const YoutubeHomePage = ({
       fetchData();
     }
   }, [date, selectedCoin, videoApiUrl]);
-
-  useEffect(() => {
-    console.log("fetching video data: ", videoFetchData);
-  }, [videoFetchData]);
 
   return (
     <>
@@ -69,6 +66,7 @@ const YoutubeHomePage = ({
             videoFetchData={videoFetchData}
             handleRowClicked={handleRowClicked}
             selectedCoin={selectedCoin}
+            setVideoFetchData={setVideoFetchData}
           />
         </div>
         <div className="flex items-center h-full w-full justify-center space-y-4 md:py-10 py-4 flex-col">
