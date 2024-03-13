@@ -2,10 +2,11 @@ import { toast } from "react-toastify";
 import {
   formatDate,
   formatRedditData,
+  getAllAvailableDate,
   queryRedditData,
   useFetch,
 } from "../utils/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RedditCoinByDay, RedditData } from "../utils/interface";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CoinDataTable } from "../twitter/coinsByDayTWT";
@@ -16,16 +17,23 @@ const TopCoinInCommentReddit = () => {
   );
   const apiUrl = String(process.env.REACT_APP_REDDIT_WORDS);
   const { data, error } = useFetch(apiUrl);
-  let selectedData: RedditCoinByDay[] = [];
+  const [selectedData, setSelectedData] = useState<RedditCoinByDay[]>([]);
+  const [redditAvailableDate, setRedditAvailbleDate] = useState<Date[]>([]);
 
-  if (data) {
-    const parseData: RedditData[] = JSON.parse(data);
-    const formattedDate = formatDate(selectedDate);
-    const queryData = queryRedditData(formattedDate, parseData);
-    if (queryData) {
-      selectedData = formatRedditData(queryData || "");
+  useEffect(() => {
+    if (data) {
+      const parseData: RedditData[] = JSON.parse(data);
+      const formattedDate = formatDate(selectedDate);
+      const queryData = queryRedditData(formattedDate, parseData);
+      if (queryData) {
+        const redditData = formatRedditData(queryData || "");
+        setSelectedData(redditData);
+      }
+      const dates = parseData.map((d) => d.date);
+      const redditDates = getAllAvailableDate(dates);
+      setRedditAvailbleDate(redditDates);
     }
-  }
+  }, [data, selectedDate]);
 
   if (error) {
     console.error(error);
@@ -51,6 +59,7 @@ const TopCoinInCommentReddit = () => {
         columns={columns}
         startDate={selectedDate}
         setStartDate={setSelectedDate}
+        allDate={redditAvailableDate}
       />
     </div>
   );

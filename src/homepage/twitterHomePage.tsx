@@ -51,7 +51,7 @@ const TwitterHomePage = ({
   return (
     <>
       <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
-      <div className="BackgroundPage">
+      <div className="BackgroundPage font-sans">
         <div className="flex flex-row h-full w-full justify-between items-start md:py-10 py-4">
           <CoinByDayTwt
             coin={selectedCoin}
@@ -59,12 +59,14 @@ const TwitterHomePage = ({
             selectedCoin={selectedCoin}
           />
         </div>
-        <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
+        <div className="flex flex-col items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
+          <div className="border-t-2 border-t-black w-3/4" />
           <SentimentByCoin
             openModal={openSentimentByCoinModal}
             closeModal={closeSentimentByCoinModal}
             isOpen={isSentimentByCoinModalOpen}
           />
+          <div className="border-b-2 border-b-black w-3/4" />
         </div>
         <div className="flex flex-row items-center h-full w-full justify-center space-y-4 md:py-10 py-4">
           <SentimentByUser />

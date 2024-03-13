@@ -24,14 +24,14 @@ export const YoutubeTableBody = ({ data }: YoutubeTableBodyProps) => {
             >
               <td
                 colSpan={2}
-                className="p-1 md:p-2 text-xs md:text-sm text-center border-2 border-gray-500 text-white bg-zinc-800"
+                className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 text-white bg-zinc-800"
               >
-                <span>{d.title}</span>
+                {d.title}
               </td>
-              <td className="p-1 md:p-2 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
+              <td className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
                 {d.sentiment}{" "}
               </td>
-              <td className="p-1 md:p-2 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
+              <td className="p-1 md:p-2 lg:px-8 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
                 {d.views}{" "}
               </td>
             </tr>
@@ -40,3 +40,4 @@ export const YoutubeTableBody = ({ data }: YoutubeTableBodyProps) => {
     </>
   );
 };
+//className="p-1 md:p-2 lg:px-8 text-xs md:text-sm lg:text-base font-bold text-center border-2 border-gray-500"

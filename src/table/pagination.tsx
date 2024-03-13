@@ -14,7 +14,7 @@ const PaginationControll = ({
       <button
         className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
-            ? "cursor-default hover:bg-gray-300"
+            ? "cursor-not-allowed opacity-50"
             : "cursor-pointer hover:bg-gray-500"
         }`}
         onClick={() => setPageIndex(0)}
@@ -25,7 +25,7 @@ const PaginationControll = ({
       <button
         className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
           !canPreviousPage
-            ? "cursor-default hover:bg-gray-300"
+            ? "cursor-not-allowed opacity-50"
             : "cursor-pointer hover:bg-gray-500"
         }`}
         onClick={() => previousPage()}
@@ -41,8 +41,8 @@ const PaginationControll = ({
       </span>
       <button
         className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
-          !canPreviousPage
-            ? "cursor-default hover:bg-gray-300"
+          !canNextPage
+            ? "cursor-not-allowed opacity-50"
             : "cursor-pointer hover:bg-gray-500"
         }`}
         onClick={() => nextPage()}
@@ -52,8 +52,8 @@ const PaginationControll = ({
       </button>
       <button
         className={`border-none font-bold text-sm bg-gray-300 px-2 ld:px-4 lg:py-1 text-gray-700 ${
-          !canPreviousPage
-            ? "cursor-default hover:bg-gray-300"
+          !canNextPage
+            ? "cursor-not-allowed opacity-50"
             : "cursor-pointer hover:bg-gray-500"
         }`}
         onClick={() => setPageIndex(pageCount - 1)}

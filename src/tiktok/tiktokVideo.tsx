@@ -53,31 +53,15 @@ const TiktokVideo = () => {
         return <span>{newSentiment ? newSentiment : "N/A"}</span>;
       },
     }),
-    columnHelper.accessor("video_id", {
-      header: "Link",
-      cell: (info) => {
-        const row = info.row.original;
-        const tiktokLink = `https://www.tiktok.com/@${row.username}/video/${row.video_id}`;
-        return (
-          <a
-            href={tiktokLink}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white"
-          >
-            View Link
-          </a>
-        );
-      },
-    }),
   ];
   return (
     <>
-      <div css={isLoaded ? fadeIn : undefined}>
-        <div className="flex flex-col items-center justify-center w-full space-y-4">
-          <h3 className="font-extrabold text-xl md:text-2xl">Tiktok Videos</h3>
-          <DataTable data={parseData} columns={columns} />
-        </div>
+      <div
+        css={isLoaded ? fadeIn : undefined}
+        className="flex flex-col items-center justify-center w-full space-y-4"
+      >
+        <h3 className="font-extrabold text-xl md:text-2xl">Tiktok Videos</h3>
+        <DataTable data={parseData} columns={columns} openTiktokLink={true} />
       </div>
     </>
   );

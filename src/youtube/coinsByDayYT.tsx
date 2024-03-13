@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   formatDate,
   formatYoutubeDataPieChart,
+  getAllAvailableDate,
   useFetch,
 } from "../utils/utils";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -14,10 +15,6 @@ import { CoinDataTable, DataTableWithPieChart } from "../twitter/coinsByDayTWT";
 import { useEffect, useState } from "react";
 
 const CoinByDayYT = ({
-  // openCoinByDateModalYt,
-  // closeCoinByDateModalYt,
-  // isOpenYtModal,
-  // selectedCoinYt,
   ytSelectedDate,
   setYtSelectedData,
   videoFetchData,
@@ -46,14 +43,7 @@ const CoinByDayYT = ({
       setYtPieChartData(pieChartData);
       setParseData(filterData);
       const dates = currentData.map((d) => d.date);
-      const localTimezoneDates = Array.from(new Set(dates)).map((dateStr) => {
-        const parts = dateStr.split("-").map((part) => parseInt(part, 10));
-        const year = parts[0];
-        const month = parts[1] - 1;
-        const day = parts[2];
-        return new Date(year, month, day);
-      });
-
+      const localTimezoneDates = getAllAvailableDate(dates);
       setAllDate(localTimezoneDates);
     }
   }, [data, formattedDate]);
@@ -102,7 +92,7 @@ const CoinByDayYT = ({
   }
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <div className="flex flex-col items-center justify-center w-3/4 space-y-4">
         {parseData !== undefined && parseData.length > 0 ? (
           <DataTableWithPieChart
             data={parseData}
@@ -120,7 +110,7 @@ const CoinByDayYT = ({
             allDate={allDate}
           />
         ) : (
-          <div className="space-y-4 flex-1 flex items-center justify-center flex-col">
+          <div className="flex items-center justify-center flex-col space-y-4 flex-1 w-full">
             <h3 className="font-extrabold text-xl md:text-2xl">
               Top Coins By Day
             </h3>
@@ -135,6 +125,7 @@ const CoinByDayYT = ({
               expandYoutubeTableBody={true}
               youtubeExpandData={parseVideoData}
               setParseVideoData={setParseVideoData}
+              maxDate={ytMaxDate}
             />
           </div>
         )}

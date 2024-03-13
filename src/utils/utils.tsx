@@ -657,6 +657,17 @@ export const formatYoutubeDataPieChart = (
   return pieChartData;
 };
 
+export const getAllAvailableDate = (dates: string[]): Date[] => {
+  const localTimezoneDates = Array.from(new Set(dates)).map((dateStr) => {
+    const parts = dateStr.split("-").map((part) => parseInt(part, 10));
+    const year = parts[0];
+    const month = parts[1] - 1;
+    const day = parts[2];
+    return new Date(year, month, day);
+  });
+  return localTimezoneDates;
+};
+
 export {
   useFetch,
   extractTwitterSentimentByDay,

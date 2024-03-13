@@ -38,8 +38,8 @@ const CoinDataTable = React.memo(
     expandYoutubeTableBody,
     youtubeExpandData,
     setParseVideoData,
+    maxDate,
   }: CoinDataTableProps) => {
-    console.log("data: ", data);
     return (
       <>
         <div className="flex items-center justify-center flex-col space-y-4">
@@ -48,6 +48,7 @@ const CoinDataTable = React.memo(
               startDate={startDate}
               setStartDate={setStartDate}
               twitterMaxDate={twitterMaxDate}
+              maxDate={maxDate}
               allDate={allDate}
             />
           )}
@@ -85,6 +86,7 @@ const CoinByDayTwt = ({
     series: [0],
     labels: [""],
   });
+  const [allTwitterDate, setAllTwitterDate] = useState<Date[]>([]);
   const twitterMaxDate = new Date();
   const { data, error, loading } = useFetch(twitterUrl || "", {
     date: dateFormat,
@@ -113,9 +115,15 @@ const CoinByDayTwt = ({
   }, [coin, data]);
 
   useEffect(() => {
-    console.log("duplicate data: ", duplicateData);
-    console.log("no duplicate data: ", noDuplicateData);
-  }, [duplicateData, noDuplicateData]);
+    const twitterStartDate = new Date(2023, 9, 12);
+    const currentDate = new Date();
+    const dateArrays: Date[] = [];
+    while (twitterStartDate <= currentDate) {
+      dateArrays.push(new Date(twitterStartDate));
+      twitterStartDate.setDate(twitterStartDate.getDate() + 1);
+    }
+    setAllTwitterDate(dateArrays);
+  }, []);
 
   if (error) {
     console.error("Failed fetching twitter data: ", error);
@@ -159,13 +167,14 @@ const CoinByDayTwt = ({
           coin={coin || null}
           startDate={startDate}
           setStartDate={setStartDate}
-          maxDate={twitterMaxDate}
+          twitterMaxDate={twitterMaxDate}
           series={pieChartData.series}
           labels={pieChartData.labels}
           handleRowClicked={handleRowClicked}
           twitterExpandData={duplicateData}
           selectedCoin={selectedCoin}
           expandTwitterTableBody={true}
+          allDate={allTwitterDate}
         />
       ) : (
         <div
@@ -186,6 +195,7 @@ const CoinByDayTwt = ({
             twitterExpandData={duplicateData}
             selectedCoin={selectedCoin}
             expandTwitterTableBody={true}
+            allDate={allTwitterDate}
           />
         </div>
       )}
@@ -217,12 +227,13 @@ export const DataTableWithPieChart = ({
   allDate,
   expandYoutubeTableBody,
   youtubeExpandData,
+  twitterMaxDate,
 }: DataTableWithPieChartProps) => {
   return (
-    <div className="flex items-start justify-start lg:space-x-28 flex-col md:flex-row">
+    <div className="flex items-start justify-start lg:space-x-28 flex-col lg:flex-row">
       <div
         css={isLoaded ? fadeIn : undefined}
-        className="flex items-center justify-center flex-col space-y-4 flex-1 max-w-min"
+        className="flex items-center justify-center flex-col space-y-4 flex-1 w-full"
       >
         <h3 className="font-extrabold text-lg md:text-xl mt-4">
           Top Coins By Day
@@ -233,13 +244,14 @@ export const DataTableWithPieChart = ({
           coin={coin || null}
           startDate={startDate}
           setStartDate={setStartDate}
-          twitterMaxDate={maxDate}
+          twitterMaxDate={twitterMaxDate}
           handleRowClicked={handleRowClicked}
           twitterExpandData={twitterExpandData}
           selectedCoin={selectedCoin}
           expandTwitterTableBody={expandTwitterTableBody}
           expandYoutubeTableBody={expandYoutubeTableBody}
           allDate={allDate}
+          maxDate={maxDate}
           youtubeExpandData={youtubeExpandData}
         />
       </div>

@@ -49,6 +49,7 @@ export interface DataTableProps extends Modal {
   setParseVideoData?:
     | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
     | undefined;
+  openTiktokLink?: boolean;
 }
 
 export interface ArrayTweetResult {
@@ -83,6 +84,7 @@ export interface StartDate {
   setStartDate: (date: Date) => void;
   twitterMaxDate?: Date;
   allDate?: Date[];
+  maxDate?: Date;
 }
 
 export interface Modal {
@@ -118,6 +120,7 @@ export interface CoinDataTableProps {
   expandTwitterTableBody?: boolean;
   expandYoutubeTableBody?: boolean;
   setParseVideoData?: React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>;
+  maxDate?: Date;
 }
 
 export interface Pagination {
@@ -395,7 +398,7 @@ export interface DataTableWithPieChartProps {
   coin: string | null | undefined;
   startDate: Date;
   setStartDate: React.Dispatch<React.SetStateAction<Date>>;
-  maxDate: Date;
+  maxDate?: Date;
   series: number[];
   labels: string[];
   handleRowClicked: (coin: string) => void;
@@ -405,4 +408,5 @@ export interface DataTableWithPieChartProps {
   expandYoutubeTableBody?: boolean;
   allDate?: Date[];
   youtubeExpandData?: CoinByDateYTProps[];
+  twitterMaxDate?: Date;
 }

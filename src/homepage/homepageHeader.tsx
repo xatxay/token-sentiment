@@ -13,7 +13,7 @@ const HomepageHeader = ({ twitterName, twitterPfp }: HomePageProps) => {
   // };
 
   return (
-    <div className="w-full flex flex-row box-border items-center justify-around bg-black">
+    <div className="w-full flex flex-row box-border items-center justify-around bg-black font-sans">
       <div className="flex space-x-2 items-center justify-center">
         <img
           className="w-6 md:w-10 lg:w-12 h-auto"
