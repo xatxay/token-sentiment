@@ -17,7 +17,8 @@ export const TwitterTableBody = ({ data }: TwitterTableBodyProps) => {
               onClick={() => window.open(d.twitterUrl, "_blank")}
             >
               <td className="p-1 md:p-2 text-xs md:text-sm text-center border-2 border-gray-500 white bg-zinc-800">
-                {d.coin}
+                {/* {d.coin} */}
+                {""}
               </td>
               <td
                 // colSpan={2}

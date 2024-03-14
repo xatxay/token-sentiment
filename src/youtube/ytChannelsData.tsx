@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import {
-  calculateMinMax,
   calculateYtViewsByDay,
   chartContentFormatted,
   extractUniqueUsers,
@@ -12,8 +11,8 @@ import {
   YoutubeChannelsDataType,
   YoutubeViewsChange,
 } from "../utils/interface";
-import BrushChart from "../chart/brushChart";
 import { ChangeEvent, useEffect, useState } from "react";
+import HighChartData from "../chart/newBrushChart";
 
 const YoutubeChannelsData = () => {
   const apiUrl = String(process.env.REACT_APP_YOUTUBE_CHANNELS_DATA);
@@ -53,9 +52,22 @@ const YoutubeChannelsData = () => {
     }
   }, [data, selectedChannel]);
 
-  useEffect(() => {
-    console.log("channel chart data: ", channelsChartData);
-  }, [channelsChartData]);
+  const highChartSeriesYtChannelsDataFormat: Highcharts.SeriesLineOptions[] = [
+    {
+      type: "line",
+      name: "Views",
+      data: channelsChartData.map((d) => ({
+        x: d.date,
+        y: typeof d.data === "string" ? parseInt(d.data) : d.data,
+        tooltipContent: d.tooltipContent,
+      })),
+      tooltip: {
+        pointFormatter: function (this: any) {
+          return this.tooltipContent;
+        },
+      },
+    },
+  ];
 
   if (error) {
     console.error("Error fetching youtube channels data: ", error);
@@ -65,14 +77,14 @@ const YoutubeChannelsData = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  const { min, max } = calculateMinMax(channelsChartData, "data");
+
   return (
-    <div className="flex flex-col items-center justify-center w-full space-y-4">
-      <h3 className="font-extrabold text-xl md:text-2xl">
+    <div className="flex flex-col items-center justify-center w-3/4 space-y-4">
+      <h3 className="font-extrabold text-xl md:text-lg">
         Total Channel Views Per Day
       </h3>
       <select
-        className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+        className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800 rounded-md"
         value={selectedChannel}
         onChange={handleSelectUser}
       >
@@ -88,11 +100,9 @@ const YoutubeChannelsData = () => {
           );
         })}
       </select>
-      <BrushChart
-        data={channelsChartData}
-        min={min}
-        max={max}
-        isClickable={false}
+      <HighChartData
+        seriesData={highChartSeriesYtChannelsDataFormat}
+        title={{ title: "", subtitle: "" }}
       />
     </div>
   );

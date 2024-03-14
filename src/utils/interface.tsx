@@ -44,11 +44,11 @@ export interface DataTableProps extends Modal {
   expandTwitterTableBody?: boolean;
   twitterExpandData?: ArrayTweetResult[];
   selectedCoin?: string | null;
-  expandYoutubeTableBody?: boolean;
-  youtubeExpandData?: CoinByDateYTProps[];
-  setParseVideoData?:
-    | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
-    | undefined;
+  // expandYoutubeTableBody?: boolean;
+  // youtubeExpandData?: CoinByDateYTProps[];
+  // setParseVideoData?:
+  //   | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
+  //   | undefined;
   openTiktokLink?: boolean;
   sentimentByUser?: boolean;
 }
@@ -205,8 +205,20 @@ export interface UserSentimentGroup {
 }
 
 export interface BrushChartData {
+  date: number;
+  data: number | string;
+  tooltipContent: string;
+}
+
+export interface BrushChartDataTest {
   date: Date | string;
   data: number | string;
+  tooltipContent: string;
+}
+
+export interface BrushChartDataTest2 {
+  date: number;
+  data: string;
   tooltipContent: string;
 }
 
@@ -284,6 +296,7 @@ export interface ChartDataConfig<T> {
   getDataValue: (item: T) => number | string;
   getTooltipContent: (item: T) => string;
   getDate: (item: T) => Date | number | string;
+  // getDate: (item: T) => number;
 }
 
 export interface TiktokStat {

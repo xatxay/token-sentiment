@@ -21,7 +21,6 @@ const DateSelector = ({
     : new Date(new Date().setDate(new Date().getDate() - 1));
   maxDateCompare.setHours(0, 0, 0, 0);
   const isLatestDate = startDateCompare >= maxDateCompare;
-  console.log("is latest date: ", isLatestDate);
 
   let goBackADay;
   let goForwardADay;

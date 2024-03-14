@@ -1,20 +1,19 @@
 import { toast } from "react-toastify";
 import {
-  calculateMinMax,
   chartContentFormatted,
   extractUniqueUsers,
   getTiktokConfigValue,
   handleTikTokMenuSelection,
   useFetch,
 } from "../utils/utils";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   BrushChartData,
   ChartDataConfig,
   SelectTiktokData,
   TiktokStat,
 } from "../utils/interface";
-import BrushChart from "../chart/brushChart";
+import HighChartData from "../chart/newBrushChart";
 
 const TiktokStatistic = () => {
   const { data, error } = useFetch(
@@ -33,8 +32,8 @@ const TiktokStatistic = () => {
     "Likes (Last 10 Vid)",
     "Sentiment (Last 10 Vid)",
   ];
-  let uniqueUser: string[] = [];
-  let tiktokChartData: BrushChartData[] = [];
+  const [uniqueUser, setUniqueUser] = useState<string[]>([]);
+  const [tiktokChartData, setTiktokChartData] = useState<BrushChartData[]>([]);
 
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedUser(event.target.value);
@@ -44,37 +43,60 @@ const TiktokStatistic = () => {
     setMenu(event.target.value);
   };
 
-  if (data) {
-    const parseData: TiktokStat[] = JSON.parse(data);
-    uniqueUser = extractUniqueUsers(parseData, "username");
-    const dataSelected: SelectTiktokData[] =
-      handleTikTokMenuSelection(parseData, selectedUser, menu) || [];
-    const tiktokStatConfig: ChartDataConfig<SelectTiktokData> = {
-      getDataValue: (stat) => getTiktokConfigValue(stat),
-      getTooltipContent: (stat) => {
-        const value = getTiktokConfigValue(stat);
-        return `<strong>${stat.username}: ${Number(value).toLocaleString(
-          "en-US"
-        )}</strong>`;
+  useEffect(() => {
+    if (data) {
+      const parseData: TiktokStat[] = JSON.parse(data);
+      const uniqueUserData = extractUniqueUsers(parseData, "username");
+      setUniqueUser(uniqueUserData);
+      const dataSelected: SelectTiktokData[] =
+        handleTikTokMenuSelection(parseData, selectedUser, menu) || [];
+      const tiktokStatConfig: ChartDataConfig<SelectTiktokData> = {
+        getDataValue: (stat) => getTiktokConfigValue(stat),
+        getTooltipContent: (stat) => {
+          const value = getTiktokConfigValue(stat);
+          return `<strong>${stat.username}: ${Number(value).toLocaleString(
+            "en-US"
+          )}</strong>`;
+        },
+        getDate: (stat) => stat.date,
+      };
+      const tiktokChartDataContent = chartContentFormatted(
+        dataSelected,
+        tiktokStatConfig
+      );
+      setTiktokChartData(tiktokChartDataContent);
+    }
+  }, [data, menu, selectedUser]);
+
+  const highchartsTiktokData: Highcharts.SeriesLineOptions[] = [
+    {
+      type: "line",
+      name: "Tiktok Data",
+      data: tiktokChartData.map((d) => ({
+        x: d.date,
+        y: typeof d.data === "string" ? parseInt(d.data) : d.data,
+        tooltipContent: d.tooltipContent,
+      })),
+      tooltip: {
+        pointFormatter: function (this: any) {
+          return this.tooltipContent;
+        },
       },
-      getDate: (stat) => stat.date,
-    };
-    tiktokChartData = chartContentFormatted(dataSelected, tiktokStatConfig);
-  }
+    },
+  ];
 
   if (error) {
     console.error("Error fetching tiktok stat: ", error);
     toast.error(error);
   }
-  const { min, max } = calculateMinMax(tiktokChartData, "data");
   return (
-    <div className="flex flex-col items-center justify-center w-full space-y-4">
+    <div className="flex flex-col items-center justify-center w-3/4 space-y-4">
       <h3 className="font-extrabold text-xl md:text-2xl">
         Tiktok Statistics Chart
       </h3>
       <div className="flex flex-row items-center justify-center w-full space-x-4 lg:space-x-10">
         <select
-          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800 rounded-md"
           value={selectedUser}
           onChange={handleSelectUser}
         >
@@ -91,7 +113,7 @@ const TiktokStatistic = () => {
           })}
         </select>
         <select
-          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800 rounded-md"
           value={menu}
           onChange={handleSelectMenu}
         >
@@ -104,11 +126,9 @@ const TiktokStatistic = () => {
           })}
         </select>
       </div>
-      <BrushChart
-        data={tiktokChartData}
-        min={min}
-        max={max}
-        isClickable={false}
+      <HighChartData
+        seriesData={highchartsTiktokData}
+        title={{ title: "", subtitle: "" }}
       />
     </div>
   );

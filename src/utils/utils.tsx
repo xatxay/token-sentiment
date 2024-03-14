@@ -3,6 +3,8 @@ import {
   AggregateSentimentByCoinData,
   ArrayTweetResult,
   BrushChartData,
+  BrushChartDataTest,
+  BrushChartDataTest2,
   ChartDataConfig,
   CoinByDateYTProps,
   Fetchparams,
@@ -238,17 +240,22 @@ const querySentimentCoin = (
   ticker: string,
   data: SentimentValidJson[]
 ): SentimentValidJson[] => {
+  console.log("query: ", ticker, data);
   const newTicker =
     ticker === "CRYPTO"
       ? ticker.charAt(0).toUpperCase() + ticker.slice(1).toLowerCase()
       : ticker;
+  console.log("new ticker: ", newTicker);
   try {
-    const coinSentiment = data.filter((coin) => {
+    const parseData: SentimentValidJson[] =
+      typeof data === "string" ? JSON.parse(data) : data;
+    const coinSentiment = parseData.filter((coin) => {
       if (newTicker in coin.coin_sentiment) {
         return true;
       }
       return false;
     });
+    console.log("coin sentiment: ", coinSentiment);
     return coinSentiment;
   } catch (err) {
     console.error("Error querying sentiment coin: ", err);
@@ -274,8 +281,8 @@ const extractUniqueUsers = <T extends object, K extends keyof T>(
 const aggregateSentimentByCoinData = (
   data: SentimentValidJson[],
   coin: string
-): BrushChartData[] => {
-  // console.log("data: ", data);
+): BrushChartDataTest2[] => {
+  console.log("agrregate data: ", data);
   const groupedByDate: AggregateSentimentByCoinData = {};
 
   //group data by date
@@ -286,8 +293,9 @@ const aggregateSentimentByCoinData = (
     }
     groupedByDate[dateString].push(item);
   });
+  console.log("group by date: ", groupedByDate);
 
-  return Object.keys(groupedByDate).map((dateString) => {
+  const returnData = Object.keys(groupedByDate).map((dateString) => {
     const items = groupedByDate[dateString];
     let userSentiments: UserSentimentGroup = {};
     // console.log("items: ", items);
@@ -302,11 +310,15 @@ const aggregateSentimentByCoinData = (
       userSentiments[username].push(sentiment);
     });
 
+    console.log("user sentiment: ", userSentiments);
+
     const combinedUserSentiments = Object.keys(userSentiments).map(
       (username) => {
         return `${username}: ${userSentiments[username].join(", ")}`;
       }
     );
+
+    console.log("combined user sentiment: ", combinedUserSentiments);
 
     const avgSentiment = (
       items.reduce((acc, cur) => {
@@ -315,16 +327,20 @@ const aggregateSentimentByCoinData = (
       }, 0) / items.length
     ).toFixed(2);
 
+    console.log("average sentiment: ", avgSentiment);
+
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
       combinedUserSentiments.join("<br>");
 
     return {
-      date: new Date(dateString),
+      date: new Date(dateString).getTime(),
       data: avgSentiment,
       tooltipContent,
     };
   });
+  console.log("return data: ", returnData);
+  return returnData;
 };
 
 const groupedDataByDate = (data: TwitterFollower[]): GroupData => {
@@ -386,7 +402,7 @@ const chartContentFormatted = <T,>(
 ): BrushChartData[] => {
   try {
     return data.map((item) => ({
-      date: new Date(config.getDate(item)),
+      date: new Date(config.getDate(item)).getTime(),
       data: config.getDataValue(item),
       tooltipContent: config.getTooltipContent(item),
     }));
@@ -415,7 +431,7 @@ const formatCoinSentimentByDayPieChart = (
   return pieChartData;
 };
 
-const formatYoutubeStats = (data: YoutubeStat[]): BrushChartData[] => {
+const formatYoutubeStats = (data: YoutubeStat[]): BrushChartDataTest[] => {
   try {
     const chartFormatted = data.map((stat) => {
       const keyword = extractYtKeyword(stat.common_words);
@@ -442,7 +458,7 @@ const formatYAxisValue = (value: number): string => {
     } else if (value >= 1e3) {
       return (value / 1e3).toFixed(2) + "K";
     } else {
-      return value.toFixed(0);
+      return value.toFixed(2);
     }
   } catch (err) {
     console.error("Error formattting value: ", err);
@@ -602,8 +618,9 @@ const querySelectedRedditMenuData = (
       let subscibeChange: number | null = null;
       if (index !== 0) {
         const prev = array[index - 1];
-        subscibeChange =
-          parseInt(reddit.subscribers) - parseInt(prev.subscribers);
+        subscibeChange = Math.abs(
+          parseInt(reddit.subscribers) - parseInt(prev.subscribers)
+        );
       }
 
       return {

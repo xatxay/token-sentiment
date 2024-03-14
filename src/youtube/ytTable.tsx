@@ -9,7 +9,6 @@ export const YoutubeTopCoinsTable = ({
   handleRowClicked,
   setParseVideoData,
 }: YoutubeTableProps) => {
-  console.log("youtube data expand: ", youtubeExpandData);
   return (
     <>
       <table className="w-[600px] table-fixed">

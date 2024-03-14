@@ -3,7 +3,7 @@ import { backgroundColor, menuColor } from "../color/color";
 
 const GlobalStyle = css`
   body {
-    font-family: sans-serif, "Clarkson", Helvetica;
+    font-family: sans-serif;
     letter-spacing: 0.5px;
     background-color: black;
     color: white;

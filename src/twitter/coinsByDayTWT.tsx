@@ -71,9 +71,9 @@ const CoinDataTable = React.memo(
               expandTwitterTableBody={expandTwitterTableBody}
               twitterExpandData={twitterExpandData}
               selectedCoin={selectedCoin}
-              expandYoutubeTableBody={expandYoutubeTableBody}
-              youtubeExpandData={youtubeExpandData}
-              setParseVideoData={setParseVideoData}
+              // expandYoutubeTableBody={expandYoutubeTableBody}
+              // youtubeExpandData={youtubeExpandData}
+              // setParseVideoData={setParseVideoData}
             />
           )}
         </div>

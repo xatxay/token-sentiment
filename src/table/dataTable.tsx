@@ -23,9 +23,9 @@ const DataTable = ({
   expandTwitterTableBody,
   twitterExpandData,
   selectedCoin,
-  expandYoutubeTableBody,
-  youtubeExpandData,
-  setParseVideoData,
+  // expandYoutubeTableBody,
+  // youtubeExpandData,
+  // setParseVideoData,
   openTiktokLink,
   sentimentByUser,
 }: DataTableProps) => {

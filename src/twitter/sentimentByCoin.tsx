@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import BrushChart from "../chart/brushChart";
 import {
-  BrushChartData,
+  BrushChartDataTest2,
   SentimentByCoinProps,
   SentimentByUserProps,
   SentimentValidJson,
@@ -12,21 +11,22 @@ import {
   querySentimentCoin,
   useFetch,
 } from "../utils/utils";
-import DataTableModal from "../table/modal";
 import { createColumnHelper } from "@tanstack/react-table";
+import HighChartData from "../chart/newBrushChart";
+import { DataTable } from "../table/dataTable";
 
 const SentimentByCoin = ({
   openModal,
   closeModal,
   isOpen,
 }: SentimentByCoinProps) => {
-  const [coin, setCoin] = useState<string>("ETH");
-  const [filterData, setFilterData] = useState<BrushChartData[]>([]);
+  const [coin, setCoin] = useState<string>("BTC");
+  const [filterData, setFilterData] = useState<BrushChartDataTest2[]>([]);
   const [modifiedData, setModifiedData] = useState<SentimentValidJson[]>([]);
   const [dataTable, setDataTable] = useState<SentimentValidJson[]>([]);
+  // const [sentimentData, setSentimentData] = useState<SentimentValidJson[]>([]);
   const apiUrl = process.env.REACT_APP_SENTIMENT_BY_COIN;
   const { data, error, loading } = useFetch(apiUrl || "");
-  const { min, max } = { min: -1, max: 1 };
 
   const columnHelper = createColumnHelper<SentimentValidJson>();
   const columns = useMemo(
@@ -48,31 +48,50 @@ const SentimentByCoin = ({
           return sentiment;
         },
       }),
-      columnHelper.accessor("tweet_url", {
-        header: "Tweet",
-        cell: (info) => {
-          return (
-            <a
-              rel="noreferrer"
-              className="hover:text-white"
-              href={info.row.original.tweet_url}
-              target="_blank"
-            >
-              View Tweet
-            </a>
-          );
-        },
-      }),
     ],
     [columnHelper]
   );
 
+  // useEffect(() => {
+  //   if (data) {
+  //     const sentimentData = querySentimentCoin(coin, data);
+  //     setSentimentData(sentimentData);
+  //   }
+  // }, [coin, data]);
+
   const processData = (coin: string, data: SentimentValidJson[]) => {
     const sentimentData = querySentimentCoin(coin, data);
-    setDataTable(sentimentData);
     const groupedData = aggregateSentimentByCoinData(sentimentData, coin);
     setFilterData(groupedData);
   };
+
+  const processClickEventData = (
+    coin: string,
+    data: SentimentValidJson[],
+    date: number
+  ) => {
+    const sentimentData = querySentimentCoin(coin, data);
+    setDataTable(
+      sentimentData.filter(
+        (d) =>
+          new Date(d.date).setHours(0, 0, 0, 0) ===
+          new Date(date).setHours(0, 0, 0, 0)
+      )
+    );
+  };
+
+  const handleChartPointClick = (event: Highcharts.PointClickEventObject) => {
+    const clickDate = event.point.x;
+    console.log("date clicked: ", clickDate);
+    // setClickDate(clickDate)
+    processClickEventData(coin, modifiedData, clickDate);
+  };
+
+  useEffect(() => {
+    console.log("filter data: ", filterData);
+    console.log("data table: ", dataTable);
+  }, [dataTable, filterData]);
+
   useEffect(() => {
     if (data) {
       const parseData: SentimentByUserProps[] = JSON.parse(data).filter(
@@ -83,6 +102,8 @@ const SentimentByCoin = ({
     }
   }, [data]);
   useEffect(() => {
+    console.log("coin: ", coin);
+    console.log("modified data: ", modifiedData);
     if (coin && modifiedData.length > 0) {
       processData(coin, modifiedData);
     }
@@ -95,16 +116,33 @@ const SentimentByCoin = ({
     }
     processData(coin, modifiedData);
   };
+
+  const highChartsSentimentByCoinsFormat: Highcharts.SeriesLineOptions[] = [
+    {
+      type: "line",
+      name: "Sentiment",
+      data: filterData.map((d) => ({
+        x: d.date,
+        y: typeof d.data === "string" ? parseFloat(d.data) : d.data,
+        tooltipContent: d.tooltipContent,
+      })),
+      tooltip: {
+        pointFormatter: function (this: any) {
+          return this.tooltipContent;
+        },
+      },
+    },
+  ];
+
   if (loading) {
     return <div>Loading</div>;
   }
   if (error) {
     return <div>{error}</div>;
   }
-  if ((filterData.length = 0)) return <div>NO data</div>;
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <div className="flex flex-col items-center justify-center w-3/4 space-y-4">
         <h3 className="font-extrabold text-xl md:text-2xl">
           Sentiment By Coin
         </h3>
@@ -112,25 +150,26 @@ const SentimentByCoin = ({
           <input
             className="p-1 md:p-2 lg:p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
             required
-            placeholder="Enter a coin! For Example: ETH"
+            placeholder="Enter a coin! For Example: BTC"
             value={coin}
             onChange={(e) => setCoin(e.target.value.toUpperCase())}
           />
         </form>
-        <BrushChart
-          data={filterData}
-          openModal={openModal}
-          min={min}
-          max={max}
-          isClickable={true}
+        <HighChartData
+          seriesData={highChartsSentimentByCoinsFormat}
+          title={{ title: "Sentiment By Coins", subtitle: "" }}
+          handleChartPointClick={handleChartPointClick}
         />
       </div>
-      <DataTableModal
-        data={dataTable}
-        columns={columns}
-        isOpen={isOpen}
-        closeModal={closeModal}
-      />
+      <div className="w-1/2">
+        <DataTable
+          data={dataTable}
+          columns={columns}
+          isOpen={isOpen}
+          closeModal={closeModal}
+          sentimentByUser={true}
+        />
+      </div>
     </>
   );
 };

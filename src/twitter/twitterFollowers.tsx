@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import BrushChart from "../chart/brushChart";
+import BrushChart from "../not-using/brushChart";
 import {
   BrushChartData,
   ChartDataConfig,

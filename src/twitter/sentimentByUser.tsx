@@ -59,21 +59,6 @@ const SentimentByUser = () => {
           return <span>{formattedSentiment}</span>;
         },
       }),
-      // columnHelper.accessor("tweet_url", {
-      //   header: "Link",
-      //   cell: (info) => {
-      //     return (
-      //       <a
-      //         rel="noreferrer"
-      //         className="hover:text-white"
-      //         href={info.row.original.tweet_url}
-      //         target="_blank"
-      //       >
-      //         Link
-      //       </a>
-      //     );
-      //   },
-      // }),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [columnHelper, username]
