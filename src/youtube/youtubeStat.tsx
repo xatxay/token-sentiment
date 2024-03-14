@@ -1,38 +1,20 @@
 import { toast } from "react-toastify";
-import BrushChart from "../chart/brushChart";
-import {
-  BrushChartData,
-  ChartDataConfig,
-  YoutubeStat,
-} from "../utils/interface";
-import {
-  calculateMinMax,
-  chartContentFormatted,
-  extractYtKeyword,
-  useFetch,
-} from "../utils/utils";
+import { YoutubeStat } from "../utils/interface";
+import { useFetch } from "../utils/utils";
 import { useEffect, useState } from "react";
+import HighChartData from "../chart/newBrushChart";
 
 const YoutubeStats = () => {
-  const { data, error } = useFetch(String(process.env.REACT_APP_YOUTUBE_STAT));
-  const [youtubeStatChart, setYoutubeStatChart] = useState<BrushChartData[]>(
-    []
+  const { data, error, loading } = useFetch(
+    String(process.env.REACT_APP_YOUTUBE_STAT)
   );
+  const [youtubeData, setYoutubeData] = useState<YoutubeStat[]>([]);
 
   useEffect(() => {
     if (data) {
       const parseData: YoutubeStat[] = JSON.parse(data);
-      const youtubeConfig: ChartDataConfig<YoutubeStat> = {
-        getDataValue: (start) => start.total_views,
-        getTooltipContent: (stat) => {
-          const keyword = extractYtKeyword(stat.common_words);
-          return `<strong>Total Views: ${stat.total_views.toLocaleString(
-            "en-US"
-          )}</strong><br><strong>Top Keywords: ${keyword}`;
-        },
-        getDate: (stat) => stat.date,
-      };
-      setYoutubeStatChart(chartContentFormatted(parseData, youtubeConfig));
+      console.log("parse data: ", parseData);
+      setYoutubeData(parseData);
     }
   }, [data]);
 
@@ -40,18 +22,22 @@ const YoutubeStats = () => {
     console.error("Error fetching yt stat: ", error);
     toast.error(error);
   }
-  const { min, max } = calculateMinMax(youtubeStatChart, "data");
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
       <h3 className="font-extrabold text-xl md:text-2xl">
         YouTube Statistics Chart
       </h3>
-      <BrushChart
+      {/* <BrushChart
         data={youtubeStatChart}
         min={min}
         max={max}
         isClickable={false}
-      />
+      /> */}
+      <HighChartData data={youtubeData} />
     </div>
   );
 };

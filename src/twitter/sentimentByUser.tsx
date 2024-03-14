@@ -9,7 +9,6 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../table/dataTable";
 import { useQuery } from "@tanstack/react-query";
-import TypewriterEffect from "../globalStyle/typewrite";
 
 const SentimentByUser = () => {
   const defaultUser = "Awawat_Trades";

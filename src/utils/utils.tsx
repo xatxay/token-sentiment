@@ -396,6 +396,16 @@ const chartContentFormatted = <T,>(
   }
 };
 
+export const formattedChartData = (
+  data: YoutubeStat[]
+): Highcharts.PointOptionsObject[] => {
+  return data.map((d) => ({
+    x: d.date,
+    y: d.total_views,
+    common_words: d.common_words,
+  }));
+};
+
 const formatCoinSentimentByDayPieChart = (
   data: ArrayTweetResult[]
 ): PieChartData => {

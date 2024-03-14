@@ -13,7 +13,7 @@ import {
   YoutubeViewsChange,
 } from "../utils/interface";
 import BrushChart from "../chart/brushChart";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const YoutubeChannelsData = () => {
   const apiUrl = String(process.env.REACT_APP_YOUTUBE_CHANNELS_DATA);
@@ -21,28 +21,41 @@ const YoutubeChannelsData = () => {
   const defaultChannel = "CryptosRUs";
   const [selectedChannel, setSelectedChannel] =
     useState<string>(defaultChannel);
-  let uniqueChannel: string[] = [];
-  let channelsChartData: BrushChartData[] = [];
+  const [uniqueChannel, setUniqueChannel] = useState<string[]>([]);
+  const [channelsChartData, setChannelsChartData] = useState<BrushChartData[]>(
+    []
+  );
 
   const handleSelectUser = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedChannel(event.target.value);
   };
 
-  if (data) {
-    const parseData: YoutubeChannelsDataType[] = JSON.parse(data);
-    uniqueChannel = extractUniqueUsers(parseData, "channel_name");
-    const selectChannelData = calculateYtViewsByDay(parseData, selectedChannel);
-    const ytChannelsDataConfig: ChartDataConfig<YoutubeViewsChange> = {
-      getDataValue: (stat) => stat.data,
-      getTooltipContent: (stat) =>
-        `<strong>${stat.channelName}: ${stat.data}</strong>`,
-      getDate: (stat) => stat.date,
-    };
-    channelsChartData = chartContentFormatted(
-      selectChannelData || [],
-      ytChannelsDataConfig
-    );
-  }
+  useEffect(() => {
+    if (data) {
+      const parseData: YoutubeChannelsDataType[] = JSON.parse(data);
+      const channels = extractUniqueUsers(parseData, "channel_name");
+      setUniqueChannel(channels);
+      const selectChannelData = calculateYtViewsByDay(
+        parseData,
+        selectedChannel
+      );
+      const ytChannelsDataConfig: ChartDataConfig<YoutubeViewsChange> = {
+        getDataValue: (stat) => stat.data,
+        getTooltipContent: (stat) =>
+          `<strong>${stat.channelName}: ${stat.data}</strong>`,
+        getDate: (stat) => stat.date,
+      };
+      const chartData = chartContentFormatted(
+        selectChannelData || [],
+        ytChannelsDataConfig
+      );
+      setChannelsChartData(chartData);
+    }
+  }, [data, selectedChannel]);
+
+  useEffect(() => {
+    console.log("channel chart data: ", channelsChartData);
+  }, [channelsChartData]);
 
   if (error) {
     console.error("Error fetching youtube channels data: ", error);
