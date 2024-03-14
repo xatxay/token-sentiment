@@ -60,21 +60,21 @@ const SentimentByUser = () => {
           return <span>{formattedSentiment}</span>;
         },
       }),
-      columnHelper.accessor("tweet_url", {
-        header: "Link",
-        cell: (info) => {
-          return (
-            <a
-              rel="noreferrer"
-              className="hover:text-white"
-              href={info.row.original.tweet_url}
-              target="_blank"
-            >
-              Link
-            </a>
-          );
-        },
-      }),
+      // columnHelper.accessor("tweet_url", {
+      //   header: "Link",
+      //   cell: (info) => {
+      //     return (
+      //       <a
+      //         rel="noreferrer"
+      //         className="hover:text-white"
+      //         href={info.row.original.tweet_url}
+      //         target="_blank"
+      //       >
+      //         Link
+      //       </a>
+      //     );
+      //   },
+      // }),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [columnHelper, username]
@@ -121,55 +121,24 @@ const SentimentByUserPlacement = ({
         <h3 className="font-extrabold text-xl md:text-2xl">
           Sentiment By User
         </h3>
-        {data && data.length > 0 ? (
-          <>
-            <select
-              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
-              value={username}
-              onChange={handleSelectUser}
-            >
-              {twitterInfluencers.map((influencer) => {
-                return (
-                  <option
-                    className="text-black font-semibold"
-                    key={influencer}
-                    value={influencer}
-                  >
-                    {influencer}
-                  </option>
-                );
-              })}
-            </select>
-            <DataTable data={data} columns={columns} />
-          </>
-        ) : (
-          <>
-            <select
-              className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
-              value={username}
-              onChange={handleSelectUser}
-            >
-              {twitterInfluencers.map((influencer) => {
-                return (
-                  <option
-                    className="text-black font-semibold"
-                    key={influencer}
-                    value={influencer}
-                  >
-                    {influencer}
-                  </option>
-                );
-              })}
-            </select>
-            <h3>
-              <span>
-                No Data For This User
-                <br /> <br />
-                Please select a different user <TypewriterEffect text=":(" />
-              </span>
-            </h3>
-          </>
-        )}
+        <select
+          className="bg-gray-400 overflow-hidden max-w-20 md:max-w-44 border-none py-1 lg:py-3 text-xs md:text-base lg:p-3 box-border font-semibold text-gray-800"
+          value={username}
+          onChange={handleSelectUser}
+        >
+          {twitterInfluencers.map((influencer) => {
+            return (
+              <option
+                className="text-black font-semibold"
+                key={influencer}
+                value={influencer}
+              >
+                {influencer}
+              </option>
+            );
+          })}
+        </select>
+        <DataTable data={data} columns={columns} sentimentByUser={true} />
       </div>
     </>
   );

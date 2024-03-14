@@ -27,6 +27,7 @@ const DataTable = ({
   youtubeExpandData,
   setParseVideoData,
   openTiktokLink,
+  sentimentByUser,
 }: DataTableProps) => {
   const [pageIndexNumber, setPageIndexNumber] = useState<number>(0);
   const maxPageSize = 5;
@@ -84,23 +85,19 @@ const DataTable = ({
               <tr
                 key={`${row.id} ${index}`}
                 onClick={() => {
+                  if (sentimentByUser) {
+                    window.open(row.original.tweet_url, "_blank");
+                  }
                   if (openTiktokLink) {
                     const tiktokLink = `https://www.tiktok.com/@${row.original.username}/video/${row.original.video_id}`;
                     window.open(tiktokLink, "_blank");
                   }
-                  // if (
-                  //   expandYoutubeTableBody &&
-                  //   youtubeExpandData &&
-                  //   youtubeExpandData?.length > 0
-                  // ) {
-                  //   setParseVideoData && setParseVideoData([]);
-                  // }
                   if (handleRowClicked) {
                     handleRowClicked(row.original.coin);
                   }
                 }}
                 className={
-                  handleRowClicked || openTiktokLink
+                  handleRowClicked || openTiktokLink || sentimentByUser
                     ? `hover:bg-gray-800 cursor-pointer`
                     : "cursor-default"
                 }

@@ -50,6 +50,7 @@ export interface DataTableProps extends Modal {
     | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
     | undefined;
   openTiktokLink?: boolean;
+  sentimentByUser?: boolean;
 }
 
 export interface ArrayTweetResult {
@@ -258,16 +259,11 @@ export interface CoinByDateYTProps {
 }
 
 export interface CoinByDayDataYt {
-  // openCoinByDateModalYt: (coin: string) => void;
-  // closeCoinByDateModalYt: () => void;
-  // isOpenYtModal: boolean;
-  // selectedCoinYt: string;
   ytSelectedDate: Date;
   setYtSelectedData: Dispatch<SetStateAction<Date>>;
-  videoFetchData: string;
   handleRowClicked: (coin: string) => void;
   selectedCoin: string;
-  setVideoFetchData: React.Dispatch<React.SetStateAction<string>>
+  date: string;
 }
 
 export interface YoutubeStat {

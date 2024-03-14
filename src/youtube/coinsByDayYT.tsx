@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import {
+  fetchQuery,
   formatDate,
   formatYoutubeDataPieChart,
   getAllAvailableDate,
@@ -17,10 +18,9 @@ import { useEffect, useState } from "react";
 const CoinByDayYT = ({
   ytSelectedDate,
   setYtSelectedData,
-  videoFetchData,
   handleRowClicked,
   selectedCoin,
-  setVideoFetchData,
+  date,
 }: CoinByDayDataYt) => {
   const apiUrl = String(process.env.REACT_APP_YOUTUBE_COIN_BY_DAY);
   const formattedDate = formatDate(ytSelectedDate);
@@ -33,6 +33,38 @@ const CoinByDayYT = ({
     labels: [""],
   });
   const ytMaxDate = new Date();
+  const [videoDataCache, setVideoDataCache] = useState<{
+    [key: string]: CoinByDateYTProps[];
+  }>({});
+  const videoApiUrl = String(process.env.REACT_APP_YOUTUBE_COIN_BY_DAY_VIDEO);
+
+  useEffect(() => {
+    const cachKey = `${date}&${selectedCoin}`;
+    if (selectedCoin && videoDataCache[cachKey]) {
+      setParseVideoData(videoDataCache[cachKey]);
+    } else if (selectedCoin) {
+      const fetchData = async () => {
+        try {
+          const videoData = await fetchQuery(videoApiUrl || "", {
+            date: date.toString(),
+            coin: selectedCoin,
+          });
+          console.log("video fetching: ", typeof videoData);
+          if (videoData) {
+            const videoDataString = JSON.parse(videoData);
+            setVideoDataCache((prevCache) => ({
+              ...prevCache,
+              [cachKey]: videoDataString,
+            }));
+            setParseVideoData(JSON.parse(videoData));
+          }
+        } catch (err) {
+          console.error("Error fetching video modal data: ", err);
+        }
+      };
+      fetchData();
+    }
+  }, [date, selectedCoin, videoApiUrl, videoDataCache]);
 
   useEffect(() => {
     if (data) {
@@ -71,14 +103,6 @@ const CoinByDayYT = ({
       cell: (info) => info.getValue(),
     }),
   ];
-
-  useEffect(() => {
-    if (videoFetchData) {
-      console.log("video fetch string: ", typeof videoFetchData);
-      setParseVideoData(JSON.parse(videoFetchData));
-      setVideoFetchData("");
-    }
-  }, [setVideoFetchData, videoFetchData]);
 
   if (error) {
     console.error("Error fetching coin by day yt data: ", error);
