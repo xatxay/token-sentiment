@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   BrushChartDataTest2,
-  SentimentByCoinProps,
   SentimentByUserProps,
   SentimentValidJson,
 } from "../utils/interface";
@@ -15,16 +14,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import HighChartData from "../chart/newBrushChart";
 import { DataTable } from "../table/dataTable";
 
-const SentimentByCoin = ({
-  openModal,
-  closeModal,
-  isOpen,
-}: SentimentByCoinProps) => {
+const SentimentByCoin = () => {
   const [coin, setCoin] = useState<string>("BTC");
   const [filterData, setFilterData] = useState<BrushChartDataTest2[]>([]);
   const [modifiedData, setModifiedData] = useState<SentimentValidJson[]>([]);
   const [dataTable, setDataTable] = useState<SentimentValidJson[]>([]);
-  // const [sentimentData, setSentimentData] = useState<SentimentValidJson[]>([]);
   const apiUrl = process.env.REACT_APP_SENTIMENT_BY_COIN;
   const { data, error, loading } = useFetch(apiUrl || "");
 
@@ -52,13 +46,6 @@ const SentimentByCoin = ({
     [columnHelper]
   );
 
-  // useEffect(() => {
-  //   if (data) {
-  //     const sentimentData = querySentimentCoin(coin, data);
-  //     setSentimentData(sentimentData);
-  //   }
-  // }, [coin, data]);
-
   const processData = (coin: string, data: SentimentValidJson[]) => {
     const sentimentData = querySentimentCoin(coin, data);
     const groupedData = aggregateSentimentByCoinData(sentimentData, coin);
@@ -83,14 +70,8 @@ const SentimentByCoin = ({
   const handleChartPointClick = (event: Highcharts.PointClickEventObject) => {
     const clickDate = event.point.x;
     console.log("date clicked: ", clickDate);
-    // setClickDate(clickDate)
     processClickEventData(coin, modifiedData, clickDate);
   };
-
-  useEffect(() => {
-    console.log("filter data: ", filterData);
-    console.log("data table: ", dataTable);
-  }, [dataTable, filterData]);
 
   useEffect(() => {
     if (data) {
@@ -101,9 +82,8 @@ const SentimentByCoin = ({
       setModifiedData(newModifiedData);
     }
   }, [data]);
+
   useEffect(() => {
-    console.log("coin: ", coin);
-    console.log("modified data: ", modifiedData);
     if (coin && modifiedData.length > 0) {
       processData(coin, modifiedData);
     }
@@ -148,7 +128,7 @@ const SentimentByCoin = ({
         </h3>
         <form onSubmit={handleSubmit}>
           <input
-            className="p-1 md:p-2 lg:p-4 items-center bg-gray-400 box-border border-none font-semibold text-base"
+            className="p-1 md:p-2 lg:p-3 items-center bg-gray-400 box-border border-none font-semibold text-base rounded-md"
             required
             placeholder="Enter a coin! For Example: BTC"
             value={coin}
@@ -157,18 +137,15 @@ const SentimentByCoin = ({
         </form>
         <HighChartData
           seriesData={highChartsSentimentByCoinsFormat}
-          title={{ title: "Sentiment By Coins", subtitle: "" }}
+          title={{
+            title: "Sentiment By Coins",
+            subtitle: "Cick on the data point to see more data",
+          }}
           handleChartPointClick={handleChartPointClick}
         />
       </div>
-      <div className="w-1/2">
-        <DataTable
-          data={dataTable}
-          columns={columns}
-          isOpen={isOpen}
-          closeModal={closeModal}
-          sentimentByUser={true}
-        />
+      <div className="w-1/2 flex items-center justify-center flex-col">
+        <DataTable data={dataTable} columns={columns} sentimentByUser={true} />
       </div>
     </>
   );

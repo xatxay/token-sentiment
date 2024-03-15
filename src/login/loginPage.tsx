@@ -6,6 +6,7 @@ import { LoginProps } from "../utils/interface";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import "../App.css";
 
 const Login = ({
   isAuthenticated,
@@ -33,8 +34,8 @@ const Login = ({
         setTwitterPfp(
           "https://pbs.twimg.com/profile_images/1539544314430226433/OSOV1122_normal.jpg"
         );
-        setIsAuthenticated(true);
-        // setIsAuthenticated(false);
+        setIsAuthenticated(true); // comment this out when deploy
+        // setIsAuthenticated(false); // comment this out when testing
       }
     };
     checkUserAuth();
@@ -50,7 +51,7 @@ const Login = ({
 
   return (
     <div
-      className="flex flex-col md:flex-row items-center justify-center h-screen w-full space-x-8 space-y-4 md:p-4"
+      className="BackgroundPage flex flex-col md:flex-row items-center justify-center h-screen w-full space-x-8 space-y-4 md:p-4"
       css={fadeIn}
     >
       <img alt="huma login pic" src={huma} className="w-40 md:w-56 h-auto" />
@@ -94,7 +95,6 @@ const Login = ({
           onClick={handleLogin}
         >
           {" "}
-          {/*change it for twitter authentication*/}
           Login
         </button>
       </div>

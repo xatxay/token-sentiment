@@ -23,11 +23,9 @@ const DataTable = ({
   expandTwitterTableBody,
   twitterExpandData,
   selectedCoin,
-  // expandYoutubeTableBody,
-  // youtubeExpandData,
-  // setParseVideoData,
   openTiktokLink,
   sentimentByUser,
+  isTwitterData,
 }: DataTableProps) => {
   const [pageIndexNumber, setPageIndexNumber] = useState<number>(0);
   const maxPageSize = 5;
@@ -54,17 +52,32 @@ const DataTable = ({
     setPageIndexNumber(newPageIndex);
   };
 
+  const getHeaderWidth = (headerId: string): string | undefined => {
+    switch (headerId) {
+      case "mentionUniqueUsers":
+        return "50%";
+      case "coin":
+      case "avgPostSentiments":
+        return "25%";
+      default:
+        return undefined;
+    }
+  };
+
   return (
     <>
-      <table
-      // className={`${expandYoutubeTableBody && "min-w-min"}  border-collapse`}
-      >
+      <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup, index) => (
             <tr key={`${headerGroup.id}, ${index}`}>
               {headerGroup.headers.map((header, i) => (
                 <td
-                  style={cellStyle}
+                  style={{
+                    ...cellStyle,
+                    width: isTwitterData
+                      ? getHeaderWidth(header.id)
+                      : undefined,
+                  }}
                   className="p-1 md:p-2 lg:px-8 text-xs md:text-sm lg:text-base font-bold text-center border-2 border-gray-500"
                   key={`${header.id}, ${i}`}
                 >
@@ -117,11 +130,6 @@ const DataTable = ({
               selectedCoin === row.original.coin ? (
                 <TwitterTableBody data={twitterExpandData || []} key={row.id} />
               ) : null}
-              {/* {expandYoutubeTableBody &&
-              selectedCoin &&
-              selectedCoin === row.original.coin ? (
-                <YoutubeTableBody data={youtubeExpandData || []} key={row.id} />
-              ) : null} */}
             </>
           ))}
         </tbody>

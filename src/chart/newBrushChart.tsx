@@ -94,7 +94,7 @@ const HighChartData = ({
         series: seriesData,
         plotOptions: {
           series: {
-            cursor: "pointer",
+            cursor: handleChartPointClick ? "pointer" : "default",
             point: {
               events: {
                 click: handleChartPointClick,

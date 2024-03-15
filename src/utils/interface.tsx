@@ -37,20 +37,16 @@ export interface Result {
   [key: string]: CoinResult;
 }
 
-export interface DataTableProps extends Modal {
+export interface DataTableProps {
   data: any[];
   columns: any[];
   handleRowClicked?: ((coin: string) => void) | undefined;
   expandTwitterTableBody?: boolean;
   twitterExpandData?: ArrayTweetResult[];
   selectedCoin?: string | null;
-  // expandYoutubeTableBody?: boolean;
-  // youtubeExpandData?: CoinByDateYTProps[];
-  // setParseVideoData?:
-  //   | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
-  //   | undefined;
   openTiktokLink?: boolean;
   sentimentByUser?: boolean;
+  isTwitterData?: boolean;
 }
 
 export interface ArrayTweetResult {
@@ -119,10 +115,10 @@ export interface CoinDataTableProps {
   youtubeExpandData?: CoinByDateYTProps[];
   selectedCoin?: string | null;
   expandTwitterTableBody?: boolean;
-  expandYoutubeTableBody?: boolean;
   setParseVideoData?: React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>;
   maxDate?: Date;
   youtubeTable?: boolean;
+  isTwitterData?: boolean;
 }
 
 export interface Pagination {
@@ -424,6 +420,7 @@ export interface DataTableWithPieChartProps {
   setParseVideoData?:
     | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
     | undefined;
+  isTwitterData?: boolean;
 }
 
 export interface YoutubeTableProps {

@@ -1,6 +1,6 @@
 import TypewriterEffect from "../globalStyle/typewrite";
 import { DataTableProps } from "../utils/interface";
-import { DataTable } from "./dataTable";
+import { DataTable } from "../table/dataTable";
 
 const NoData = ({ data, columns }: DataTableProps) => {
   return (

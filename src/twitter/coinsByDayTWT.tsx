@@ -37,15 +37,15 @@ const CoinDataTable = React.memo(
     twitterExpandData,
     selectedCoin,
     expandTwitterTableBody,
-    expandYoutubeTableBody,
     youtubeExpandData,
     setParseVideoData,
     maxDate,
     youtubeTable,
+    isTwitterData,
   }: CoinDataTableProps) => {
     return (
       <>
-        <div className="flex items-center justify-center flex-col space-y-4">
+        <div className="flex items-center justify-center flex-col space-y-4 w-full">
           {startDate && setStartDate && (
             <DateSelector
               startDate={startDate}
@@ -71,9 +71,7 @@ const CoinDataTable = React.memo(
               expandTwitterTableBody={expandTwitterTableBody}
               twitterExpandData={twitterExpandData}
               selectedCoin={selectedCoin}
-              // expandYoutubeTableBody={expandYoutubeTableBody}
-              // youtubeExpandData={youtubeExpandData}
-              // setParseVideoData={setParseVideoData}
+              isTwitterData={isTwitterData}
             />
           )}
         </div>
@@ -188,11 +186,12 @@ const CoinByDayTwt = ({
           selectedCoin={selectedCoin}
           expandTwitterTableBody={true}
           allDate={allTwitterDate}
+          isTwitterData={true}
         />
       ) : (
         <div
           css={isLoaded ? fadeIn : undefined}
-          className="space-y-4 flex-1 flex items-center justify-center flex-col"
+          className="space-y-4 flex-1 flex items-center justify-center flex-col w-full"
         >
           <h3 className="font-extrabold text-xl md:text-2xl">
             Top Coins By Day
@@ -209,16 +208,10 @@ const CoinByDayTwt = ({
             selectedCoin={selectedCoin}
             expandTwitterTableBody={true}
             allDate={allTwitterDate}
+            isTwitterData={true}
           />
         </div>
       )}
-      {/* <DataTableModal
-        data={duplicateData}
-        columns={columns}
-        isOpen={isOpen}
-        closeModal={closeModal}
-        coin={coin}
-      /> */}
     </div>
   );
 };
@@ -238,11 +231,11 @@ export const DataTableWithPieChart = ({
   selectedCoin,
   expandTwitterTableBody,
   allDate,
-  expandYoutubeTableBody,
   youtubeExpandData,
   twitterMaxDate,
   youtubeTable,
   setParseVideoData,
+  isTwitterData,
 }: DataTableWithPieChartProps) => {
   return (
     <div
@@ -252,7 +245,7 @@ export const DataTableWithPieChart = ({
     >
       <div
         css={isLoaded ? fadeIn : undefined}
-        className="flex items-center justify-center flex-col space-y-4 flex-1 w-full"
+        className="flex items-center justify-center flex-col space-y-4 flex-1 w-3/4 lg:w-full"
       >
         <h3 className="font-extrabold text-lg md:text-xl mt-4">
           Top Coins By Day
@@ -268,12 +261,12 @@ export const DataTableWithPieChart = ({
           twitterExpandData={twitterExpandData}
           selectedCoin={selectedCoin}
           expandTwitterTableBody={expandTwitterTableBody}
-          expandYoutubeTableBody={expandYoutubeTableBody}
           allDate={allDate}
           maxDate={maxDate}
           youtubeExpandData={youtubeExpandData}
           youtubeTable={youtubeTable}
           setParseVideoData={setParseVideoData}
+          isTwitterData={isTwitterData}
         />
       </div>
       <div className="flex items-center justify-center flex-col space-y-6 flex-1 w-full">

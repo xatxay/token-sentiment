@@ -49,7 +49,6 @@ const CoinByDayYT = ({
             date: date.toString(),
             coin: selectedCoin,
           });
-          console.log("video fetching: ", typeof videoData);
           if (videoData) {
             const videoDataString = JSON.parse(videoData);
             setVideoDataCache((prevCache) => ({
@@ -142,7 +141,6 @@ const CoinByDayYT = ({
               allDate={allDate}
               handleRowClicked={handleRowClicked}
               selectedCoin={selectedCoin}
-              expandYoutubeTableBody={true}
               youtubeExpandData={parseVideoData}
               setParseVideoData={setParseVideoData}
               maxDate={ytMaxDate}
@@ -151,12 +149,6 @@ const CoinByDayYT = ({
           </div>
         )}
       </div>
-      {/* <DataTableModal
-        data={parseVideoData}
-        columns={modalColumns}
-        isOpen={isOpenYtModal}
-        closeModal={closeCoinByDateModalYt}
-      /> */}
     </>
   );
 };
