@@ -58,13 +58,13 @@ export const YoutubeTopCoinsTable = ({
                   key={`${d.sentiment} + ${index}`}
                   className="p-1 md:p-2 lg:px-4 text-xs md:text-sm lg:text-base text-center border-2 border-gray-500 text-gray-400"
                 >
-                  {d.sentiment}
+                  {parseFloat(d.sentiment).toFixed(2)}
                 </td>
                 <td
                   key={`${d.total_views} + ${index}`}
                   className="p-1 md:p-2 lg:px-4 text-xs md:text-sm lg:text-base text-center border-2 border-gray-500 text-gray-400"
                 >
-                  {d.total_views}
+                  {parseFloat(d.total_views).toLocaleString("en-US")}
                 </td>
               </tr>
               {selectedCoin && selectedCoin === d.coin ? (

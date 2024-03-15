@@ -271,7 +271,9 @@ export const DataTableWithPieChart = ({
       </div>
       <div className="flex items-center justify-center flex-col space-y-6 flex-1 w-full">
         <h3 className="font-extrabold text-lg md:text-xl mt-4">
-          Top Coins By Day (#Mentions)
+          {youtubeTable
+            ? `Top Coins By Day (#Videos)`
+            : `Top Coins By Day (#Mentions)`}
         </h3>
         <PieChart series={series} labels={labels} />
       </div>

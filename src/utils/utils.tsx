@@ -630,7 +630,9 @@ const querySelectedRedditMenuData = (
             ? subscibeChange
             : reddit[menuSelected],
         tooltipContent: `<strong>${menu}: ${
-          menuSelected === "subscribers" ? subscibeChange : reddit[menuSelected]
+          menuSelected === "subscribers"
+            ? subscibeChange?.toLocaleString("en-US")
+            : parseFloat(reddit[menuSelected]).toLocaleString("en-US")
         }</strong>`,
       };
     });

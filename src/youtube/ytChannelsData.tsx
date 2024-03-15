@@ -41,7 +41,9 @@ const YoutubeChannelsData = () => {
       const ytChannelsDataConfig: ChartDataConfig<YoutubeViewsChange> = {
         getDataValue: (stat) => stat.data,
         getTooltipContent: (stat) =>
-          `<strong>${stat.channelName}: ${stat.data}</strong>`,
+          `<strong>${stat.channelName}: ${stat.data.toLocaleString(
+            "en-US"
+          )}</strong>`,
         getDate: (stat) => stat.date,
       };
       const chartData = chartContentFormatted(
