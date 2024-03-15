@@ -15,7 +15,7 @@ const TwitterHomePage = ({
   return (
     <>
       <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
-      <div className="BackgroundPage font-sans">
+      <div className="BackgroundPage">
         <div className="flex flex-row h-full w-full justify-between items-start md:py-10 py-4">
           <CoinByDayTwt
             coin={selectedCoin}

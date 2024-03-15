@@ -3,15 +3,7 @@ import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { formatYAxisValue } from "../utils/utils";
 import { chartBackgroundColor, white } from "../color/color";
-
-interface HighChartsProps {
-  seriesData: Highcharts.SeriesLineOptions[];
-  title: {
-    title: string;
-    subtitle: string;
-  };
-  handleChartPointClick?: (event: Highcharts.PointClickEventObject) => void;
-}
+import { HighChartsProps } from "../utils/interface";
 
 const HighChartData = ({
   seriesData,

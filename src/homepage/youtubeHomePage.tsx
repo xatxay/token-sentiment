@@ -22,7 +22,7 @@ const YoutubeHomePage = ({
   return (
     <>
       <HomepageHeader twitterName={twitterName} twitterPfp={twitterPfp} />
-      <div className="BackgroundPage font-sans ">
+      <div className="BackgroundPage">
         <div className="flex flex-row items-start w-full justify-center space-y-4 md:py-10 py-4">
           <CoinByDayYT
             ytSelectedDate={ytSelectedDate}

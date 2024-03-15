@@ -9,6 +9,7 @@
 
 .BackgroundPage {
   background-color: #282c34;
+  font-family: sans-serif;
 }
 
 @media (min-width: 1170px) {

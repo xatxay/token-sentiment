@@ -433,3 +433,12 @@ export interface YoutubeTableProps {
     | React.Dispatch<React.SetStateAction<CoinByDateYTProps[]>>
     | undefined;
 }
+
+export interface HighChartsProps {
+  seriesData: Highcharts.SeriesLineOptions[];
+  title: {
+    title: string;
+    subtitle: string;
+  };
+  handleChartPointClick?: (event: Highcharts.PointClickEventObject) => void;
+}
