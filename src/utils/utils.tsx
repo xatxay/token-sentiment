@@ -439,11 +439,11 @@ const formatYoutubeStats = (data: YoutubeStat[]): BrushChartDataTest[] => {
 const formatYAxisValue = (value: number): string => {
   try {
     if (value >= 1e6) {
-      return (value / 1e6).toFixed(2) + "M";
+      return value / 1e6 + "M";
     } else if (value >= 1e3) {
-      return (value / 1e3).toFixed(2) + "K";
+      return value / 1e3 + "K";
     } else {
-      return value.toFixed(2);
+      return value.toString();
     }
   } catch (err) {
     console.error("Error formattting value: ", err);
