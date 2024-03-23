@@ -42,10 +42,6 @@ const RedditChart = () => {
     }
   }, [data, menu]);
 
-  useEffect(() => {
-    console.log("reddit data: ", queryData);
-  }, [queryData]);
-
   const highchartsRedditData: Highcharts.SeriesLineOptions[] = [
     {
       type: "line",

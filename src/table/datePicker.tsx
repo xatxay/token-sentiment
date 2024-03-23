@@ -31,13 +31,11 @@ const DateSelector = ({
     minDateAllDate = firstDate >= startDateCompare;
     goBackADay = () => {
       if (!minDateAllDate) {
-        console.log("mint date: ", !minDateAllDate);
         const previosAvailableDate = findClosestDate(
           startDate,
           "prev",
           allDate
         );
-        console.log("previous available: ", previosAvailableDate);
         setStartDate(previosAvailableDate);
       }
     };
@@ -52,7 +50,6 @@ const DateSelector = ({
     goBackADay = () => {
       const previousDay = new Date(startDate.getTime());
       previousDay.setDate(previousDay.getDate() - 1);
-      console.log("else going back: ", previousDay);
       setStartDate(previousDay);
     };
 

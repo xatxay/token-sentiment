@@ -29,12 +29,7 @@ function App() {
 
   const handleRowClicked = (coin: string) => {
     selectedCoin === coin ? setSelectedCoin(null) : setSelectedCoin(coin);
-    console.log("clicking: ", selectedCoin, coin);
   };
-
-  useEffect(() => {
-    console.log("selected coin: ", selectedCoin);
-  }, [selectedCoin]);
 
   useEffect(() => {
     console.log("isauthenticated: ", isAuthenticated);

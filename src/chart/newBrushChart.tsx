@@ -79,6 +79,7 @@ const HighChartData = ({
             color: white,
           },
           backgroundColor: chartBackgroundColor,
+          marginTop: title.title && title.subtitle ? undefined : 25,
         },
         tooltip: {
           split: false,

@@ -104,7 +104,6 @@ const CoinByDayTwt = ({
   });
 
   useEffect(() => {
-    console.log("use data: ", data);
     const twitterResult = extractTwitterSentimentByDay(data);
     if (twitterResult === null) {
       setNoDuplicateData([]);

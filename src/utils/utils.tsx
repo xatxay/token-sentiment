@@ -194,8 +194,6 @@ const duplicateCoins = (data: ArrayTweetResult[], ticker: string) => {
       }
       return false;
     });
-    // console.log("array data: ", data);
-    // console.log("filter data: ", filterData);
     return filterData;
   } catch (err) {
     console.error("Error extract duplicate coins");
@@ -240,12 +238,10 @@ const querySentimentCoin = (
   ticker: string,
   data: SentimentValidJson[]
 ): SentimentValidJson[] => {
-  console.log("query: ", ticker, data);
   const newTicker =
     ticker === "CRYPTO"
       ? ticker.charAt(0).toUpperCase() + ticker.slice(1).toLowerCase()
       : ticker;
-  console.log("new ticker: ", newTicker);
   try {
     const parseData: SentimentValidJson[] =
       typeof data === "string" ? JSON.parse(data) : data;
@@ -255,7 +251,6 @@ const querySentimentCoin = (
       }
       return false;
     });
-    console.log("coin sentiment: ", coinSentiment);
     return coinSentiment;
   } catch (err) {
     console.error("Error querying sentiment coin: ", err);
@@ -282,7 +277,6 @@ const aggregateSentimentByCoinData = (
   data: SentimentValidJson[],
   coin: string
 ): BrushChartDataTest2[] => {
-  console.log("agrregate data: ", data);
   const groupedByDate: AggregateSentimentByCoinData = {};
 
   //group data by date
@@ -293,12 +287,10 @@ const aggregateSentimentByCoinData = (
     }
     groupedByDate[dateString].push(item);
   });
-  console.log("group by date: ", groupedByDate);
 
   const returnData = Object.keys(groupedByDate).map((dateString) => {
     const items = groupedByDate[dateString];
     let userSentiments: UserSentimentGroup = {};
-    // console.log("items: ", items);
 
     //group data by username
     items.forEach((item) => {
@@ -310,15 +302,11 @@ const aggregateSentimentByCoinData = (
       userSentiments[username].push(sentiment);
     });
 
-    console.log("user sentiment: ", userSentiments);
-
     const combinedUserSentiments = Object.keys(userSentiments).map(
       (username) => {
         return `${username}: ${userSentiments[username].join(", ")}`;
       }
     );
-
-    console.log("combined user sentiment: ", combinedUserSentiments);
 
     const avgSentiment = (
       items.reduce((acc, cur) => {
@@ -326,8 +314,6 @@ const aggregateSentimentByCoinData = (
         return acc + sentimentValue;
       }, 0) / items.length
     ).toFixed(2);
-
-    console.log("average sentiment: ", avgSentiment);
 
     const tooltipContent =
       `<strong>Sentiment: ${avgSentiment}</strong><br>` +
@@ -339,7 +325,6 @@ const aggregateSentimentByCoinData = (
       tooltipContent,
     };
   });
-  console.log("return data: ", returnData);
   return returnData;
 };
 

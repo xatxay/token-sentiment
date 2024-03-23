@@ -69,7 +69,6 @@ const SentimentByCoin = () => {
 
   const handleChartPointClick = (event: Highcharts.PointClickEventObject) => {
     const clickDate = event.point.x;
-    console.log("date clicked: ", clickDate);
     processClickEventData(coin, modifiedData, clickDate);
   };
 
